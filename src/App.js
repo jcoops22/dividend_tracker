@@ -13,4 +13,6 @@ function App() {
 export default App;
 
 // styles
-const Container = styled.div``;
+const Container = styled.div`
+  /* border: 2px solid blue; */
+`;

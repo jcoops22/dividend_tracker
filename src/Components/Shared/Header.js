@@ -8,7 +8,11 @@ const Header = ({ text }) => {
 export default Header;
 // styles
 const H1 = styled.h1`
-  font-size: 3rem;
+  color: #fff;
+  font-size: 2rem;
   text-align: center;
   width: 100%;
+  padding: 1rem 0.5rem;
+  background-color: #000;
+  /* border: 1px solid red; */
 `;
