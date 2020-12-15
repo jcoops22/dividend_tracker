@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import SearchStocks from "../Home/SearchStocks";
 
-const Add = () => {
-  const [symbolName, setSymbolName] = useState("");
-
+const Add = ({ stocks }) => {
   return (
     <Container>
       <h1>Add Stock</h1>
       <Form onClick={(e) => e.stopPropagation()}>
         <label>Symbol</label>
-        <input type="text" onChange={(e) => setSymbolName(e.setSymbolName)} />
+        <SearchStocks allstocks={stocks} />
       </Form>
     </Container>
   );
@@ -22,7 +21,7 @@ export default Add;
 const Container = styled.div`
   position: fixed;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -32,7 +31,9 @@ const Container = styled.div`
   border: 2px solid purple;
 `;
 const Form = styled.div`
-  background-color: blue;
   height: 10rem;
+  width: 100%;
+  max-width: 800px;
+  background-color: blue;
   border: 3px solid #333;
 `;

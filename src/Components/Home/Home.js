@@ -21,10 +21,12 @@ const Home = () => {
     axios
       .get(api_URL_Overview)
       .then((data) => {
-        console.log(data);
+        // console.log(data);
       })
       .catch((err) => console.log(err));
-    getStocks();
+    if (!localStorage.symbol) {
+      getStocks();
+    }
   }, []);
 
   const getStocks = () => {
@@ -42,7 +44,7 @@ const Home = () => {
   return (
     <Container>
       <Header text={"Dividend Tracker"} />
-      <Toolbar />
+      <Toolbar stocks={allStocks} />
       {allStocks ? <StocksList stocks={allStocks} /> : null}
       {loading ? <LoadingIcon /> : null}
     </Container>
@@ -54,5 +56,5 @@ export default Home;
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 `;

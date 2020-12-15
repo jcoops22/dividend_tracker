@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import AddForm from "../Home/AddForm";
 
-const Toolbar = () => {
+const Toolbar = ({ stocks }) => {
   const [add] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1607372577/Dividend%20Tracker/add-svgrepo-com_jqafqu_ndqnlz.svg"
   );
@@ -24,7 +24,7 @@ const Toolbar = () => {
           <img src={add} alt="add" />
         </AddTicker>
       </AddTickerWrapper>
-      {showAddForm ? <AddForm /> : null}
+      {showAddForm ? <AddForm stocks={stocks} /> : null}
     </Container>
   );
 };
@@ -38,6 +38,7 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
+  margin-bottom: 3rem;
   border: 2px solid #999;
 
   @media ${device.tabletS} {
@@ -67,11 +68,14 @@ const AddTickerWrapper = styled.div`
   /* border: 1px solid red; */
 `;
 const AddTicker = styled.div`
+  height: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 0 0.3rem;
-  border: 1px solid orange;
+  padding: 0 1rem;
+  box-shadow: 2px 2px 8px 0 #999;
+  cursor: pointer;
+  /* border: 1px solid orange; */
   img {
     margin-left: 1rem;
     width: 2rem;

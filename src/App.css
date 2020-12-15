@@ -13,5 +13,5 @@ import {device} from "../../resources/mediaquery"
   margin: 0;
 }
 html {
-  /* background-color: #000; */
+  background-color: #000;
 }
