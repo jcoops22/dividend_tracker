@@ -6,6 +6,7 @@ import Header from "../Shared/Header";
 import Toolbar from "../Shared/Toolbar";
 import StocksList from "./StocksList";
 import LoadingIcon from "../Shared/LoadingIcon";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -45,7 +46,8 @@ const Home = () => {
     <Container>
       <Header text={"Dividend Tracker"} />
       <Toolbar stocks={allStocks} />
-      {allStocks ? <StocksList stocks={allStocks} /> : null}
+      <Link to="/">Sign out</Link>
+      <StocksList />
       {loading ? <LoadingIcon /> : null}
     </Container>
   );

@@ -12,6 +12,7 @@ const firebaseConfig = {
   measurementId: "G-L3PK11PDSM",
 };
 
+// REGISTER USER
 export const creatUserProfileDocument = async (userAuth, addtionalData) => {
   if (!userAuth) {
     return;
@@ -23,6 +24,8 @@ export const creatUserProfileDocument = async (userAuth, addtionalData) => {
   if (!snapshot.exists) {
     const { email } = userAuth;
     const { first, last } = addtionalData;
+    const stocks = [];
+    const id = userAuth.uid;
     const createdAt = new Date();
 
     try {
@@ -31,8 +34,23 @@ export const creatUserProfileDocument = async (userAuth, addtionalData) => {
         last,
         email,
         createdAt,
+        stocks,
+        id,
         ...addtionalData,
       });
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          first,
+          last,
+          email,
+          createdAt,
+          stocks,
+          id,
+          ...addtionalData,
+        })
+      );
     } catch (err) {
       console.log("error creating user", err.message);
     }

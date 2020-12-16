@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { Link } from "react-router-dom";
 import SearchStocks from "../Home/SearchStocks";
 
-const Add = ({ stocks }) => {
+const Add = (props) => {
+  const { stocks } = props.location.state;
+
   return (
     <Container>
+      <Link to="/home">back</Link>
       <h1>Add Stock</h1>
       <Form onClick={(e) => e.stopPropagation()}>
         <label>Symbol</label>
@@ -34,6 +38,6 @@ const Form = styled.div`
   height: 10rem;
   width: 100%;
   max-width: 800px;
-  background-color: blue;
+  /* background-color: blue; */
   border: 3px solid #333;
 `;

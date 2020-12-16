@@ -21,7 +21,6 @@ const Register = () => {
         email,
         password
       );
-      console.log("success");
       creatUserProfileDocument(user, { first, last });
     } catch (err) {
       alert(err);

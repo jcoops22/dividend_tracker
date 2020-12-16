@@ -1,34 +1,43 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { getUserStocks } from "../../resources/stockUtilities";
 import LoadingIcon from "../Shared/LoadingIcon";
+import StocksWrapper from "./StocksWrapper";
 
-const StocksList = ({ stocks }) => {
-  const [userStocks, setUserStocks] = useState();
+const StocksList = ({ refresh }) => {
+  const [userStocks, setUserStocks] = useState(null);
+  const [user] = useState(JSON.parse(localStorage.getItem("user")));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     if (userStocks) {
       setLoading(false);
+    } else {
+      updateUserStocks();
     }
-  }, [userStocks]);
+  }, [userStocks, refresh]);
+
+  const updateUserStocks = async () => {
+    let stocks = await getUserStocks(user.id);
+    setUserStocks(stocks);
+    setLoading(false);
+  };
 
   return (
     <Container>
       <h1>Your Stocks:</h1>
-      {userStocks ? (
-        <StockWrapper>
-          {userStocks.map((stock, ind) => (
-            <StockLine key={ind}>
-              <StockLabel>Ticker:</StockLabel>
-              {stock.ticker}
-              <StockLabel>Company Name:</StockLabel>
-              {stock.name}
-            </StockLine>
-          ))}
-        </StockWrapper>
+      {loading ? (
+        <LoadingIcon />
       ) : (
-        "Add some stocks to track your dividends"
+        <StockContainer>
+          {userStocks.length ? (
+            <StocksWrapper stocks={userStocks} />
+          ) : (
+            "Add some stocks!"
+          )}
+        </StockContainer>
       )}
     </Container>
   );
@@ -49,22 +58,10 @@ const Container = styled.div`
     /* padding: 0 1rem; */
   }
 `;
-const StockWrapper = styled.div`
+const StockContainer = styled.div`
   max-width: 900px;
   display: flex;
   align-items: center;
   flex-direction: column;
   border: 1px solid red;
-`;
-const StockLine = styled.p`
-  width: 100%;
-  font-size: 1.2rem;
-  color: blue;
-  display: flex;
-  align-items: center;
-  border: 1px solid green;
-`;
-const StockLabel = styled.label`
-  font-weight: bold;
-  color: #999;
 `;

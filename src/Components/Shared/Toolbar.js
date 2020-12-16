@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { device } from "../../resources/mediaquery";
 import AddForm from "../Home/AddForm";
 
@@ -19,12 +20,20 @@ const Toolbar = ({ stocks }) => {
         <button>Reports</button>
       </ReportButton>
       <AddTickerWrapper>
-        <AddTicker onClick={() => setShowAddForm(!showAddForm)}>
-          <span>Add new stock or fund</span>
-          <img src={add} alt="add" />
+        <AddTicker>
+          <Link
+            to={{
+              pathname: "/add",
+              state: {
+                stocks: stocks,
+              },
+            }}
+          >
+            <span>Add new stock or fund</span>
+            <img src={add} alt="add" />
+          </Link>
         </AddTicker>
       </AddTickerWrapper>
-      {showAddForm ? <AddForm stocks={stocks} /> : null}
     </Container>
   );
 };
