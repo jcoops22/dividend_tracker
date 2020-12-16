@@ -30,7 +30,7 @@ const SearchStocks = ({ allstocks }) => {
       />
       <Results>
         <h3>Results:</h3>
-        {query && !query.includes(" ") ? (
+        {query && query !== " " ? (
           <ResultsWrapper>
             {filteredResults.slice(0, 100).map((stock, ind) => (
               <ResultRow key={ind}>
