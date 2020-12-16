@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { updateStocks } from "../../resources/stockUtilities";
 
 const SearchStocks = ({ allstocks }) => {
   const [query, setQuery] = useState("");
@@ -8,14 +7,13 @@ const SearchStocks = ({ allstocks }) => {
 
   useEffect(() => {
     filterResults(query);
-    updateStocks();
     // console.log(filteredResults);
   }, [query]);
 
   const filterResults = (val) => {
     let temp = allstocks.filter((stock) => {
-      return stock["ACT Symbol"].toLowerCase().includes(val.toLowerCase()) ||
-        stock["Company Name"].toLowerCase().includes(val.toLowerCase())
+      return stock.ticker.toLowerCase().includes(val.toLowerCase()) ||
+        stock.name.toLowerCase().includes(val.toLowerCase())
         ? stock
         : null;
     });
@@ -34,15 +32,15 @@ const SearchStocks = ({ allstocks }) => {
         <h3>Results:</h3>
         {query && !query.includes(" ") ? (
           <ResultsWrapper>
-            {filteredResults.map((stock, ind) => (
+            {filteredResults.slice(0, 100).map((stock, ind) => (
               <ResultRow key={ind}>
                 <Col>
                   <label>Ticker</label>
-                  <p>{stock["ACT Symbol"]}</p>
+                  <p>{stock.ticker}</p>
                 </Col>
                 <Col>
                   <label>Company</label>
-                  <p>{stock["Company Name"]}</p>
+                  <p>{stock.name}</p>
                 </Col>
               </ResultRow>
             ))}

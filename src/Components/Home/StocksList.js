@@ -21,9 +21,9 @@ const StocksList = ({ stocks }) => {
           {userStocks.map((stock, ind) => (
             <StockLine key={ind}>
               <StockLabel>Ticker:</StockLabel>
-              {stock["ACT Symbol"]}
+              {stock.ticker}
               <StockLabel>Company Name:</StockLabel>
-              {stock["Company Name"]}
+              {stock.name}
             </StockLine>
           ))}
         </StockWrapper>

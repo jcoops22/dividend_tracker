@@ -1,13 +1,15 @@
 import "./App.css";
 import styled from "styled-components";
-import Home from "./Components/Home/Home";
 import { Switch, Route } from "react-router-dom";
+import Home from "./Components/Home/Home";
+import Landing from "./Components/Home/Landing";
 
 function App() {
   return (
     <Container className="App">
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={Landing} />
+        <Route exact path="/home" component={Home} />
       </Switch>
     </Container>
   );

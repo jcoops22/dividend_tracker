@@ -1,35 +1,34 @@
 import { firestore } from "../Components/Firebase/firebase";
 import { nas } from "../resources/nyseOBJ";
 
-let currentArr = [];
-
 export const updateStocks = () => {
-  let ref = firestore.collection("symbols");
-
-  ref
-    .get()
-    .then((data) => {
-      return data.docs.map((doc) => {
-        return doc.data();
-      });
-    })
-    .then((obj) => {
-      currentArr = obj[0].symbols;
-      let adjusted = nas.map((stock) => {
-        return {
-          // name: stock["Company Name"],
-          // ticker: stock["ACT Symbol"],
-          name: stock["Company Name"],
-          ticker: stock["Symbol"],
-        };
-      });
-      console.log(adjusted);
-
-      // ref.doc().set({
-      //   symbols: adjusted,
-      // });
-    });
+  // let ref = firestore.collection("symbols");
+  // ref
+  //   .get()
+  //   .then((data) => {
+  //     return data.docs.map((doc) => {
+  //       return doc.data();
+  //     });
+  //   })
+  //   .then((obj) => {
+  //     // console.log(obj[0].symbols);
+  //     let nyse = obj[0].symbols.map((stock) => {
+  //       return {
+  //         name: stock["Company Name"],
+  //         ticker: stock["ACT Symbol"],
+  //       };
+  //     });
+  //     let adjusted = nas.map((stock) => {
+  //       return {
+  //         name: stock["Company Name"],
+  //         ticker: stock["Symbol"],
+  //       };
+  //     });
+  // console.log(adjusted.concat(nyse));
   // ref.doc().set({
-
+  //   symbols: adjusted.concat(nyse),
+  // });
+  // });
+  // ref.doc().set({
   // })
 };
