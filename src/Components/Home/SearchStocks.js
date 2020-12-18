@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 import { addStock } from "../../resources/stockUtilities";
+import { selectCurrentUser } from "../../redux/user/user-selectors";
 
-const SearchStocks = ({ allstocks }) => {
+const SearchStocks = ({ allstocks, selectCurrentUser }) => {
   const [query, setQuery] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [user] = useState(JSON.parse(localStorage.getItem("user")));
@@ -34,7 +37,10 @@ const SearchStocks = ({ allstocks }) => {
         {query && query !== " " ? (
           <ResultsWrapper>
             {filteredResults.slice(0, 100).map((stock, ind) => (
-              <ResultRow key={ind} onClick={() => addStock(user.id, stock)}>
+              <ResultRow
+                key={ind}
+                onClick={() => addStock(selectCurrentUser.id, stock)}
+              >
                 <Col>
                   <label>Ticker</label>
                   <p>{stock.ticker}</p>
@@ -52,7 +58,12 @@ const SearchStocks = ({ allstocks }) => {
   );
 };
 
-export default SearchStocks;
+const mapStateToProps = createStructuredSelector({
+  selectCurrentUser: selectCurrentUser,
+});
+const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchStocks);
 
 // styles
 const Container = styled.div`

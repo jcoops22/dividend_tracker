@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { getUserStocks } from "../../resources/stockUtilities";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 import LoadingIcon from "../Shared/LoadingIcon";
 import StocksWrapper from "./StocksWrapper";
+import { selectCurrentUser } from "../../redux/user/user-selectors";
 
-const StocksList = ({ refresh }) => {
-  const [userStocks, setUserStocks] = useState(null);
-  const [user] = useState(JSON.parse(localStorage.getItem("user")));
+const StocksList = ({ refresh, selectCurrentUser }) => {
+  const [userStocks, setUserStocks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,7 +22,8 @@ const StocksList = ({ refresh }) => {
   }, [userStocks, refresh]);
 
   const updateUserStocks = async () => {
-    let stocks = await getUserStocks(user.id);
+    console.log("should be called");
+    let stocks = await getUserStocks(selectCurrentUser.id);
     setUserStocks(stocks);
     setLoading(false);
   };
@@ -43,7 +46,12 @@ const StocksList = ({ refresh }) => {
   );
 };
 
-export default StocksList;
+const mapStateToProps = createStructuredSelector({
+  selectCurrentUser: selectCurrentUser,
+});
+const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(StocksList);
 
 // styles
 const Container = styled.div`
