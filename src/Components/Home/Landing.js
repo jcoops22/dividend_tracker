@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import SignIn from "../Home/SignIn";
 import Register from "../Home/Register";
+import { auth } from "../Firebase/firebase";
 
 const Landing = () => {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
@@ -15,7 +16,7 @@ const Landing = () => {
   return (
     <Container>
       <HeaderWrapper>
-        <h1>Dividend Tracker</h1>
+        <h1 onClick={() => auth.signOut()}>Dividend Tracker</h1>
         <SignIn />
       </HeaderWrapper>
       <h3>Record and manage your dividends</h3>

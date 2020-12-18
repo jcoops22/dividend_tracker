@@ -1,4 +1,5 @@
 import "./App.css";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
 import Home from "./Components/Home/Home";
@@ -18,7 +19,6 @@ function App() {
 }
 
 export default App;
-
 // styles
 const Container = styled.div`
   /* border: 2px solid blue; */

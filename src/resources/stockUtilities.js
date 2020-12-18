@@ -58,7 +58,26 @@ export const addStock = async (userID, stock) => {
     });
     return newArr;
   });
-  // take current user object and update the stocks property
+  // take current user object and update the stocks array property
+  let updatedObj = { ...currentUserObj, stocks: updatedStocksArray };
+  console.log(updatedStocksArray);
+  console.log(updatedObj);
+  // update the user's stocks
+  ref.set({
+    ...updatedObj,
+  });
+};
+
+export const deleteStock = async (userID, stock) => {
+  let ref = firestore.doc(`users/${userID}`);
+  let currentUserObj = await ref.get().then((data) => data.data());
+
+  let updatedStocksArray = await ref.get().then((data) => {
+    return data.data().stocks.filter((s) => {
+      return s.ticker !== stock.ticker;
+    });
+  });
+  // take current user object and update the stocks array property
   let updatedObj = { ...currentUserObj, stocks: updatedStocksArray };
   console.log(updatedStocksArray);
   console.log(updatedObj);

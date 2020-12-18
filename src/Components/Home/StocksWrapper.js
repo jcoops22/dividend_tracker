@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import Drawer from "./Drawer";
+import StockToolbar from "./StockToolbar";
 
 const StocksWrapper = ({ stocks }) => {
   const [selected, setSelected] = useState(false);
@@ -116,6 +117,7 @@ const StocksWrapper = ({ stocks }) => {
               </SectionDiv>
             </Col>
           </Row>
+          <StockToolbar stock={stock} />
           <Drawer
             stock={stock}
             open={selected === stock.ticker}

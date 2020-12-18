@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 import { auth, creatUserProfileDocument } from "../Firebase/firebase";
+import { setCurrentUser } from "../../redux/user/user-actions";
 
-const Register = () => {
+const Register = ({ setCurrentUser }) => {
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [password, setPassword] = useState("");
@@ -17,14 +20,16 @@ const Register = () => {
       return;
     }
     try {
+      // create ability to sign in with email and password
       const { user } = await auth.createUserWithEmailAndPassword(
         email,
         password
       );
-      creatUserProfileDocument(user, { first, last });
+      // create user in firestore and set as current user in redux
+      let createdUser = await creatUserProfileDocument(user, { first, last });
+      setCurrentUser(createdUser);
     } catch (err) {
       alert(err);
-      console.log(err);
       console.error(err);
     }
   };
@@ -69,7 +74,14 @@ const Register = () => {
   );
 };
 
-export default Register;
+const mapStateToProps = createStructuredSelector({
+  // currentUser: selectCurrentUser,
+});
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
 
 // styles
 const Form = styled.form`

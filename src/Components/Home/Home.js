@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import { firestore } from "../Firebase/firebase";
+import { auth, firestore } from "../Firebase/firebase";
 import Header from "../Shared/Header";
 import Toolbar from "../Shared/Toolbar";
 import StocksList from "./StocksList";
@@ -36,7 +35,7 @@ const Home = () => {
     <Container>
       <Header text={"Dividend Tracker"} />
       <Toolbar stocks={allStocks} />
-      <Link to="/">Sign out</Link>
+      <Lin onClick={() => auth.signOut()}>Sign out</Lin>
       <StocksList />
       {loading ? <LoadingIcon /> : null}
     </Container>
@@ -49,4 +48,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   /* border: 1px solid red; */
+`;
+const Lin = styled.div`
+  background-color: lightgreen;
 `;

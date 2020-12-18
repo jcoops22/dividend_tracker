@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import { setCurrentUser } from "../../redux/user/user-actions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBa_DTb-CMVCtzZ9etA45OLfTpR0v9Km-A",
@@ -20,6 +21,7 @@ export const creatUserProfileDocument = async (userAuth, addtionalData) => {
   console.log("creating the document");
   const userRef = firestore.doc(`users/${userAuth.uid}`);
   const snapshot = await userRef.get();
+  let returnedUser = null;
 
   if (!snapshot.exists) {
     const { email } = userAuth;
@@ -28,34 +30,27 @@ export const creatUserProfileDocument = async (userAuth, addtionalData) => {
     const id = userAuth.uid;
     const createdAt = new Date();
 
+    const userObj = {
+      first,
+      last,
+      email,
+      createdAt,
+      stocks,
+      id,
+      ...addtionalData,
+    };
+
     try {
       await userRef.set({
-        first,
-        last,
-        email,
-        createdAt,
-        stocks,
-        id,
-        ...addtionalData,
+        ...userObj,
       });
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          first,
-          last,
-          email,
-          createdAt,
-          stocks,
-          id,
-          ...addtionalData,
-        })
-      );
+      returnedUser = userObj;
     } catch (err) {
       console.log("error creating user", err.message);
     }
   }
-  return userRef;
+  return returnedUser;
+  // return userRef;
 };
 
 // Initialize Firebase
