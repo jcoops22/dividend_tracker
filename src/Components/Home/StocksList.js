@@ -9,14 +9,16 @@ import StocksWrapper from "./StocksWrapper";
 import { selectCurrentUser } from "../../redux/user/user-selectors";
 
 const StocksList = ({ refresh, selectCurrentUser }) => {
-  const [userStocks, setUserStocks] = useState([]);
+  const [userStocks, setUserStocks] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
     if (userStocks) {
+      console.log("if");
       setLoading(false);
     } else {
+      console.log("else");
       updateUserStocks();
     }
   }, [userStocks, refresh]);
@@ -36,7 +38,7 @@ const StocksList = ({ refresh, selectCurrentUser }) => {
       ) : (
         <StockContainer>
           {userStocks.length ? (
-            <StocksWrapper stocks={userStocks} />
+            <StocksWrapper stocks={userStocks} user={selectCurrentUser} />
           ) : (
             "Add some stocks!"
           )}

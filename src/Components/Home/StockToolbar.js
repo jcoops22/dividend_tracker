@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { deleteStock } from "../../resources/stockUtilities";
 
-const StockToolbar = ({ stock }) => {
-  const [user] = useState(JSON.parse(localStorage.getItem("user")));
+const StockToolbar = ({ stock, user }) => {
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608220501/Dividend%20Tracker/Icons/Stock%20Toolbar/folder-delete-svgrepo-com_sl7sf5.svg"
   );
