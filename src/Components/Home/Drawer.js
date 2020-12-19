@@ -1,30 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { selectTickerData } from "../../redux/stocks/stocks-selectors";
 
 const Drawer = ({ stock, open, loading, data }) => {
+  const [drawerData, setDrawerData] = useState(data);
+
+  useEffect(() => {});
+
   return (
     <Container animationName={open ? "open_drawer" : "noname"}>
-      {loading ? (
-        "loading"
-      ) : (
+      {data ? (
         <InfoWrapper>
           <Row>
-            <span>Market Value:{data.value}</span>
+            {loading ? <Loader /> : <span>Market Value: {data.value} </span>}
           </Row>
-          <Row>
-            <span>
-              Yield:
-              {data.yield ? data.yield.toString().substring(0, 4) + "%" : null}
-            </span>
-          </Row>
+          <Row>{loading ? <Loader /> : <span>Yield: {data.yield}</span>}</Row>
         </InfoWrapper>
+      ) : (
+        "Loading"
       )}
     </Container>
   );
 };
 
-export default Drawer;
+const mapStateToProps = createStructuredSelector({
+  selectTickerData: selectTickerData,
+});
+const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Drawer);
 
 // styles
 const Container = styled.div`
@@ -58,4 +65,11 @@ const Row = styled.div`
 const Col = styled.div`
   display: flex;
   flex-direction: column;
+`;
+const Loader = styled.div`
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 3px solid red;
+  border-top-color: blue;
 `;

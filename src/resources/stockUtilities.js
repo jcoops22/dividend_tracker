@@ -1,4 +1,5 @@
 import { firestore } from "../Components/Firebase/firebase";
+import axios from "axios";
 import { nas } from "../resources/nyseOBJ";
 
 export const updateStocks = () => {
@@ -40,6 +41,99 @@ export const getUserStocks = async (userID) => {
     return data.data().stocks;
   });
   return arr;
+};
+
+export const getTickerInfo = async (ticker, timeInterval) => {
+  // intervals options: 1, 5, 15, 30, 60
+  let interval = timeInterval;
+  let api_KEY = "3M8136KILLJ20M9K";
+  let currentInfo = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=${interval}min&apikey=${api_KEY}`;
+  let overview = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=${api_KEY}`;
+  // OVERVIEW API CALL
+  let overviewData = await axios
+    .get(overview)
+    .then((data) => {
+      if (data.data.Note) {
+        return {
+          yield: "No data",
+          divPerShare: "No data",
+          exDivDate: "No data",
+          payDivDate: "No data",
+        };
+      }
+      // console.log(!!data.data.Note);
+      // console.log(data);
+      const {
+        DividendYield,
+        DividendPerShare,
+        DividendDate,
+        ExDividendDate,
+      } = data.data;
+      // console.log({
+      //   yield: DividendYield * 100,
+      //   divPerShare: DividendPerShare,
+      //   exDivDate: ExDividendDate,
+      //   payDivDate: DividendDate,
+      // });
+      return {
+        ticker: ticker,
+        yield: DividendYield * 100,
+        divPerShare: DividendPerShare,
+        exDivDate: ExDividendDate,
+        payDivDate: DividendDate,
+      };
+    })
+    .catch((err) => {
+      console.log("There was a problem getting the data", err.message);
+      return {
+        yield: "No data",
+        divPerShare: "No data",
+        exDivDate: "No data",
+        payDivDate: "No data",
+      };
+    });
+  // TIME SERIES API CALL
+  let seriesData = await axios
+    .get(currentInfo)
+    .then((data) => {
+      if (data.data.Note) {
+        console.log("Timeout occurred");
+        return {
+          yield: "No data",
+          divPerShare: "No data",
+          exDivDate: "No data",
+          payDivDate: "No data",
+        };
+      }
+      let time_series_arr = Object.entries(data.data["Time Series (5min)"]);
+      let obj = time_series_arr.map((arr) => {
+        return {
+          lastUpdated: arr[0],
+          value: "$" + arr[1]["4. close"].slice(0, -2),
+        };
+      });
+      return obj;
+    })
+    .catch((err) => {
+      console.log(
+        "There was a problem getting the interval data,",
+        err.message
+      );
+      return {
+        lastUpdated: "No Data",
+        value: "No Data",
+      };
+    });
+  let value = await seriesData[0].value;
+  // console.log({
+  //   ...overviewData,
+  //   timeDate: seriesData,
+  // });
+  return {
+    ...overviewData,
+    timeDate: seriesData,
+    value: value,
+  };
 };
 
 export const addStock = async (userID, stock) => {

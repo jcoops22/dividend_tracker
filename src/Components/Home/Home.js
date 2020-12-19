@@ -7,26 +7,25 @@ import Header from "../Shared/Header";
 import Toolbar from "../Shared/Toolbar";
 import StocksList from "./StocksList";
 import LoadingIcon from "../Shared/LoadingIcon";
+import { setStocks } from "../../redux/stocks/stocks-actions";
 import { setCurrentUser } from "../../redux/user/user-actions";
-import { selectCurrentUser } from "../../redux/user/user-selectors";
+import { selectAllStocks } from "../../redux/stocks/stocks-selectors";
 
-const Home = ({ setCurrentUser }) => {
+const Home = ({ setCurrentUser, setStocks, selectAllStocks }) => {
   const [loading, setLoading] = useState(false);
-  const [allStocks, setAllStocks] = useState(
-    JSON.parse(localStorage.getItem("symbol"))
-  );
+  const [allStocks, setAllStocks] = useState(null);
 
   useEffect(() => {
     // updated user on signout
     const unsub = auth.onAuthStateChanged(async (user) => {
       if (!user) {
         setCurrentUser(null);
-      } else {
-        console.log("did not sign out");
+        setStocks(null);
       }
     });
 
-    if (!localStorage.symbol) {
+    if (!selectAllStocks) {
+      // console.log("we dont' have stocks already");
       getStocks();
     }
 
@@ -39,10 +38,10 @@ const Home = ({ setCurrentUser }) => {
     setLoading(true);
     const stocksCollectionRef = firestore.collection("symbols");
     stocksCollectionRef.get().then((data) => {
-      let stocksArr = data.docs[0].data().symbols;
-      window.localStorage.setItem("symbol", JSON.stringify(stocksArr));
-      let storedStocks = JSON.parse(localStorage.getItem("symbol"));
-      setAllStocks(storedStocks);
+      setStocks(data.docs[0].data().symbols);
+      // window.localStorage.setItem("symbol", JSON.stringify(stocksArr));
+      // let storedStocks = JSON.parse(localStorage.getItem("symbol"));
+      setAllStocks(data.docs[0].data().symbols);
       setLoading(false);
     });
   };
@@ -59,10 +58,11 @@ const Home = ({ setCurrentUser }) => {
 };
 
 const mapStateToProps = createStructuredSelector({
-  selectCurrentUser: selectCurrentUser,
+  selectAllStocks: selectAllStocks,
 });
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  setStocks: (stocks) => dispatch(setStocks(stocks)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

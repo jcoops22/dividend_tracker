@@ -8,23 +8,20 @@ import LoadingIcon from "../Shared/LoadingIcon";
 import StocksWrapper from "./StocksWrapper";
 import { selectCurrentUser } from "../../redux/user/user-selectors";
 
-const StocksList = ({ refresh, selectCurrentUser }) => {
+const StocksList = ({ selectCurrentUser }) => {
   const [userStocks, setUserStocks] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
     if (userStocks) {
-      console.log("if");
       setLoading(false);
     } else {
-      console.log("else");
       updateUserStocks();
     }
-  }, [userStocks, refresh]);
+  }, [userStocks]);
 
   const updateUserStocks = async () => {
-    console.log("should be called");
     let stocks = await getUserStocks(selectCurrentUser.id);
     setUserStocks(stocks);
     setLoading(false);
@@ -38,7 +35,7 @@ const StocksList = ({ refresh, selectCurrentUser }) => {
       ) : (
         <StockContainer>
           {userStocks.length ? (
-            <StocksWrapper stocks={userStocks} user={selectCurrentUser} />
+            <StocksWrapper stocks={userStocks} />
           ) : (
             "Add some stocks!"
           )}

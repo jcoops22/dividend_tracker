@@ -1,88 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import Drawer from "./Drawer";
 import StockToolbar from "./StockToolbar";
 
 const StocksWrapper = ({ stocks }) => {
   const [selected, setSelected] = useState(false);
   const [overviewData, setOverviewData] = useState({});
   const [seriesData, setSeriesData] = useState({});
-  const [drawerData, setDrawerData] = useState({});
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setDrawerData({
-      ...seriesData,
-      ...overviewData,
-    });
-  }, [loading, overviewData, seriesData]);
+  useEffect(() => {}, [loading, overviewData, seriesData]);
 
-  const getTickerInfo = async (ticker) => {
-    // intervals options: 1, 5, 15, 30, 60
-    let interval = 5;
-    let api_KEY = "3M8136KILLJ20M9K";
-    let currentInfo = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=${interval}min&apikey=${api_KEY}`;
-    let overview = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=${api_KEY}`;
-    // OVERVIEW API CALL
-    await axios
-      .get(overview)
-      .then((data) => {
-        setLoading(true);
-        const {
-          DividendYield,
-          DividendPerShare,
-          DividendDate,
-          ExDividendDate,
-        } = data.data;
-        setOverviewData({
-          yield: DividendYield * 100,
-          divPerShare: DividendPerShare,
-          exDivDate: ExDividendDate,
-          payDivDate: DividendDate,
-        });
-      })
-      .catch((err) => {
-        setOverviewData({
-          yield: "No data",
-          divPerShare: "No data",
-          exDivDate: "No data",
-          payDivDate: "No data",
-        });
-        setDrawerData({
-          value: "No Data",
-        });
-        setLoading(false);
-        return err;
-      });
-    // TIME SERIES API CALL
-    await axios
-      .get(currentInfo)
-      .then((data) => {
-        let time_series_arr = Object.entries(data.data["Time Series (5min)"]);
-
-        time_series_arr.map((arr) => {
-          setSeriesData({
-            lastUpdated: arr[0],
-            value: "$" + arr[1]["4. close"].slice(0, -2),
-          });
-        });
-      })
-      .then(() => {
-        setLoading(false);
-      })
-      .catch((err) => {
-        setSeriesData({
-          lastUpdated: "No Data",
-          value: "No Data",
-        });
-        setDrawerData({
-          value: "No Data",
-        });
-        setLoading(false);
-        return err;
-      });
-  };
   return (
     <Container>
       {stocks.map((stock, ind) => (
@@ -90,7 +17,6 @@ const StocksWrapper = ({ stocks }) => {
           key={ind}
           onClick={() => {
             setSelected(stock.ticker);
-            getTickerInfo(stock.ticker);
           }}
         >
           <Row>
@@ -118,12 +44,6 @@ const StocksWrapper = ({ stocks }) => {
             </Col>
           </Row>
           <StockToolbar stock={stock} />
-          <Drawer
-            stock={stock}
-            open={selected === stock.ticker}
-            data={drawerData}
-            loading={loading}
-          />
         </StockLine>
       ))}
     </Container>
