@@ -39,8 +39,6 @@ const Home = ({ setCurrentUser, setStocks, selectAllStocks }) => {
     const stocksCollectionRef = firestore.collection("symbols");
     stocksCollectionRef.get().then((data) => {
       setStocks(data.docs[0].data().symbols);
-      // window.localStorage.setItem("symbol", JSON.stringify(stocksArr));
-      // let storedStocks = JSON.parse(localStorage.getItem("symbol"));
       setAllStocks(data.docs[0].data().symbols);
       setLoading(false);
     });

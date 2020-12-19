@@ -60,28 +60,22 @@ export const getTickerInfo = async (ticker, timeInterval) => {
           exDivDate: "No data",
           payDivDate: "No data",
         };
+      } else {
+        const {
+          DividendYield,
+          DividendPerShare,
+          DividendDate,
+          ExDividendDate,
+        } = data.data;
+
+        return {
+          ticker: ticker,
+          yield: DividendYield,
+          divPerShare: DividendPerShare,
+          exDivDate: ExDividendDate,
+          payDivDate: DividendDate,
+        };
       }
-      // console.log(!!data.data.Note);
-      // console.log(data);
-      const {
-        DividendYield,
-        DividendPerShare,
-        DividendDate,
-        ExDividendDate,
-      } = data.data;
-      // console.log({
-      //   yield: DividendYield * 100,
-      //   divPerShare: DividendPerShare,
-      //   exDivDate: ExDividendDate,
-      //   payDivDate: DividendDate,
-      // });
-      return {
-        ticker: ticker,
-        yield: DividendYield * 100,
-        divPerShare: DividendPerShare,
-        exDivDate: ExDividendDate,
-        payDivDate: DividendDate,
-      };
     })
     .catch((err) => {
       console.log("There was a problem getting the data", err.message);
@@ -112,7 +106,10 @@ export const getTickerInfo = async (ticker, timeInterval) => {
           value: "$" + arr[1]["4. close"].slice(0, -2),
         };
       });
-      return obj;
+      return {
+        ...obj,
+        value: obj[0].value,
+      };
     })
     .catch((err) => {
       console.log(
@@ -121,18 +118,18 @@ export const getTickerInfo = async (ticker, timeInterval) => {
       );
       return {
         lastUpdated: "No Data",
-        value: "No Data",
+        value: "Data Not Available",
       };
     });
-  let value = await seriesData[0].value;
-  // console.log({
-  //   ...overviewData,
-  //   timeDate: seriesData,
-  // });
+  console.log({
+    ...overviewData,
+    timeDate: seriesData,
+    value: seriesData.value,
+  });
   return {
     ...overviewData,
     timeDate: seriesData,
-    value: value,
+    value: seriesData.value,
   };
 };
 

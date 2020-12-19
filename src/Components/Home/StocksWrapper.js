@@ -56,6 +56,7 @@ export default StocksWrapper;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  padding-bottom: 4rem;
 `;
 const StockLine = styled.div`
   width: 100%;

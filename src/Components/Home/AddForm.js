@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 import { Link } from "react-router-dom";
 import SearchStocks from "../Home/SearchStocks";
+import { selectAllStocks } from "../../redux/stocks/stocks-selectors";
 
-const Add = (props) => {
-  const { stocks } = props.location.state;
-
+const Add = ({ selectAllStocks }) => {
   return (
     <Container>
       <Link to="/home">back</Link>
       <h1>Add Stock</h1>
       <Form onClick={(e) => e.stopPropagation()}>
         <label>Symbol</label>
-        <SearchStocks allstocks={stocks} />
+        <SearchStocks allstocks={selectAllStocks} />
       </Form>
     </Container>
   );
 };
 
-export default Add;
+const mapStateToProps = createStructuredSelector({
+  selectAllStocks: selectAllStocks,
+});
+const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Add);
 
 // styles
 const Container = styled.div`

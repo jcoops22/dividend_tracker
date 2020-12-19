@@ -30,17 +30,19 @@ const StockToolbar = ({
   );
   const [showModal, setShowModal] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
-  const [tickerInfo, setTickerInfo] = useState({});
+  const [tickerInfo, setTickerInfo] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const assignTickerData = async () => {
+    setLoading(true);
     if (showDrawer) {
       return;
     }
-    console.log("running");
+
     let data = await getTickerInfo(stock.ticker, 5);
     setTickerData(data);
     setTickerInfo(data);
+    setLoading(!!!data);
   };
 
   return (
@@ -74,7 +76,12 @@ const StockToolbar = ({
           <ConfirmDelete>Are you sure you want to delete?</ConfirmDelete>
         </Modal>
       ) : null}
-      <Drawer stock={stock} open={showDrawer} data={tickerInfo} />
+      <Drawer
+        stock={stock}
+        open={showDrawer}
+        data={tickerInfo}
+        loading={loading}
+      />
     </Container>
   );
 };
