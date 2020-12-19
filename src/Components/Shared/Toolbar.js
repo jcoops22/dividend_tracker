@@ -16,7 +16,7 @@ const Toolbar = ({ stocks }) => {
         return showAddForm ? setShowAddForm(false) : null;
       }}
     >
-      <ReportButton hidden={true}>
+      <ReportButton>
         <button>Reports</button>
       </ReportButton>
       <AddTickerWrapper>
@@ -43,15 +43,24 @@ export default Toolbar;
 // styles
 const Container = styled.div`
   width: 100%;
+  height: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
   margin-bottom: 3rem;
-  border: 2px solid #999;
+  padding: 0;
+  overflow: hidden;
+  opacity: 0;
+  animation: drop_toolbar_down 0.5s 1s forwards;
+  border-bottom: 2px solid #999;
 
-  @media ${device.tabletS} {
-    border: none;
+  @keyframes drop_toolbar_down {
+    to {
+      opacity: 1;
+      padding: 0.5rem;
+      height: 4.25rem;
+    }
   }
 `;
 const ReportButton = styled.div`
@@ -59,7 +68,7 @@ const ReportButton = styled.div`
   display: flex;
   justify-content: center;
   /* border: 2px solid #edc639; */
-  border: 1px solid red;
+  /* border: 1px solid red; */
 
   button {
     width: 6rem;

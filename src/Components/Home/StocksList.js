@@ -59,16 +59,13 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
-
-  @media ${device.tabletS} {
-    /* padding: 0 1rem; */
-  }
+  /* background-color: blue; */
 `;
 const StockContainer = styled.div`
+  width: 100%;
   max-width: 900px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 `;

@@ -4,6 +4,7 @@ import { device } from "../../resources/mediaquery";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectTickerData } from "../../redux/stocks/stocks-selectors";
+import { formatDateData } from "../../resources/stockUtilities";
 
 const Drawer = ({ stock, open, loading, data }) => {
   useEffect(() => {}, [loading]);
@@ -15,38 +16,24 @@ const Drawer = ({ stock, open, loading, data }) => {
           <Row padding="0.5rem">
             <Col>
               <Row>
-                {loading ? (
-                  <Loader />
-                ) : (
-                  <span>
-                    Market Value:{" "}
-                    {data.value === undefined
-                      ? "Data Not Available"
-                      : data.value}
-                  </span>
-                )}
+                <span>
+                  Market Value:{" "}
+                  {data.value === undefined ? "Data Not Available" : data.value}
+                </span>
               </Row>
               <Row>
-                {loading ? (
-                  <Loader />
-                ) : (
-                  <span>
-                    Yield: {isNaN(data.yield * 100) ? 0 : data.yield * 100}%
-                  </span>
-                )}
+                <span>
+                  Yield: {isNaN(data.yield * 100) ? 0 : data.yield * 100}%
+                </span>
               </Row>
               <Row>
-                {loading ? (
-                  <Loader />
-                ) : (
-                  <span>
-                    Dividend per share: $
-                    {isNaN(data.divPerShare) ? 0 : data.divPerShare}
-                  </span>
-                )}
+                <span>
+                  Dividend per share: $
+                  {isNaN(data.divPerShare) ? 0 : data.divPerShare}
+                </span>
               </Row>
             </Col>
-            <Col>
+            <Col padding="0 0 0 0.5rem">
               <D3Div>D3 here</D3Div>
             </Col>
           </Row>
@@ -59,14 +46,18 @@ const Drawer = ({ stock, open, loading, data }) => {
                   display: "flex",
                   justifyContent: "space-between",
                   width: "100%",
-                  padding: "0 0.3rem",
+                  padding: "0 0.5rem",
                 }}
               >
                 <div style={{ width: "50%" }}>
-                  Ex-Dividend date: {data.exDivDate}
+                  Ex-Dividend date:{" "}
+                  {data.exDivDate ? formatDateData(data.exDivDate) : "No data"}
                 </div>
-                <div style={{ width: "50%" }}>
-                  Payout date: {data.payDivDate}
+                <div style={{ width: "50%", paddingLeft: "1rem" }}>
+                  Payout date:{" "}
+                  {data.payDivDate
+                    ? formatDateData(data.payDivDate)
+                    : "No data"}
                 </div>
               </div>
             )}
@@ -122,14 +113,16 @@ const InfoWrapper = styled.div`
   }
 `;
 const Row = styled.div`
-  position: relative;
+  /* position: relative; */
   display: flex;
   padding: ${(props) => props.padding};
+  padding-bottom: 0.2rem;
   font-size: 1rem;
 `;
 const Col = styled.div`
   display: flex;
   flex-direction: column;
+  padding: ${(props) => props.padding};
   width: 50%;
 `;
 const Loader = styled.div`

@@ -10,8 +10,14 @@ import LoadingIcon from "../Shared/LoadingIcon";
 import { setStocks } from "../../redux/stocks/stocks-actions";
 import { setCurrentUser } from "../../redux/user/user-actions";
 import { selectAllStocks } from "../../redux/stocks/stocks-selectors";
+import { selectCurrentUser } from "../../redux/user/user-selectors";
 
-const Home = ({ setCurrentUser, setStocks, selectAllStocks }) => {
+const Home = ({
+  setCurrentUser,
+  selectCurrentUser,
+  setStocks,
+  selectAllStocks,
+}) => {
   const [loading, setLoading] = useState(false);
   const [allStocks, setAllStocks] = useState(null);
 
@@ -46,9 +52,14 @@ const Home = ({ setCurrentUser, setStocks, selectAllStocks }) => {
 
   return (
     <Container>
-      <Header text={"Dividend Tracker"} />
-      <Toolbar stocks={allStocks} />
-      <Lin onClick={() => auth.signOut()}>Sign out</Lin>
+      <Sticky>
+        <Header
+          text={"Dividend Tracker"}
+          user={selectCurrentUser.first}
+          auth={auth}
+        />
+        <Toolbar stocks={allStocks} />
+      </Sticky>
       <StocksList />
       {loading ? <LoadingIcon /> : null}
     </Container>
@@ -57,6 +68,7 @@ const Home = ({ setCurrentUser, setStocks, selectAllStocks }) => {
 
 const mapStateToProps = createStructuredSelector({
   selectAllStocks: selectAllStocks,
+  selectCurrentUser: selectCurrentUser,
 });
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
@@ -70,6 +82,8 @@ const Container = styled.div`
   height: 100vh;
   /* border: 1px solid red; */
 `;
-const Lin = styled.div`
-  background-color: lightgreen;
+const Sticky = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 1;
 `;

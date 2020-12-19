@@ -33,7 +33,17 @@ export const updateStocks = () => {
   // ref.doc().set({
   // })
 };
+export const formatDateData = (data) => {
+  if (data === "No data" || data === "None") {
+    return "No Data";
+  }
+  let year = data.slice(0, 4);
+  let month = data.slice(5, 7);
+  let day = data.slice(8, 10);
 
+  // console.log(data, year, month, day);
+  return `${month}/${day}/${year}`;
+};
 export const getUserStocks = async (userID) => {
   let ref = firestore.doc(`users/${userID}`);
 
@@ -61,6 +71,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
           payDivDate: "No data",
         };
       } else {
+        console.log(data);
         const {
           DividendYield,
           DividendPerShare,
