@@ -17,6 +17,7 @@ const Home = ({
   selectCurrentUser,
   setStocks,
   selectAllStocks,
+  history,
 }) => {
   const [loading, setLoading] = useState(false);
   const [allStocks, setAllStocks] = useState(null);
@@ -57,6 +58,7 @@ const Home = ({
           text={"Dividend Tracker"}
           user={selectCurrentUser.first}
           auth={auth}
+          history={history}
         />
         <Toolbar stocks={allStocks} />
       </Sticky>

@@ -137,7 +137,6 @@ const Loader = styled.div`
   opacity: 1;
   visibility: ${(props) => props.visibiliy};
   animation: rotate_drawer_loader 0.5s ease-in infinite alternate;
-  /* animation-play-state: ${(props) => props.playing}; */
   border-radius: 50%;
   border: 3px solid red;
   border-top-color: blue;

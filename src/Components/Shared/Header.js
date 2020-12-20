@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 
-const Header = ({ text, user, auth }) => {
+const Header = ({ text, user, auth, history }) => {
   return (
     <Container>
-      <H1>{text}</H1>
+      <H1 onClick={() => history.push("/")}>{text}</H1>
       <Welcome>Welcome, {user}</Welcome>
       <SignOut type="button" value="Sign Out" onClick={() => auth.signOut()} />
     </Container>
@@ -37,6 +37,7 @@ const H1 = styled.h1`
   height: 100%;
   padding: 1rem 0.5rem;
   margin-left: 40%;
+  cursor: pointer;
   animation: slide_header_over 0.7s 0.5s ease-out forwards;
   /* border: 1px solid red; */
 

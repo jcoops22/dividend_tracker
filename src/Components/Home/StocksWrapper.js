@@ -14,12 +14,7 @@ const StocksWrapper = ({ stocks }) => {
   return (
     <Container>
       {stocks.map((stock, ind) => (
-        <StockLine
-          key={ind}
-          onClick={() => {
-            setSelected(stock.ticker);
-          }}
-        >
+        <StockLine key={ind} background={ind % 2 === 0 ? "lightgray" : null}>
           <Row>
             <Col>
               <Name>
@@ -65,6 +60,10 @@ const StockLine = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 0.5rem;
+  margin: 0.3rem 0;
+  background-color: ${(props) => props.background};
+  box-shadow: 2px 3px 8px 0 #999;
+  border-radius: 8px;
   /* border: 1px solid green; */
 `;
 const Row = styled.div`

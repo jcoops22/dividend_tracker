@@ -100,7 +100,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(StockToolbar);
 const Container = styled.div`
   width: 100%;
   height: 25%;
-  background-color: #3ed;
+  /* background-color: #3ed; */
 `;
 const Wrapper = styled.div`
   width: 100%;

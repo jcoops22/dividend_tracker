@@ -26,7 +26,9 @@ function App({ selectCurrentUser, setCurrentUser, history }) {
         <Route
           exact
           path="/home"
-          render={() => (selectCurrentUser ? <Home /> : <Landing />)}
+          render={() =>
+            selectCurrentUser ? <Home history={history} /> : <Landing />
+          }
         />
         <Route exact path="/add" component={AddForm} />
       </Switch>
