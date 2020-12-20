@@ -56,7 +56,7 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-bottom: 4rem;
+  padding-bottom: 0.3rem 0.3rem 4rem;
   /* border: 3px solid green; */
 `;
 const StockLine = styled.div`
@@ -64,12 +64,12 @@ const StockLine = styled.div`
   font-size: 1.2rem;
   display: flex;
   flex-direction: column;
+  padding-top: 0.5rem;
   /* border: 1px solid green; */
 `;
 const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
-  background-color: lightblue;
   /* border: 1px solid green; */
 
   @media ${device.tabletS} {
@@ -91,15 +91,18 @@ const Col = styled.div`
 const Name = styled.div`
   font-size: 1.3rem;
   color: #000;
+  padding-left: 0.3rem;
 `;
 const Ticker = styled.div`
   font-size: 1rem;
   color: #555;
+  padding-left: 0.3rem;
+  margin-top: 0.2rem;
 `;
 const SectionDiv = styled.div`
   height: 50%;
   width: 50%;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.3rem;
 
   span {
     padding: 0 0.7rem;

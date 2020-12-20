@@ -71,7 +71,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
           payDivDate: "No data",
         };
       } else {
-        console.log(data);
+        console.log("All data", data);
         const {
           DividendYield,
           DividendPerShare,

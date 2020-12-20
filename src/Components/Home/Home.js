@@ -79,6 +79,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home);
 // styles
 const Container = styled.div`
   width: 100%;
+  padding-bottom: 4rem;
   /* border: 1px solid red; */
 `;
 const Sticky = styled.div`

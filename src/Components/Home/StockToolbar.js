@@ -107,11 +107,17 @@ const Wrapper = styled.div`
   padding: 0.3rem;
   display: flex;
   flex-direction: row-reverse;
-  justify-content: space-between;
+  justify-content: flex-start;
 `;
 const IconWrapper = styled.div`
-  width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5rem;
+  margin: 0 0.7rem;
   cursor: pointer;
+  border-radius: 50%;
+  /* border: 1px solid red; */
 
   img {
     width: 100%;

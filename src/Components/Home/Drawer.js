@@ -10,8 +10,11 @@ const Drawer = ({ stock, open, loading, data }) => {
   useEffect(() => {}, [loading]);
 
   return (
-    <Container animationName={open ? "open_drawer" : "noname"}>
-      {data ? (
+    <Container
+      animationName={open ? "open_drawer" : "close_drawer"}
+      fillMode={open ? "forwards" : "backwards"}
+    >
+      {data && !loading ? (
         <InfoWrapper>
           <Row padding="0.5rem">
             <Col>
@@ -64,7 +67,7 @@ const Drawer = ({ stock, open, loading, data }) => {
           </Row>
         </InfoWrapper>
       ) : (
-        <Loader playing={open ? "running" : "paused"} />
+        <Loader visibiliy={open ? "visibile" : "hidden"} />
       )}
     </Container>
   );
@@ -83,9 +86,10 @@ const Container = styled.div`
   height: 0;
   width: 100%;
   overflow: hidden;
-  animation: noname 0.4s forwards;
+  animation: noname 0.4s;
+  animation-fill-mode: forwards;
   animation-name: ${(props) => props.animationName};
-  border: 1px solid red;
+  /* border: 1px solid red; */
 
   @keyframes open_drawer {
     to {
@@ -94,9 +98,8 @@ const Container = styled.div`
   }
 
   @keyframes close_drawer {
-    to {
-      height: 4rem;
-      background-color: blue;
+    from {
+      height: 6rem;
     }
   }
 `;
@@ -132,8 +135,9 @@ const Loader = styled.div`
   height: 30px;
   width: 30px;
   opacity: 1;
+  visibility: ${(props) => props.visibiliy};
   animation: rotate_drawer_loader 0.5s ease-in infinite alternate;
-  animation-play-state: ${(props) => props.playing};
+  /* animation-play-state: ${(props) => props.playing}; */
   border-radius: 50%;
   border: 3px solid red;
   border-top-color: blue;
