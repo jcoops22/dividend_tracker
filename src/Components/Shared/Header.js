@@ -43,7 +43,7 @@ const H1 = styled.h1`
   @keyframes slide_header_over {
     to {
       margin-left: 0;
-      font-size: 1.7rem;
+      font-size: 1.5rem;
     }
   }
 `;
@@ -55,7 +55,7 @@ const Welcome = styled.div`
   padding-top: 2rem;
   width: 40%;
   height: 100%;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   opacity: 0;
   text-transform: capitalize;
   animation: fade_welcome_in 0.3s 1.2s ease-out forwards;

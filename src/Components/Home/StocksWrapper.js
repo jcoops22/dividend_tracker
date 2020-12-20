@@ -70,7 +70,7 @@ const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
   background-color: lightblue;
-  border: 1px solid green;
+  /* border: 1px solid green; */
 
   @media ${device.tabletS} {
     flex-wrap: nowrap;
@@ -82,8 +82,11 @@ const Col = styled.div`
   display: flex;
   flex-direction: column;
   /* width: ${(props) => props.wid}; */
-  width: 50%;
-  border: 1px solid green;
+  width: 100%;
+  /* border: 1px solid green; */
+  @media ${device.tabletS} {
+    width: 50%;
+  }
 `;
 const Name = styled.div`
   font-size: 1.3rem;

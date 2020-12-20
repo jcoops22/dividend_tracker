@@ -63,7 +63,7 @@ const Container = styled.div`
 `;
 const StockContainer = styled.div`
   width: 100%;
-  max-width: 900px;
+  max-width: 1024px;
   display: flex;
   align-items: center;
   flex-direction: column;
