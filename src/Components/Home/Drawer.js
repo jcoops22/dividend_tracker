@@ -5,15 +5,17 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectTickerData } from "../../redux/stocks/stocks-selectors";
 import { formatDateData } from "../../resources/stockUtilities";
+import LoadingIcon from "../Shared/LoadingIcon";
 
 const Drawer = ({ stock, open, loading, data }) => {
   useEffect(() => {}, [loading]);
-
+  // <Loader visibiliy={open ? "visibile" : "hidden"} />;
   return (
     <Container
       animationName={open ? "open_drawer" : "close_drawer"}
       fillMode={open ? "forwards" : "backwards"}
     >
+      <hr />
       {data && !loading ? (
         <InfoWrapper>
           <Row padding="0.5rem">
@@ -67,7 +69,7 @@ const Drawer = ({ stock, open, loading, data }) => {
           </Row>
         </InfoWrapper>
       ) : (
-        <Loader visibiliy={open ? "visibile" : "hidden"} />
+        <LoadingIcon visibiliy={open ? "visibile" : "hidden"} />
       )}
     </Container>
   );
@@ -90,6 +92,10 @@ const Container = styled.div`
   animation-fill-mode: forwards;
   animation-name: ${(props) => props.animationName};
   /* border: 1px solid red; */
+
+  hr {
+    width: 80%;
+  }
 
   @keyframes open_drawer {
     to {
@@ -116,7 +122,6 @@ const InfoWrapper = styled.div`
   }
 `;
 const Row = styled.div`
-  /* position: relative; */
   display: flex;
   padding: ${(props) => props.padding};
   padding-bottom: 0.2rem;

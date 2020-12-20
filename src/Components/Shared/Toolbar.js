@@ -20,20 +20,12 @@ const Toolbar = ({ stocks }) => {
         <button>Reports</button>
       </ReportButton>
       <AddTickerWrapper>
-        <AddTicker>
-          <Link
-            to={{
-              pathname: "/add",
-              state: {
-                stocks: stocks,
-              },
-            }}
-          >
-            <span>Add new stock or fund</span>
-            <img src={add} alt="add" />
-          </Link>
+        <AddTicker onClick={() => setShowAddForm(true)}>
+          <span>Add new stock or fund</span>
+          <img src={add} alt="add" />
         </AddTicker>
       </AddTickerWrapper>
+      {showAddForm ? <AddForm /> : null}
     </Container>
   );
 };

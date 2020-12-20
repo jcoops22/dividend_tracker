@@ -74,6 +74,9 @@ const Welcome = styled.div`
   }
 `;
 const SignOut = styled.input`
+  &:hover {
+    border: 2px solid #fff;
+  }
   width: 6rem;
   height: 2rem;
   margin: 0 auto;
@@ -82,7 +85,8 @@ const SignOut = styled.input`
   background-color: #27d67b;
   border-radius: 20px;
   animation: fade_signOut_in 0.8s 1.3s forwards;
-  border: 2px solid #fff;
+  border: none;
+  /* border: 2px solid #fff; */
 
   @keyframes fade_signOut_in {
     to {

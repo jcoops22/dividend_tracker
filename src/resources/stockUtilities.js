@@ -148,18 +148,25 @@ export const addStock = async (userID, stock) => {
   let ref = firestore.doc(`users/${userID}`);
   let currentUserObj = await ref.get().then((data) => data.data());
 
-  let updatedStocksArray = await ref.get().then((data) => {
-    let newArr = [stock];
-    data.data().stocks.forEach((s) => {
-      if (s.ticker !== stock.ticker) {
-        newArr.push(s);
-      } else {
-        console.log("already exists in stocks");
-        return;
-      }
+  let updatedStocksArray = await ref
+    .get()
+    .then((data) => {
+      let newArr = [stock];
+      data.data().stocks.forEach((s) => {
+        if (s.ticker !== stock.ticker) {
+          newArr.push(s);
+        } else {
+          console.log("already exists in stocks");
+          return;
+        }
+      });
+      return newArr;
+    })
+    .catch((err) => {
+      return {
+        message: err.message,
+      };
     });
-    return newArr;
-  });
   // take current user object and update the stocks array property
   let updatedObj = { ...currentUserObj, stocks: updatedStocksArray };
   console.log(updatedStocksArray);
@@ -168,23 +175,32 @@ export const addStock = async (userID, stock) => {
   ref.set({
     ...updatedObj,
   });
+
+  return updatedStocksArray;
 };
 
 export const deleteStock = async (userID, stock) => {
   let ref = firestore.doc(`users/${userID}`);
   let currentUserObj = await ref.get().then((data) => data.data());
-
-  let updatedStocksArray = await ref.get().then((data) => {
-    return data.data().stocks.filter((s) => {
-      return s.ticker !== stock.ticker;
+  let updatedStocksArray = await ref
+    .get()
+    .then((data) => {
+      return data.data().stocks.filter((s) => {
+        return s.ticker !== stock.ticker;
+      });
+    })
+    .catch((err) => {
+      return {
+        message: err.message,
+      };
     });
-  });
   // take current user object and update the stocks array property
   let updatedObj = { ...currentUserObj, stocks: updatedStocksArray };
-  console.log(updatedStocksArray);
-  console.log(updatedObj);
+  // console.log(updatedStocksArray);
+  // console.log(updatedObj);
   // update the user's stocks
   ref.set({
     ...updatedObj,
   });
+  return updatedStocksArray;
 };

@@ -3,23 +3,65 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { addStock } from "../../resources/stockUtilities";
-import { selectCurrentUser } from "../../redux/user/user-selectors";
+import {
+  selectCurrentUser,
+  selectCurrentUserStocks,
+} from "../../redux/user/user-selectors";
+import { setCurrentUserStocks } from "../../redux/user/user-actions";
 
-const SearchStocks = ({ allstocks, selectCurrentUser }) => {
+const SearchStocks = ({
+  allstocks,
+  selectCurrentUser,
+  setCurrentUserStocks,
+  selectCurrentUserStocks,
+}) => {
   const [query, setQuery] = useState("");
+  const [tickersArr, setTickersArr] = useState(null);
   const [filteredResults, setFilteredResults] = useState([]);
-  const [user] = useState(JSON.parse(localStorage.getItem("user")));
+  const [alreadyAdded, setAlreadyAdded] = useState(null);
+  const [alreadyAddedIcon] = useState("");
+  const [addToListIcon] = useState("");
 
   useEffect(() => {
+    if (!tickersArr) {
+      buildTickersArr(selectCurrentUserStocks);
+    }
+    // set the focus on the input on render
     document.querySelector("#search_input").focus();
     filterResults(query);
-  }, [query]);
+    alreadyAddedCheck(query);
+  }, [query, tickersArr]);
 
   const filterResults = (query) => {
-    let temp = allstocks.filter((stock, ind, arr) => {
+    let temp = allstocks.filter((stock) => {
       return stock.ticker.toLowerCase() === query.toLowerCase() ? stock : null;
     });
     setFilteredResults(temp);
+  };
+
+  const handleAddStock = async (user, stock) => {
+    let success = await addStock(user, stock);
+    if (success.message === undefined) {
+      setCurrentUserStocks(selectCurrentUserStocks.concat(stock));
+    } else {
+      console.log(success.message);
+    }
+  };
+
+  const buildTickersArr = (arr) => {
+    setTickersArr(
+      arr.map((stockObj) => {
+        return stockObj.ticker;
+      })
+    );
+  };
+
+  const alreadyAddedCheck = (query) => {
+    if (tickersArr) {
+      setAlreadyAdded(
+        !!tickersArr.some((ticker) => query.toUpperCase() === ticker)
+      );
+    }
   };
 
   return (
@@ -39,7 +81,7 @@ const SearchStocks = ({ allstocks, selectCurrentUser }) => {
             {filteredResults.slice(0, 100).map((stock, ind) => (
               <ResultRow
                 key={ind}
-                onClick={() => addStock(selectCurrentUser.id, stock)}
+                onClick={() => handleAddStock(selectCurrentUser.id, stock)}
               >
                 <Col>
                   <label>Ticker</label>
@@ -49,6 +91,11 @@ const SearchStocks = ({ allstocks, selectCurrentUser }) => {
                   <label>Company</label>
                   <p>{stock.name}</p>
                 </Col>
+                {alreadyAdded ? (
+                  <AddedIcon src={alreadyAddedIcon} alt="added already" />
+                ) : (
+                  <AddIcon src={addToListIcon} alt="add to list" />
+                )}
               </ResultRow>
             ))}
           </ResultsWrapper>
@@ -60,8 +107,11 @@ const SearchStocks = ({ allstocks, selectCurrentUser }) => {
 
 const mapStateToProps = createStructuredSelector({
   selectCurrentUser: selectCurrentUser,
+  selectCurrentUserStocks: selectCurrentUserStocks,
 });
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUserStocks: (stocks) => dispatch(setCurrentUserStocks(stocks)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchStocks);
 
@@ -110,4 +160,10 @@ const ResultRow = styled.div`
 const Col = styled.div`
   display: flex;
   flex-direction: column;
+`;
+const AddedIcon = styled.img`
+  width: 10px;
+`;
+const AddIcon = styled.img`
+  width: 10px;
 `;

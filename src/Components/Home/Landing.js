@@ -38,8 +38,8 @@ const Landing = () => {
         <ul>
           <li>Add stocks to your list</li>
           <li>Enter your dividend payouts</li>
-          <li>Get up to date information on your tracked stocks</li>
-          <li>Get analysis reports of your portfolio</li>
+          <li>Get up to date* information on your tracked stocks</li>
+          <li>Generate reports to track your progress</li>
         </ul>
       </Section>
     </Container>

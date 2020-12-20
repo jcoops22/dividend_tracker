@@ -6,36 +6,40 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import LoadingIcon from "../Shared/LoadingIcon";
 import StocksWrapper from "./StocksWrapper";
-import { selectCurrentUser } from "../../redux/user/user-selectors";
+import {
+  selectCurrentUser,
+  selectCurrentUserStocks,
+} from "../../redux/user/user-selectors";
+import { setCurrentUserStocks } from "../../redux/user/user-actions";
 
-const StocksList = ({ selectCurrentUser }) => {
-  const [userStocks, setUserStocks] = useState(null);
+const StocksList = ({
+  selectCurrentUser,
+  setCurrentUserStocks,
+  selectCurrentUserStocks,
+}) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    if (userStocks) {
-      setLoading(false);
-    } else {
-      updateUserStocks();
-    }
-  }, [userStocks]);
+    updateUserStocks();
+  }, [setCurrentUserStocks]);
 
   const updateUserStocks = async () => {
     let stocks = await getUserStocks(selectCurrentUser.id);
-    setUserStocks(stocks);
+    setCurrentUserStocks(stocks);
     setLoading(false);
+    console.log(stocks);
   };
 
   return (
     <Container>
       <h1>Your Stocks:</h1>
       {loading ? (
-        <LoadingIcon />
+        <LoadingIcon big={true} />
       ) : (
         <StockContainer>
-          {userStocks.length ? (
-            <StocksWrapper stocks={userStocks} />
+          {selectCurrentUserStocks.length ? (
+            <StocksWrapper stocks={selectCurrentUserStocks} />
           ) : (
             "Add some stocks!"
           )}
@@ -47,8 +51,11 @@ const StocksList = ({ selectCurrentUser }) => {
 
 const mapStateToProps = createStructuredSelector({
   selectCurrentUser: selectCurrentUser,
+  selectCurrentUserStocks: selectCurrentUserStocks,
 });
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUserStocks: (stocks) => dispatch(setCurrentUserStocks(stocks)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(StocksList);
 
