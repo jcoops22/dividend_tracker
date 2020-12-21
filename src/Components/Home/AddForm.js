@@ -9,7 +9,7 @@ import { selectAllStocks } from "../../redux/stocks/stocks-selectors";
 const Add = ({ selectAllStocks }) => {
   return (
     <Container>
-      <Form onClick={(e) => e.stopPropagation()}>
+      <Form>
         <SearchStocks allstocks={selectAllStocks} />
       </Form>
     </Container>
@@ -32,9 +32,8 @@ const Container = styled.div`
   background-color: rgba(0, 0, 0, 0.7);
   height: 100vh;
   width: 100vw;
-  padding: 0 1rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   animation: fade_AddForm_in 0.5s forwards;
   /* border: 2px solid purple; */
@@ -46,10 +45,17 @@ const Container = styled.div`
   }
 `;
 const Form = styled.div`
+  position: relative;
+  left: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: flex-end;
   width: 100%;
+  animation: slide_form_in_from_right 0.4s forwards;
   /* border: 3px solid red; */
+
+  @keyframes slide_form_in_from_right {
+    to {
+      left: 0;
+    }
+  }
 `;

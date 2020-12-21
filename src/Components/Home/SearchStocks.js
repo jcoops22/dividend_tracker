@@ -92,7 +92,7 @@ const SearchStocks = ({
   };
 
   return (
-    <Container id={"searchResults"}>
+    <Container id={"searchResults"} onClick={(e) => e.stopPropagation()}>
       <h5>Search:</h5>
       <Input
         autoComplete="off"
@@ -158,7 +158,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(SearchStocks);
 // styles
 const Container = styled.div`
   position: relative;
-  left: 100%;
   width: 100%;
   max-width: 530px;
   height: 12rem;
@@ -167,7 +166,6 @@ const Container = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 0.5rem;
-  animation: slide_in_Search_from_left 0.3s forwards;
   background-color: #fff;
   /* border: 2px solid blue; */
 
@@ -176,12 +174,6 @@ const Container = styled.div`
     padding-left: 2rem;
     font-size: 1rem;
     /* border: 1px solid red; */
-  }
-
-  @keyframes slide_in_Search_from_left {
-    to {
-      left: 50%;
-    }
   }
 `;
 const Input = styled.input`
@@ -234,7 +226,6 @@ const ResultRow = styled.div`
     font-size: 1.2rem;
     /* border: 2px solid red; */
   }
-  /* border: 1px solid red; */
 `;
 const Row = styled.div`
   display: flex;
