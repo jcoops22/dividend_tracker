@@ -4,6 +4,14 @@ signout green: #27d67b
 purple: #7249d1
 
 */
+/*
+FONTS:  
+drawer/info: 
+font-family: 'Arimo', sans-serif;
+text: 
+font-family: 'Exo', sans-serif; 
+*/
+
 /* React IMPORTS
 import React, { useState } from "react";
 import styled from "styled-components";
@@ -20,5 +28,6 @@ html {
 body {
   height: fit-content;
   min-height: 100vh;
+  font-family: "Exo", sans-serif;
   background-color: #fff;
 }

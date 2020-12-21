@@ -14,7 +14,7 @@ const StocksWrapper = ({ stocks }) => {
   return (
     <Container>
       {stocks.map((stock, ind) => (
-        <StockLine key={ind} background={ind % 2 === 0 ? "lightgray" : null}>
+        <StockLine key={ind}>
           <Row>
             <Col>
               <Name>
@@ -51,8 +51,12 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-bottom: 0.3rem 0.3rem 4rem;
+  padding: 0 0 4rem;
   /* border: 3px solid green; */
+
+  @media ${device.mobileL} {
+    padding: 0 0.5rem 4rem;
+  }
 `;
 const StockLine = styled.div`
   width: 100%;
@@ -64,7 +68,7 @@ const StockLine = styled.div`
   background-color: ${(props) => props.background};
   box-shadow: 2px 3px 8px 0 #999;
   border-radius: 8px;
-  /* border: 1px solid green; */
+  border: 2px solid #7249d1;
 `;
 const Row = styled.div`
   display: flex;

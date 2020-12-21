@@ -36,6 +36,7 @@ const Container = styled.div`
   justify-content: flex-end;
   align-items: center;
   animation: fade_AddForm_in 0.5s forwards;
+  font-family: "Exo", sans-serif;
   /* border: 2px solid purple; */
 
   @keyframes fade_AddForm_in {

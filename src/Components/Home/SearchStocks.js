@@ -171,6 +171,7 @@ const Container = styled.div`
   align-items: center;
   padding: 0.5rem;
   background-color: #fff;
+  font-family: "Exo", sans-serif;
   /* border: 2px solid blue; */
 
   h5 {
@@ -188,6 +189,7 @@ const Input = styled.input`
   padding: 0.4rem;
   font-size: 17px;
   border-radius: 3px;
+  font-family: "Exo", sans-serif;
   border: 2px solid #7249d1;
 `;
 const Results = styled.div`

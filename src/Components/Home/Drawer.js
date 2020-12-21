@@ -9,13 +9,13 @@ import LoadingIcon from "../Shared/LoadingIcon";
 
 const Drawer = ({ stock, open, loading, data }) => {
   useEffect(() => {}, [loading]);
-  // <Loader visibiliy={open ? "visibile" : "hidden"} />;
+
   return (
     <Container
       animationName={open ? "open_drawer" : "close_drawer"}
       fillMode={open ? "forwards" : "backwards"}
     >
-      <hr />
+      {open ? <hr /> : null}
       {data && !loading ? (
         <InfoWrapper>
           <Row padding="0.5rem">
@@ -91,19 +91,36 @@ const Container = styled.div`
   position: relative;
   height: 0;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   overflow: hidden;
   animation: noname 0.4s;
   animation-fill-mode: forwards;
   animation-name: ${(props) => props.animationName};
-  border: 1px solid red;
+  font-family: "Arimo", sans-serif;
+  /* border: 1px solid red; */
 
   hr {
     width: 80%;
+    border-color: #7249d1;
+    opacity: 0.5;
+    animation: extend_hr_in_drawer 0.3s forwards;
+
+    @keyframes extend_hr_in_drawer {
+      from {
+        width: 0;
+      }
+    }
+  }
+
+  @media ${device.mobileL} {
+    /* animation-name: open_drawer; */
   }
 
   @keyframes open_drawer {
     to {
-      height: 6rem;
+      height: 10rem;
     }
   }
 
