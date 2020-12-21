@@ -69,7 +69,11 @@ const Drawer = ({ stock, open, loading, data }) => {
           </Row>
         </InfoWrapper>
       ) : (
-        <LoadingIcon visibiliy={open ? "visibile" : "hidden"} />
+        <LoadingIcon
+          visibiliy={open ? "visibile" : "hidden"}
+          height={"3rem"}
+          marginTop={"2rem"}
+        />
       )}
     </Container>
   );
@@ -91,7 +95,7 @@ const Container = styled.div`
   animation: noname 0.4s;
   animation-fill-mode: forwards;
   animation-name: ${(props) => props.animationName};
-  /* border: 1px solid red; */
+  border: 1px solid red;
 
   hr {
     width: 80%;

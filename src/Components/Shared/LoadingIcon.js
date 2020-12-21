@@ -2,25 +2,32 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 
-const LoadingIcon = ({ big, small, visibiliy }) => {
+const LoadingIcon = ({ height, big, visibiliy, marginTop }) => {
   const [spinnerIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608524427/Dividend%20Tracker/Icons/cube-svgrepo-com_hiothk.svg"
   );
 
+  // <LoaderSmall visibiliy={visibiliy} />
   return (
     <div>
       {big ? (
         <Loader>
-          <Wrapper>
-            <Spinner bg="red" height="60px" aniName="height1" delay="0.2s" />
-            <Spinner bg="blue" height="80px" aniName="height2" delay="0.4s" />
-            <Spinner bg="green" height="20px" aniName="height3" delay="0.6s" />
-            <Spinner bg="purple" height="70px" aniName="height4" delay="0.8s" />
-            <Spinner bg="orange" height="10px" aniName="height5" delay="1s" />
+          <Wrapper height={height}>
+            <Spinner bg="red" height="35%" aniName="height1" delay="0.2s" />
+            <Spinner bg="blue" height="80%" aniName="height2" delay="0.4s" />
+            <Spinner bg="green" height="20%" aniName="height3" delay="0.6s" />
+            <Spinner bg="purple" height="70%" aniName="height4" delay="0.8s" />
+            <Spinner bg="orange" height="50%" aniName="height5" delay="1s" />
           </Wrapper>
         </Loader>
       ) : (
-        <LoaderSmall visibiliy={visibiliy} />
+        <Wrapper visibiliy={visibiliy} height={height} marginTop={marginTop}>
+          <Spinner bg="red" height="35%" aniName="height1" delay="0.2s" />
+          <Spinner bg="blue" height="80%" aniName="height2" delay="0.4s" />
+          <Spinner bg="green" height="20%" aniName="height3" delay="0.6s" />
+          <Spinner bg="purple" height="70%" aniName="height4" delay="0.8s" />
+          <Spinner bg="orange" height="50%" aniName="height5" delay="1s" />
+        </Wrapper>
       )}
     </div>
   );
@@ -41,9 +48,14 @@ const Loader = styled.div`
   align-items: center;
 `;
 const Wrapper = styled.div`
-  height: 4rem;
+  height: ${(props) => props.height};
+  width: 9rem;
   transform: rotate(180deg);
   display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: ${(props) => props.marginTop};
+  visibility: ${(props) => props.visibiliy};
   border-top: 4px solid #999;
   /* border: 1px solid red; */
 `;
@@ -58,28 +70,28 @@ const Spinner = styled.div`
 
   @keyframes height1 {
     to {
-      height: 20px;
+      height: 20%;
     }
   }
 
   @keyframes height2 {
     to {
-      height: 60px;
+      height: 90%;
     }
   }
   @keyframes height3 {
     to {
-      height: 80px;
+      height: 60%;
     }
   }
   @keyframes height4 {
     to {
-      height: 100px;
+      height: 30%;
     }
   }
   @keyframes height5 {
     to {
-      height: 40px;
+      height: 100%;
     }
   }
 `;

@@ -35,7 +35,7 @@ const StocksList = ({
     <Container>
       <h1>Your Stocks:</h1>
       {loading ? (
-        <LoadingIcon big={true} />
+        <LoadingIcon big={true} height={"6rem"} />
       ) : (
         <StockContainer>
           {selectCurrentUserStocks.length ? (

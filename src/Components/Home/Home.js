@@ -63,7 +63,7 @@ const Home = ({
         <Toolbar stocks={allStocks} />
       </Sticky>
       <StocksList />
-      {loading ? <LoadingIcon big={true} /> : null}
+      {loading ? <LoadingIcon big={true} height={"6rem"} /> : null}
     </Container>
   );
 };
