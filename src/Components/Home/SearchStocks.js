@@ -139,7 +139,11 @@ const SearchStocks = ({
               </ResultRow>
             ))}
           </ResultsWrapper>
-        ) : null}
+        ) : (
+          <ResultsWrapper>
+            <ResultRow>No results</ResultRow>
+          </ResultsWrapper>
+        )}
       </Results>
     </Container>
   );
