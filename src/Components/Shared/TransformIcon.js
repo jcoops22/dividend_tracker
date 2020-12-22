@@ -4,7 +4,7 @@ import { device } from "../../resources/mediaquery";
 
 const TransformIcon = ({ first, second, transform, w1, w2 }) => {
   useEffect(() => {
-    console.log(transform);
+    // console.log(transform);
   }, [transform]);
 
   return (

@@ -45,7 +45,7 @@ const StockToolbar = ({
 
   const assignTickerData = async () => {
     setLoading(true);
-    if (showDrawer) {
+    if (showDrawer && showInfo) {
       return;
     }
 
@@ -55,6 +55,8 @@ const StockToolbar = ({
     setLoading(!!!data);
   };
 
+  // BUTTONS Functions
+  // update the stocks list after delete
   const updateAfterDelete = async (user, stock) => {
     let success = await deleteStock(user, stock);
     if (success.message === undefined) {
@@ -68,8 +70,32 @@ const StockToolbar = ({
       console.log(success.message);
     }
   };
+  // tasks when DIVIDEND drawer is opened
+  const handleShowDividend = () => {
+    if (showDividend) {
+      setShowDrawer(false);
+      setShowDividend(false);
+    } else {
+      setLoading(false);
+      setShowDrawer(true);
+      setShowDividend(true);
+      setShowInfo(false);
+    }
+  };
 
-  const handleShowDividend = () => {};
+  // tasks when INFO drawer is opened
+  const handleShowInfo = () => {
+    if (showInfo) {
+      setShowDrawer(false);
+      setShowInfo(false);
+      assignTickerData();
+    } else {
+      assignTickerData();
+      setShowDrawer(true);
+      setShowInfo(true);
+      setShowDividend(false);
+    }
+  };
 
   return (
     <Container>
@@ -85,9 +111,7 @@ const StockToolbar = ({
         </IconWrapper>
         <IconWrapper
           onClick={() => {
-            assignTickerData();
-            setShowDrawer(!showDrawer);
-            setShowInfo(!showInfo);
+            handleShowInfo();
           }}
         >
           <TransformIcon
@@ -100,9 +124,7 @@ const StockToolbar = ({
         </IconWrapper>
         <IconWrapper
           onClick={() => {
-            setShowDrawer(!showDrawer);
-            setShowDividend(!showDividend);
-            setShowInfo(false);
+            handleShowDividend();
           }}
         >
           <TransformIcon
@@ -131,6 +153,9 @@ const StockToolbar = ({
                   type="button"
                   value="Delete"
                   onClick={() => {
+                    setShowDrawer(false);
+                    setShowInfo(false);
+                    setShowDividend(false);
                     updateAfterDelete(selectCurrentUser.id, stock);
                   }}
                 />
