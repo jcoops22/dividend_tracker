@@ -26,6 +26,10 @@ const SearchStocks = ({
   const [addToListIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608506065/Dividend%20Tracker/Icons/SearchResults/add-svgrepo-com_gihegx.svg"
   );
+  const [littleLoader] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608609453/Dividend%20Tracker/Icons/Stock%20Toolbar/loading-loader-svgrepo-com_fruuoz.svg"
+  );
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!tickersArr) {
@@ -54,6 +58,7 @@ const SearchStocks = ({
   };
   // adding stock function
   const handleAddStock = async (user, stock) => {
+    setLoading(true);
     let success = await addStock(user, stock);
     if (success.message === undefined) {
       setCurrentUserStocks(selectCurrentUserStocks.concat(stock));
@@ -61,7 +66,9 @@ const SearchStocks = ({
       let arr = tickersArr;
       arr.push(query.toUpperCase());
       setTickersArr(arr);
+      setLoading(false);
     } else {
+      setLoading(false);
       console.log(success.message);
     }
   };
@@ -75,6 +82,7 @@ const SearchStocks = ({
   };
   // handle unchecking the match aka deleting
   const handleDelete = async (user, stock) => {
+    setLoading(true);
     let success = await deleteStock(user, stock);
     if (success.message === undefined) {
       console.log("success");
@@ -87,7 +95,9 @@ const SearchStocks = ({
       setTickersArr(
         tickersArr.filter((ticker) => query.toUpperCase() !== ticker)
       );
+      setLoading(false);
     } else {
+      setLoading(false);
       console.log(success.message);
     }
   };
@@ -120,21 +130,27 @@ const SearchStocks = ({
                     <p>{stock.name}</p>
                   </Row>
                 </Col>
-                <IconsDiv
-                  onClick={() =>
-                    alreadyAdded
-                      ? handleDelete(selectCurrentUser.id, stock)
-                      : handleAddStock(selectCurrentUser.id, stock)
-                  }
-                >
-                  <TransformIcon
-                    first={addToListIcon}
-                    second={alreadyAddedIcon}
-                    w1={"1.5rem"}
-                    w2={"1.5rem"}
-                    transform={alreadyAdded}
-                  />
-                </IconsDiv>
+                {loading ? (
+                  <AlreadyAddedLoader>
+                    <img src={littleLoader} alt="little loader" />
+                  </AlreadyAddedLoader>
+                ) : (
+                  <IconsDiv
+                    onClick={() =>
+                      alreadyAdded
+                        ? handleDelete(selectCurrentUser.id, stock)
+                        : handleAddStock(selectCurrentUser.id, stock)
+                    }
+                  >
+                    <TransformIcon
+                      first={addToListIcon}
+                      second={alreadyAddedIcon}
+                      w1={"1.5rem"}
+                      w2={"1.5rem"}
+                      transform={alreadyAdded}
+                    />
+                  </IconsDiv>
+                )}
               </ResultRow>
             ))}
           </ResultsWrapper>
@@ -253,4 +269,23 @@ const IconsDiv = styled.div`
   margin: 1rem;
   cursor: pointer;
   /* border: 1px solid red; */
+`;
+const AlreadyAddedLoader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+  cursor: pointer;
+  animation: spin_already_added_loader 1s linear forwards infinite;
+  /* border: 1px solid red; */
+
+  img {
+    width: 1.5rem;
+  }
+
+  @keyframes spin_already_added_loader {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `;
