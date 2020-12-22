@@ -11,7 +11,7 @@ import {
   selectCurrentUserStocks,
 } from "../../redux/user/user-selectors";
 import { selectTickerData } from "../../redux/stocks/stocks-selectors";
-
+import TransformIcon from "../Shared/TransformIcon";
 import Drawer from "./Drawer";
 
 const StockToolbar = ({
@@ -27,16 +27,21 @@ const StockToolbar = ({
   const [infoIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608222064/Dividend%20Tracker/Icons/Stock%20Toolbar/info-svgrepo-com_qtqho4.svg"
   );
+  const [closeInfoIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608598486/Dividend%20Tracker/Icons/Stock%20Toolbar/up-arrow-svgrepo-com_wpl1wo.svg"
+  );
   const [openIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608222100/Dividend%20Tracker/Icons/Stock%20Toolbar/add-svgrepo-com_jqafqu_nrjek2.svg"
   );
   const [closeIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608222111/Dividend%20Tracker/Icons/Stock%20Toolbar/minus_omimec_o5lvx8.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608599873/Dividend%20Tracker/Icons/Stock%20Toolbar/close-cross-svgrepo-com_gyobih.svg"
   );
   const [showModal, setShowModal] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [tickerInfo, setTickerInfo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [showDividend, setShowDividend] = useState(false);
 
   const assignTickerData = async () => {
     setLoading(true);
@@ -64,6 +69,8 @@ const StockToolbar = ({
     }
   };
 
+  const handleShowDividend = () => {};
+
   return (
     <Container>
       <Wrapper>
@@ -76,18 +83,35 @@ const StockToolbar = ({
             }}
           />
         </IconWrapper>
-        <IconWrapper>
-          <img
-            src={infoIcon}
-            alt="show stock info"
-            onClick={() => {
-              assignTickerData();
-              setShowDrawer(!showDrawer);
-            }}
+        <IconWrapper
+          onClick={() => {
+            assignTickerData();
+            setShowDrawer(!showDrawer);
+            setShowInfo(!showInfo);
+          }}
+        >
+          <TransformIcon
+            first={infoIcon}
+            second={closeInfoIcon}
+            w1={"1.5rem"}
+            w2={"1.5rem"}
+            transform={showInfo}
           />
         </IconWrapper>
-        <IconWrapper>
-          <img src={openIcon} alt="show dividend entry" />
+        <IconWrapper
+          onClick={() => {
+            setShowDrawer(!showDrawer);
+            setShowDividend(!showDividend);
+            setShowInfo(false);
+          }}
+        >
+          <TransformIcon
+            first={openIcon}
+            second={closeIcon}
+            w1={"1.5rem"}
+            w2={"1.2rem"}
+            transform={showDividend}
+          />
         </IconWrapper>
       </Wrapper>
       {showModal ? (
@@ -122,6 +146,8 @@ const StockToolbar = ({
         </Modal>
       ) : null}
       <Drawer
+        info={showInfo}
+        dividends={showDividend}
         stock={stock}
         open={showDrawer}
         data={tickerInfo}

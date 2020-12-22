@@ -8,6 +8,7 @@ import {
   selectCurrentUserStocks,
 } from "../../redux/user/user-selectors";
 import { setCurrentUserStocks } from "../../redux/user/user-actions";
+import TransformIcon from "../Shared/TransformIcon";
 
 const SearchStocks = ({
   allstocks,
@@ -119,22 +120,20 @@ const SearchStocks = ({
                     <p>{stock.name}</p>
                   </Row>
                 </Col>
-                <IconsDiv>
-                  {alreadyAdded ? (
-                    <AddedIcon
-                      src={alreadyAddedIcon}
-                      alt="added already"
-                      onClick={() => handleDelete(selectCurrentUser.id, stock)}
-                    />
-                  ) : (
-                    <AddIcon
-                      src={addToListIcon}
-                      alt="add to list"
-                      onClick={() =>
-                        handleAddStock(selectCurrentUser.id, stock)
-                      }
-                    />
-                  )}
+                <IconsDiv
+                  onClick={() =>
+                    alreadyAdded
+                      ? handleDelete(selectCurrentUser.id, stock)
+                      : handleAddStock(selectCurrentUser.id, stock)
+                  }
+                >
+                  <TransformIcon
+                    first={addToListIcon}
+                    second={alreadyAddedIcon}
+                    w1={"1.5rem"}
+                    w2={"1.5rem"}
+                    transform={alreadyAdded}
+                  />
                 </IconsDiv>
               </ResultRow>
             ))}
@@ -254,10 +253,4 @@ const IconsDiv = styled.div`
   margin: 1rem;
   cursor: pointer;
   /* border: 1px solid red; */
-`;
-const AddedIcon = styled.img`
-  width: 1.5rem;
-`;
-const AddIcon = styled.img`
-  width: 1.5rem;
 `;

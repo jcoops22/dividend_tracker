@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import SignIn from "../Home/SignIn";
 import Register from "../Home/Register";
 import { auth } from "../Firebase/firebase";
+import TransformIcon from "../Shared/TransformIcon";
 
 const Landing = () => {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
@@ -13,6 +14,12 @@ const Landing = () => {
   const [coin] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608095060/Dividend%20Tracker/Icons/coin-svgrepo-com_kejmkv.svg"
   );
+  const [transform, setTransform] = useState(false);
+
+  useEffect(() => {
+    console.log("we transformed");
+  }, [transform]);
+
   return (
     <Container>
       <HeaderWrapper>
@@ -42,6 +49,20 @@ const Landing = () => {
           <li>Generate reports to track your progress</li>
         </ul>
       </Section>
+      <div
+        onClick={() => {
+          console.log("clicked");
+          setTransform(!transform);
+        }}
+      >
+        <TransformIcon
+          first={piggyBank}
+          second={coin}
+          transform={transform}
+          w1={"30px"}
+          w2={"30px"}
+        />
+      </div>
     </Container>
   );
 };

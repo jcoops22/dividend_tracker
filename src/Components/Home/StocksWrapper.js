@@ -63,7 +63,7 @@ const StockLine = styled.div`
   font-size: 1.2rem;
   display: flex;
   flex-direction: column;
-  padding-top: 0.5rem;
+  padding: 0.5rem 0;
   margin: 0.3rem 0;
   background-color: ${(props) => props.background};
   box-shadow: 2px 3px 8px 0 #999;
@@ -95,6 +95,10 @@ const Name = styled.div`
   font-size: 1.3rem;
   color: #000;
   padding-left: 0.3rem;
+
+  span {
+    font-weight: bolder;
+  }
 `;
 const Ticker = styled.div`
   font-size: 1rem;
@@ -112,6 +116,6 @@ const SectionDiv = styled.div`
   }
 `;
 const StockLabel = styled.label`
-  font-weight: bold;
+  font-size: 1rem;
   color: #999;
 `;

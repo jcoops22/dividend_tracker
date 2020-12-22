@@ -7,7 +7,7 @@ import { selectTickerData } from "../../redux/stocks/stocks-selectors";
 import { formatDateData } from "../../resources/stockUtilities";
 import LoadingIcon from "../Shared/LoadingIcon";
 
-const Drawer = ({ stock, open, loading, data }) => {
+const Drawer = ({ info, open, loading, data, dividends }) => {
   useEffect(() => {}, [loading]);
 
   return (
@@ -16,7 +16,7 @@ const Drawer = ({ stock, open, loading, data }) => {
       fillMode={open ? "forwards" : "backwards"}
     >
       {open ? <hr /> : null}
-      {data && !loading ? (
+      {data && !loading && info ? (
         <InfoWrapper>
           <Row padding="0.5rem">
             <Col>
@@ -68,13 +68,15 @@ const Drawer = ({ stock, open, loading, data }) => {
             )}
           </Row>
         </InfoWrapper>
-      ) : (
+      ) : null}
+      {data && !loading && dividends ? <div>Dividends here!</div> : null}
+      {loading ? (
         <LoadingIcon
           visibiliy={open ? "visibile" : "hidden"}
           height={"3rem"}
           marginTop={"2rem"}
         />
-      )}
+      ) : null}
     </Container>
   );
 };
@@ -102,7 +104,8 @@ const Container = styled.div`
   /* border: 1px solid red; */
 
   hr {
-    width: 80%;
+    /* width: 80%; */
+    width: calc(100% - 20px);
     border-color: #7249d1;
     opacity: 0.5;
     animation: extend_hr_in_drawer 0.3s forwards;
