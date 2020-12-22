@@ -22,19 +22,19 @@ const StockToolbar = ({
   selectCurrentUserStocks,
 }) => {
   const [deleteIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608220501/Dividend%20Tracker/Icons/Stock%20Toolbar/folder-delete-svgrepo-com_sl7sf5.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616680/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_jvsloc.svg"
   );
   const [infoIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608222064/Dividend%20Tracker/Icons/Stock%20Toolbar/info-svgrepo-com_qtqho4.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614713/Dividend%20Tracker/Icons/Stock%20Toolbar/info-svgrepo-com_quyddh.svg"
   );
   const [closeInfoIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608598486/Dividend%20Tracker/Icons/Stock%20Toolbar/up-arrow-svgrepo-com_wpl1wo.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608615238/Dividend%20Tracker/Icons/Stock%20Toolbar/up-arrow-svgrepo-com_i2hote.svg"
   );
   const [openIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608222100/Dividend%20Tracker/Icons/Stock%20Toolbar/add-svgrepo-com_jqafqu_nrjek2.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608615849/Dividend%20Tracker/Icons/Stock%20Toolbar/plus-svgrepo-com_mtsovt.svg"
   );
   const [closeIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608599873/Dividend%20Tracker/Icons/Stock%20Toolbar/close-cross-svgrepo-com_gyobih.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616032/Dividend%20Tracker/Icons/Stock%20Toolbar/close-svgrepo-com_nohmjc.svg"
   );
   const [showModal, setShowModal] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);

@@ -7,8 +7,13 @@ import SearchStocks from "../Home/SearchStocks";
 import { selectAllStocks } from "../../redux/stocks/stocks-selectors";
 
 const Add = ({ selectAllStocks }) => {
+  const [close] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616936/Dividend%20Tracker/Icons/SearchResults/close-svgrepo-com_c2ygft.svg"
+  );
+
   return (
     <Container>
+      <CloseForm src={close} alt="close" />
       <Form>
         <SearchStocks allstocks={selectAllStocks} />
       </Form>
@@ -44,6 +49,14 @@ const Container = styled.div`
       opacity: 1;
     }
   }
+`;
+const CloseForm = styled.img`
+  position: absolute;
+  top: 4rem;
+  left: calc(100% - 4rem);
+  width: 1.5rem;
+  cursor: pointer;
+  /* border: 1px solid red; */
 `;
 const Form = styled.div`
   position: relative;

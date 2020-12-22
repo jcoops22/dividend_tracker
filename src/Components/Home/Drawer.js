@@ -69,7 +69,7 @@ const Drawer = ({ info, open, loading, data, dividends }) => {
           </Row>
         </InfoWrapper>
       ) : null}
-      {data && !loading && dividends ? <div>Dividends here!</div> : null}
+      {!loading && dividends ? <div>Dividends here!</div> : null}
       {loading ? (
         <LoadingIcon
           visibiliy={open ? "visibile" : "hidden"}

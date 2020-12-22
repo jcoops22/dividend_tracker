@@ -27,7 +27,7 @@ const SearchStocks = ({
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608506065/Dividend%20Tracker/Icons/SearchResults/add-svgrepo-com_gihegx.svg"
   );
   const [littleLoader] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608609453/Dividend%20Tracker/Icons/Stock%20Toolbar/loading-loader-svgrepo-com_fruuoz.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
   );
   const [loading, setLoading] = useState(false);
 

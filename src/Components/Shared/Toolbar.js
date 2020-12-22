@@ -6,7 +6,7 @@ import AddForm from "../Home/AddForm";
 
 const Toolbar = ({ stocks }) => {
   const [add] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1607372577/Dividend%20Tracker/add-svgrepo-com_jqafqu_ndqnlz.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614991/Dividend%20Tracker/Icons/Stock%20Toolbar/add-svgrepo-com_jqafqu_ebyxdo.svg"
   );
   const [showAddForm, setShowAddForm] = useState(false);
 
