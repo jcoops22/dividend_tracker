@@ -21,6 +21,9 @@ const StocksList = ({
   const [loading, setLoading] = useState(true);
   const [filteredStocks, setFilteredStocks] = useState(selectCurrentUserStocks);
   const [query, setQuery] = useState(null);
+  const [searchIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608665469/Dividend%20Tracker/Icons/Stocklist/search-svgrepo-com_gfadnk.svg"
+  );
 
   useEffect(() => {
     // handle searching
@@ -42,7 +45,6 @@ const StocksList = ({
 
   const handleSearchFilter = (query) => {
     if (query.length) {
-      console.log(" in the IF");
       setFilteredStocks(
         selectCurrentUserStocks.filter(
           (stock) =>
@@ -61,6 +63,7 @@ const StocksList = ({
       ) : (
         <StockContainer>
           <SearchBar>
+            <img src={searchIcon} alt="search" />
             <input
               type="text"
               placeholder="search your stocks"
@@ -106,11 +109,26 @@ const StockContainer = styled.div`
   /* border: 1px solid red; */
 `;
 const SearchBar = styled.div`
-  width: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 220px;
   height: 3rem;
+  padding: 0 0.3rem;
+  margin: 0.5rem 0;
+  border-radius: 3px;
+  border: 2px solid #7249d1;
 
+  img {
+    width: 1.8rem;
+    margin-right: 1rem;
+  }
   input {
     width: 100%;
-    border: 2px solid red;
+    height: 100%;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    /* border: 2px solid red; */
   }
 `;
