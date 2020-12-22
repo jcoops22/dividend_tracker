@@ -22,7 +22,7 @@ const StockToolbar = ({
   selectCurrentUserStocks,
 }) => {
   const [deleteIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616680/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_jvsloc.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
   );
   const [infoIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614713/Dividend%20Tracker/Icons/Stock%20Toolbar/info-svgrepo-com_quyddh.svg"

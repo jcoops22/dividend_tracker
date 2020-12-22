@@ -11,6 +11,7 @@ import {
   selectCurrentUserStocks,
 } from "../../redux/user/user-selectors";
 import { setCurrentUserStocks } from "../../redux/user/user-actions";
+import { getSuggestedQuery } from "@testing-library/react";
 
 const StocksList = ({
   selectCurrentUser,
@@ -18,17 +19,38 @@ const StocksList = ({
   selectCurrentUserStocks,
 }) => {
   const [loading, setLoading] = useState(true);
+  const [filteredStocks, setFilteredStocks] = useState(selectCurrentUserStocks);
+  const [query, setQuery] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-    updateUserStocks();
-  }, [setCurrentUserStocks]);
+    // handle searching
+    if (!query) {
+      setLoading(true);
+      updateUserStocks();
+      setFilteredStocks(selectCurrentUserStocks);
+    } else {
+      handleSearchFilter(query);
+    }
+  }, [setCurrentUserStocks, query]);
 
   const updateUserStocks = async () => {
     let stocks = await getUserStocks(selectCurrentUser.id);
     setCurrentUserStocks(stocks);
     setLoading(false);
     console.log(stocks);
+  };
+
+  const handleSearchFilter = (query) => {
+    if (query.length) {
+      console.log(" in the IF");
+      setFilteredStocks(
+        selectCurrentUserStocks.filter(
+          (stock) =>
+            stock.name.toLowerCase().includes(query.toLowerCase()) ||
+            stock.ticker.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    }
   };
 
   return (
@@ -38,8 +60,15 @@ const StocksList = ({
         <LoadingIcon big={true} height={"6rem"} />
       ) : (
         <StockContainer>
+          <SearchBar>
+            <input
+              type="text"
+              placeholder="search your stocks"
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </SearchBar>
           {selectCurrentUserStocks.length ? (
-            <StocksWrapper stocks={selectCurrentUserStocks} />
+            <StocksWrapper stocks={filteredStocks} />
           ) : (
             "Add some stocks!"
           )}
@@ -75,4 +104,13 @@ const StockContainer = styled.div`
   align-items: center;
   flex-direction: column;
   /* border: 1px solid red; */
+`;
+const SearchBar = styled.div`
+  width: 80px;
+  height: 3rem;
+
+  input {
+    width: 100%;
+    border: 2px solid red;
+  }
 `;

@@ -6,6 +6,7 @@ import { createStructuredSelector } from "reselect";
 import { selectTickerData } from "../../redux/stocks/stocks-selectors";
 import { formatDateData } from "../../resources/stockUtilities";
 import LoadingIcon from "../Shared/LoadingIcon";
+import DividendsForm from "../Home/DividendsForm";
 
 const Drawer = ({ info, open, loading, data, dividends }) => {
   const [point, setPoint] = useState(null);
@@ -81,13 +82,19 @@ const Drawer = ({ info, open, loading, data, dividends }) => {
           </Row>
         </InfoWrapper>
       ) : null}
-      {!loading && dividends ? <div>Dividends here!</div> : null}
+      {!loading && dividends ? (
+        <InfoWrapper>
+          <DividendsForm />
+        </InfoWrapper>
+      ) : null}
       {loading ? (
-        <LoadingIcon
-          visibiliy={open ? "visibile" : "hidden"}
-          height={"3rem"}
-          marginTop={"2rem"}
-        />
+        <InfoWrapper>
+          <LoadingIcon
+            visibiliy={open ? "visibile" : "hidden"}
+            height={"3rem"}
+            marginTop={"2rem"}
+          />
+        </InfoWrapper>
       ) : null}
     </Container>
   );
@@ -154,10 +161,13 @@ const Hr = styled.hr`
 `;
 
 const InfoWrapper = styled.div`
+  height: 8rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   opacity: 0;
   animation: fade_info_in 0.5s forwards;
+  /* border: 1px solid red; */
 
   @keyframes fade_info_in {
     to {
