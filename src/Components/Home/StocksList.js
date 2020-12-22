@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { getUserStocks } from "../../resources/stockUtilities";
@@ -30,7 +30,6 @@ const StocksList = ({
     if (!query) {
       setLoading(true);
       updateUserStocks();
-      setFilteredStocks(selectCurrentUserStocks);
     } else {
       handleSearchFilter(query);
     }
@@ -39,6 +38,7 @@ const StocksList = ({
   const updateUserStocks = async () => {
     let stocks = await getUserStocks(selectCurrentUser.id);
     setCurrentUserStocks(stocks);
+    setFilteredStocks(stocks);
     setLoading(false);
     console.log(stocks);
   };
@@ -65,10 +65,14 @@ const StocksList = ({
           <SearchBar>
             <img src={searchIcon} alt="search" />
             <input
+              autoFocus
               type="text"
               placeholder="search your stocks"
               onChange={(e) => setQuery(e.target.value)}
             />
+            {query ? (
+              <span onClick={() => setQuery(null)}> &#10005; </span>
+            ) : null}
           </SearchBar>
           {selectCurrentUserStocks.length ? (
             <StocksWrapper stocks={filteredStocks} />
@@ -109,10 +113,10 @@ const StockContainer = styled.div`
   /* border: 1px solid red; */
 `;
 const SearchBar = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 220px;
   height: 3rem;
   padding: 0 0.3rem;
   margin: 0.5rem 0;
@@ -124,11 +128,21 @@ const SearchBar = styled.div`
     margin-right: 1rem;
   }
   input {
-    width: 100%;
+    width: 200px;
     height: 100%;
     font-size: 18px;
     border: none;
     outline: none;
     /* border: 2px solid red; */
+  }
+
+  span {
+    position: absolute;
+    left: calc(100% - 1.5rem);
+    width: 2rem;
+    color: #ff3501;
+    opacity: 0.7;
+    cursor: pointer;
+    /* border: 1px solid red; */
   }
 `;

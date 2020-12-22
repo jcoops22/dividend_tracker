@@ -9,14 +9,17 @@ import LoadingIcon from "../Shared/LoadingIcon";
 import DividendsForm from "../Home/DividendsForm";
 
 const Drawer = ({ info, open, loading, data, dividends }) => {
-  const [point, setPoint] = useState(null);
+  const [point, setPoint] = useState(
+    info ? "calc(100% - 4.8rem)" : "calc(100% - 7.8rem)"
+  );
   useEffect(() => {
+    console.log(" should have run ");
     if (info) {
       setPoint("calc(100% - 4.8rem)");
     } else if (dividends) {
       setPoint("calc(100% - 7.8rem)");
     }
-  }, [loading, info, dividends]);
+  }, [loading, info, dividends, point]);
 
   return (
     <Container

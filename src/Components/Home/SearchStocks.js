@@ -105,15 +105,20 @@ const SearchStocks = ({
   return (
     <Container id={"searchResults"} onClick={(e) => e.stopPropagation()}>
       <h5>Search:</h5>
-      <Input
-        autoComplete="off"
-        id="search_input"
-        type="text"
-        placeholder="Enter Symbol/Ticker value"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        style={query.length ? { textTransform: "uppercase" } : null}
-      />
+      <InputWrapper>
+        <Input
+          autoComplete="off"
+          id="search_input"
+          type="text"
+          placeholder="Enter Symbol/Ticker value"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          style={query.length ? { textTransform: "uppercase" } : null}
+        />
+        {query.length ? (
+          <span onClick={() => setQuery("")}>&#10005; </span>
+        ) : null}
+      </InputWrapper>
       <Results>
         <h4>Results:</h4>
         {query && query !== " " ? (
@@ -179,7 +184,7 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   max-width: 530px;
-  height: 12rem;
+  height: 16rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -196,16 +201,40 @@ const Container = styled.div`
     /* border: 1px solid red; */
   }
 `;
+const InputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3rem;
+  padding: 0 0.3rem;
+  margin: 0.5rem 0;
+  border-radius: 3px;
+  border: 2px solid #7249d1;
+
+  span {
+    position: absolute;
+    left: calc(100% - 1.5rem);
+    width: 2rem;
+    color: #ff3501;
+    opacity: 0.7;
+    cursor: pointer;
+    /* border: 1px solid red; */
+  }
+`;
 const Input = styled.input`
   &:focus {
-    outline-color: #7249d1;
+    outline: none;
+    /* outline-color: #7249d1; */
   }
-  width: 50%;
+  position: relative;
+  width: 220px;
   padding: 0.4rem;
   font-size: 17px;
   border-radius: 3px;
   font-family: "Exo", sans-serif;
-  border: 2px solid #7249d1;
+  border: none;
+  /* border: 2px solid #7249d1; */
 `;
 const Results = styled.div`
   width: 100%;
