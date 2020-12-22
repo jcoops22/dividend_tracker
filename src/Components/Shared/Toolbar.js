@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { device } from "../../resources/mediaquery";
 import AddForm from "../Home/AddForm";
 
 const Toolbar = ({ stocks }) => {
   const [add] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614991/Dividend%20Tracker/Icons/Stock%20Toolbar/add-svgrepo-com_jqafqu_ebyxdo.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608615849/Dividend%20Tracker/Icons/Stock%20Toolbar/plus-svgrepo-com_mtsovt.svg"
   );
   const [showAddForm, setShowAddForm] = useState(false);
 
@@ -21,7 +20,7 @@ const Toolbar = ({ stocks }) => {
       </ReportButton>
       <AddTickerWrapper>
         <AddTicker onClick={() => setShowAddForm(true)}>
-          <span>Add new stock or fund</span>
+          <span>Add stock</span>
           <img src={add} alt="add" />
         </AddTicker>
       </AddTickerWrapper>

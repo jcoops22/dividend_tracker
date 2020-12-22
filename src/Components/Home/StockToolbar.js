@@ -284,7 +284,7 @@ const ConfirmDeleteWrapper = styled.div`
   background-color: #fff;
   width: 100%;
   height: 100%;
-  padding: 1rem 0;
+  padding: 1rem;
   border-radius: 3px;
 `;
 const ButtonsWrapper = styled.div`
@@ -307,6 +307,7 @@ const ButtonsWrapper = styled.div`
     width: 5rem;
     height: 2rem;
     border-radius: 20px;
+    background-color: #fff;
     border: 2px solid #7249d1;
   }
 

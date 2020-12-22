@@ -8,14 +8,26 @@ import { formatDateData } from "../../resources/stockUtilities";
 import LoadingIcon from "../Shared/LoadingIcon";
 
 const Drawer = ({ info, open, loading, data, dividends }) => {
-  useEffect(() => {}, [loading]);
+  const [point, setPoint] = useState(null);
+  useEffect(() => {
+    if (info) {
+      setPoint("calc(100% - 4.8rem)");
+    } else if (dividends) {
+      setPoint("calc(100% - 7.8rem)");
+    }
+  }, [loading, info, dividends]);
 
   return (
     <Container
       animationName={open ? "open_drawer" : "close_drawer"}
       fillMode={open ? "forwards" : "backwards"}
     >
-      {open ? <hr /> : null}
+      {open ? (
+        <HrWrapper>
+          <Hr wid={point} />
+          <div></div>
+        </HrWrapper>
+      ) : null}
       {data && !loading && info ? (
         <InfoWrapper>
           <Row padding="0.5rem">
@@ -103,24 +115,6 @@ const Container = styled.div`
   font-family: "Arimo", sans-serif;
   /* border: 1px solid red; */
 
-  hr {
-    /* width: 80%; */
-    width: calc(100% - 20px);
-    border-color: #7249d1;
-    opacity: 0.5;
-    animation: extend_hr_in_drawer 0.3s forwards;
-
-    @keyframes extend_hr_in_drawer {
-      from {
-        width: 0;
-      }
-    }
-  }
-
-  @media ${device.mobileL} {
-    /* animation-name: open_drawer; */
-  }
-
   @keyframes open_drawer {
     to {
       height: 10rem;
@@ -133,6 +127,32 @@ const Container = styled.div`
     }
   }
 `;
+const HrWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  div {
+    opacity: 0.5;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: #7249d1;
+  }
+`;
+const Hr = styled.hr`
+  width: ${(props) => props.wid};
+  border-color: #7249d1;
+  opacity: 0.5;
+  animation: extend_hr_in_drawer 0.3s forwards;
+
+  @keyframes extend_hr_in_drawer {
+    from {
+      width: 0;
+    }
+  }
+`;
+
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;

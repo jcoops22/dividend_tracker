@@ -7,7 +7,7 @@ const Header = ({ text, user, auth, history }) => {
     <Container>
       <H1 onClick={() => history.push("/")}>{text}</H1>
       <Welcome>Welcome, {user}</Welcome>
-      <SignOut type="button" value="Sign Out" onClick={() => auth.signOut()} />
+      <SignOut onClick={() => auth.signOut()}>Sign Out</SignOut>
     </Container>
   );
 };
@@ -73,7 +73,7 @@ const Welcome = styled.div`
     }
   }
 `;
-const SignOut = styled.input`
+const SignOut = styled.button`
   &:hover {
     border: 2px solid #fff;
   }
