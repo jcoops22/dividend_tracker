@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
+import { updateStockDividend } from "../../resources/stockUtilities";
+import { selectCurrentUser } from "../../redux/user/user-selectors";
 
-const DividendsForm = ({ stock }) => {
+const DividendsForm = ({ stock, selectCurrentUser }) => {
+  const [amount, setAmount] = useState("");
+  const [payDate, setPayDate] = useState("");
+
+  useEffect(() => {}, []);
+
+  const handleSubmit = () => {
+    let currentPayouts = [];
+    let payoutObj = {
+      amount: amount,
+      payDate: payDate,
+    };
+    updateStockDividend(
+      selectCurrentUser.id,
+      stock,
+      currentPayouts.concat(payoutObj)
+    );
+  };
+
   return (
     <Container>
       <Row>
@@ -18,56 +38,38 @@ const DividendsForm = ({ stock }) => {
               min="0"
               step="0.01"
               default="0.00"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => setAmount(e.target.value)}
             />
           </RowInput>
         </Amount>
         <DateWrapper>
           <label>Date:</label>
-          <input type="date" onChange={(e) => console.log(e.target.value)} />
+          <input type="date" onChange={(e) => setPayDate(e.target.value)} />
         </DateWrapper>
-        <button>Enter</button>
+        <button onClick={() => handleSubmit()}>Enter</button>
       </Row>
       <History>
         <h6>History:</h6>
-        <HistoryWrapper>
-          <HistoryLine>
-            <div>
-              <p>$0.45</p>
-              <span>11/30/20</span>
-            </div>
-          </HistoryLine>
-          <HistoryLine>
-            <div>
-              <p>$0.45</p>
-              <span>11/30/20</span>
-            </div>
-          </HistoryLine>
-          <HistoryLine>
-            <div>
-              <p>$0.45</p>
-              <span>11/30/20</span>
-            </div>
-          </HistoryLine>
-          <HistoryLine>
-            <div>
-              <p>$0.45</p>
-              <span>11/30/20</span>
-            </div>
-          </HistoryLine>
-          <HistoryLine>
-            <div>
-              <p>$0.45</p>
-              <span>11/30/20</span>
-            </div>
-          </HistoryLine>
-        </HistoryWrapper>
+        {stock.payouts ? (
+          <HistoryWrapper>
+            {stock.payouts.map((pay) => (
+              <HistoryLine>
+                <div>
+                  <p>${pay.amount}</p>
+                  <span>{pay.payDate}</span>
+                </div>
+              </HistoryLine>
+            ))}
+          </HistoryWrapper>
+        ) : null}
       </History>
     </Container>
   );
 };
 
-const mapStateToProps = createStructuredSelector({});
+const mapStateToProps = createStructuredSelector({
+  selectCurrentUser: selectCurrentUser,
+});
 const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(DividendsForm);
@@ -128,7 +130,7 @@ const Row = styled.div`
   width: 100%;
   padding: 0 0.5rem;
   background-color: #fff;
-  border-bottom: 2px solid #999;
+  border-bottom: 2px solid #7249d1;
   /* border: 1px solid blue; */
 
   @media ${device.tablet} {
@@ -194,6 +196,7 @@ const HistoryLine = styled.div`
 
     p {
       font-size: 1rem;
+      color: #27d67b;
     }
     span {
       font-size: 0.8rem;

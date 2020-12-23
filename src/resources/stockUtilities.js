@@ -33,6 +33,8 @@ export const updateStocks = () => {
   // ref.doc().set({
   // })
 };
+
+// format data to month * day * year
 export const formatDateData = (data) => {
   if (data === "No data" || data === "None") {
     return "No Data";
@@ -44,6 +46,8 @@ export const formatDateData = (data) => {
   // console.log(data, year, month, day);
   return `${month}/${day}/${year}`;
 };
+
+// get the users added stocks
 export const getUserStocks = async (userID) => {
   let ref = firestore.doc(`users/${userID}`);
 
@@ -53,6 +57,7 @@ export const getUserStocks = async (userID) => {
   return arr;
 };
 
+// API calls to get data for requested stock
 export const getTickerInfo = async (ticker, timeInterval) => {
   // intervals options: 1, 5, 15, 30, 60
   let interval = timeInterval;
@@ -144,6 +149,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
   };
 };
 
+// add stock to users stock list
 export const addStock = async (userID, stock) => {
   let ref = firestore.doc(`users/${userID}`);
   let currentUserObj = await ref.get().then((data) => data.data());
@@ -178,7 +184,7 @@ export const addStock = async (userID, stock) => {
 
   return updatedStocksArray;
 };
-
+// delete stock from users list of stocks
 export const deleteStock = async (userID, stock) => {
   let ref = firestore.doc(`users/${userID}`);
   let currentUserObj = await ref.get().then((data) => data.data());
@@ -203,4 +209,29 @@ export const deleteStock = async (userID, stock) => {
     ...updatedObj,
   });
   return updatedStocksArray;
+};
+
+export const updateStockDividend = async (userID, stock, payout) => {
+  let ref = firestore.doc(`users/${userID}`);
+  let currentUserObj = await ref.get().then((data) => data.data());
+  let updatedStockArr = await ref
+    .get()
+    .then((data) => {
+      return data.data().stocks.map((s) => {
+        return s.ticker === stock.ticker ? { ...s, payouts: payout } : s;
+      });
+    })
+    .catch((err) => {
+      return {
+        message: err.message,
+      };
+    });
+  console.log(currentUserObj);
+  console.log(updatedStockArr);
+  let updatedObj = { ...currentUserObj, stocks: updatedStockArr };
+
+  ref.set({
+    ...updatedObj,
+  });
+  return updatedObj;
 };

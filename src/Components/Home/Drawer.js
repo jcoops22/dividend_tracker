@@ -8,7 +8,7 @@ import { formatDateData } from "../../resources/stockUtilities";
 import LoadingIcon from "../Shared/LoadingIcon";
 import DividendsForm from "../Home/DividendsForm";
 
-const Drawer = ({ info, open, loading, data, dividends }) => {
+const Drawer = ({ info, open, loading, data, dividends, stock }) => {
   const [point, setPoint] = useState(
     info ? "calc(100% - 4.8rem)" : "calc(100% - 7.8rem)"
   );
@@ -86,7 +86,7 @@ const Drawer = ({ info, open, loading, data, dividends }) => {
       ) : null}
       {!loading && dividends ? (
         <InfoWrapper>
-          <DividendsForm />
+          <DividendsForm stock={stock} />
         </InfoWrapper>
       ) : null}
       {loading ? (
@@ -142,7 +142,7 @@ const HrWrapper = styled.div`
   align-items: center;
 
   div {
-    opacity: 0.5;
+    /* opacity: 0.5; */
     height: 10px;
     width: 10px;
     border-radius: 50%;
@@ -152,7 +152,7 @@ const HrWrapper = styled.div`
 const Hr = styled.hr`
   width: ${(props) => props.wid};
   border-color: #7249d1;
-  opacity: 0.5;
+  /* opacity: 0.5; */
   animation: extend_hr_in_drawer 0.3s forwards;
 
   @keyframes extend_hr_in_drawer {
