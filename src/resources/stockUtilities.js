@@ -233,5 +233,29 @@ export const updateStockDividend = async (userID, stock, payout) => {
   ref.set({
     ...updatedObj,
   });
-  return updatedObj;
+  return updatedStockArr;
+};
+
+// get the dividends history
+export const getStockDividends = async (userID, stock) => {
+  let ref = firestore.doc(`users/${userID}`);
+  let updatedStockArr = await ref
+    .get()
+    .then((data) => {
+      return data.data().stocks.filter((s) => {
+        return s.ticker === stock.ticker;
+      });
+    })
+    .then((data) => {
+      console.log(data[0].payouts);
+      return data[0].payouts;
+    })
+    .catch((err) => {
+      console.log(err);
+      return {
+        message: err.message,
+      };
+    });
+  // console.log(updatedStockArr);
+  return updatedStockArr;
 };

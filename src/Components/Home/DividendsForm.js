@@ -3,26 +3,59 @@ import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { updateStockDividend } from "../../resources/stockUtilities";
+import {
+  updateStockDividend,
+  getStockDividends,
+} from "../../resources/stockUtilities";
 import { selectCurrentUser } from "../../redux/user/user-selectors";
 
 const DividendsForm = ({ stock, selectCurrentUser }) => {
-  const [amount, setAmount] = useState("");
-  const [payDate, setPayDate] = useState("");
+  const [amount, setAmount] = useState(null);
+  const [payDate, setPayDate] = useState(null);
+  const [stockPayouts, setStockPayouts] = useState(stock.payouts);
+  const [check, setCheck] = useState(true);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (check) {
+      getStockDividends(selectCurrentUser.id, stock).then((data) => {
+        console.log(data);
+        setStockPayouts(data);
+      });
+      setCheck(false);
+    }
+    console.log(check);
+    console.log(stockPayouts);
+  }, [stockPayouts]);
 
-  const handleSubmit = () => {
-    let currentPayouts = [];
+  // handle recording the dividend
+  const handleSubmit = async () => {
+    // if they don't have any payout yet make an empty array
+    let currentPayouts = stockPayouts === undefined ? [] : stockPayouts;
     let payoutObj = {
       amount: amount,
       payDate: payDate,
     };
-    updateStockDividend(
+    console.log(stock.payouts);
+    let success = await updateStockDividend(
       selectCurrentUser.id,
       stock,
       currentPayouts.concat(payoutObj)
     );
+    if (success.message === undefined) {
+      // setStockPayouts(getStockDividends(selectCurrentUser.id, stock));
+      let dividends = await getStockDividends(selectCurrentUser.id, stock);
+      // update the history arr
+      console.log(dividends);
+      setCheck(true);
+      setStockPayouts(dividends);
+      setAmount("");
+      setPayDate("");
+    } else {
+      console.log("There was an error.");
+      return {
+        message: success.message,
+      };
+    }
   };
 
   return (
@@ -38,22 +71,27 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
               min="0"
               step="0.01"
               default="0.00"
+              value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
           </RowInput>
         </Amount>
         <DateWrapper>
           <label>Date:</label>
-          <input type="date" onChange={(e) => setPayDate(e.target.value)} />
+          <input
+            type="date"
+            value={payDate}
+            onChange={(e) => setPayDate(e.target.value)}
+          />
         </DateWrapper>
         <button onClick={() => handleSubmit()}>Enter</button>
       </Row>
       <History>
         <h6>History:</h6>
-        {stock.payouts ? (
+        {stockPayouts ? (
           <HistoryWrapper>
-            {stock.payouts.map((pay) => (
-              <HistoryLine>
+            {stockPayouts.map((pay, ind) => (
+              <HistoryLine key={ind}>
                 <div>
                   <p>${pay.amount}</p>
                   <span>{pay.payDate}</span>
@@ -91,13 +129,8 @@ const Container = styled.div`
     width: 100%;
     height: 2rem;
     font-size: 1.2rem;
-    /* margin-right: 2rem; */
     border: none;
     outline: none;
-
-    @media ${device.tabletS} {
-      /* font-size: 1.5rem; */
-    }
   }
   input[type="number"] {
     max-width: 100px;
@@ -174,6 +207,7 @@ const HistoryWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 0.5rem;
+  /* overflow-y: scroll; */
   /* border: 1px solid red; */
 
   @media ${device.tabletS} {
@@ -191,7 +225,7 @@ const HistoryLine = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0 0.2rem;
+    padding: 0 0.5rem;
     width: 100%;
 
     p {
