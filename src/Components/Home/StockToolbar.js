@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { deleteStock, getTickerInfo } from "../../resources/stockUtilities";
 import { setCurrentUserStocks } from "../../redux/user/user-actions";
-import { setTickerData } from "../../redux/stocks/stocks-actions";
+import { setTickerData, setReload } from "../../redux/stocks/stocks-actions";
 import {
   selectCurrentUser,
   selectCurrentUserStocks,
@@ -20,6 +20,7 @@ const StockToolbar = ({
   setTickerData,
   setCurrentUserStocks,
   selectCurrentUserStocks,
+  setReload,
 }) => {
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
@@ -66,6 +67,7 @@ const StockToolbar = ({
           (stocks) => stocks.ticker !== stock.ticker
         )
       );
+      setReload(false);
     } else {
       console.log(success.message);
     }
@@ -190,6 +192,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   setTickerData: (data) => dispatch(setTickerData(data)),
   setCurrentUserStocks: (stocks) => dispatch(setCurrentUserStocks(stocks)),
+  setReload: (bool) => dispatch(setReload(bool)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StockToolbar);

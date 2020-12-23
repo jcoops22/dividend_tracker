@@ -9,3 +9,8 @@ export const setTickerData = (data) => ({
   type: StocksTypes.SET_TICKER,
   payload: data,
 });
+
+export const setReload = (bool) => ({
+  type: StocksTypes.SET_RELOAD,
+  payload: bool,
+});

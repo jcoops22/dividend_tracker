@@ -6,26 +6,31 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import LoadingIcon from "../Shared/LoadingIcon";
 import StocksWrapper from "./StocksWrapper";
+import { selectReload } from "../../redux/stocks/stocks-selectors";
 import {
   selectCurrentUser,
   selectCurrentUserStocks,
 } from "../../redux/user/user-selectors";
 import { setCurrentUserStocks } from "../../redux/user/user-actions";
-import { getSuggestedQuery } from "@testing-library/react";
 
 const StocksList = ({
   selectCurrentUser,
   setCurrentUserStocks,
   selectCurrentUserStocks,
+  selectReload,
 }) => {
   const [loading, setLoading] = useState(true);
   const [filteredStocks, setFilteredStocks] = useState(selectCurrentUserStocks);
   const [query, setQuery] = useState(null);
+  const [scrollUpIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608673604/Dividend%20Tracker/Icons/Stocklist/up-arrow-svgrepo-com_ghr6pj.svg"
+  );
   const [searchIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608665469/Dividend%20Tracker/Icons/Stocklist/search-svgrepo-com_gfadnk.svg"
   );
 
   useEffect(() => {
+    console.log("we reloaded");
     // handle searching
     if (!query) {
       setLoading(true);
@@ -33,7 +38,7 @@ const StocksList = ({
     } else {
       handleSearchFilter(query);
     }
-  }, [setCurrentUserStocks, query]);
+  }, [setCurrentUserStocks, query, selectReload]);
 
   const updateUserStocks = async () => {
     let stocks = await getUserStocks(selectCurrentUser.id);
@@ -75,10 +80,21 @@ const StocksList = ({
             ) : null}
           </SearchBar>
           {selectCurrentUserStocks.length ? (
-            <StocksWrapper stocks={filteredStocks} />
+            <StocksWrapper
+              stocks={query ? filteredStocks : selectCurrentUserStocks}
+            />
           ) : (
             "Add some stocks!"
           )}
+          {selectCurrentUserStocks.length > 6 ? (
+            <ScrollUp>
+              <img
+                src={scrollUpIcon}
+                alt="scroll up"
+                onClick={() => window.scrollTo(0, 0)}
+              />
+            </ScrollUp>
+          ) : null}
         </StockContainer>
       )}
     </Container>
@@ -88,6 +104,7 @@ const StocksList = ({
 const mapStateToProps = createStructuredSelector({
   selectCurrentUser: selectCurrentUser,
   selectCurrentUserStocks: selectCurrentUserStocks,
+  selectReload: selectReload,
 });
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUserStocks: (stocks) => dispatch(setCurrentUserStocks(stocks)),
@@ -144,5 +161,25 @@ const SearchBar = styled.div`
     opacity: 0.7;
     cursor: pointer;
     /* border: 1px solid red; */
+  }
+`;
+
+const ScrollUp = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* border: 1px solid red; */
+
+  img {
+    width: 3rem;
+    opacity: 0;
+    cursor: pointer;
+    animation: fade_scrollIcon_in 0.5s forwards;
+  }
+
+  @keyframes fade_scrollIcon_in {
+    to {
+      opacity: 1;
+    }
   }
 `;

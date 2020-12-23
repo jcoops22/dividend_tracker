@@ -6,7 +6,13 @@ export const selectAllStocks = createSelector(
   [selectStocks],
   (stocks) => stocks.stocks
 );
+
 export const selectTickerData = createSelector(
   [selectStocks],
   (stocks) => stocks.tickerData
+);
+
+export const selectReload = createSelector(
+  [selectStocks],
+  (stocks) => stocks.reload
 );
