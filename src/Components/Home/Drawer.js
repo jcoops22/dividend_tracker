@@ -13,7 +13,6 @@ const Drawer = ({ info, open, loading, data, dividends }) => {
     info ? "calc(100% - 4.8rem)" : "calc(100% - 7.8rem)"
   );
   useEffect(() => {
-    console.log(" should have run ");
     if (info) {
       setPoint("calc(100% - 4.9rem)");
     } else if (dividends) {

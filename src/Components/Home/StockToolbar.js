@@ -10,7 +10,10 @@ import {
   selectCurrentUser,
   selectCurrentUserStocks,
 } from "../../redux/user/user-selectors";
-import { selectTickerData } from "../../redux/stocks/stocks-selectors";
+import {
+  selectReload,
+  selectTickerData,
+} from "../../redux/stocks/stocks-selectors";
 import TransformIcon from "../Shared/TransformIcon";
 import Drawer from "./Drawer";
 
@@ -21,6 +24,7 @@ const StockToolbar = ({
   setCurrentUserStocks,
   selectCurrentUserStocks,
   setReload,
+  selectReload,
 }) => {
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
@@ -67,7 +71,7 @@ const StockToolbar = ({
           (stocks) => stocks.ticker !== stock.ticker
         )
       );
-      setReload(false);
+      setReload(!selectReload);
     } else {
       console.log(success.message);
     }
@@ -188,6 +192,7 @@ const mapStateToProps = createStructuredSelector({
   selectCurrentUser: selectCurrentUser,
   selectTickerData: selectTickerData,
   selectCurrentUserStocks: selectCurrentUserStocks,
+  selectReload: selectReload,
 });
 const mapDispatchToProps = (dispatch) => ({
   setTickerData: (data) => dispatch(setTickerData(data)),
