@@ -15,8 +15,16 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
   const [payDate, setPayDate] = useState(null);
   const [stockPayouts, setStockPayouts] = useState(stock.payouts);
   const [check, setCheck] = useState(true);
-
+  const [deleteIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
+  );
+  const [littleLoader] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
+  );
   useEffect(() => {
+    if (stockPayouts) {
+      getTotal();
+    }
     if (check) {
       getStockDividends(selectCurrentUser.id, stock).then((data) => {
         console.log(data);
@@ -78,7 +86,14 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
       };
     }
   };
-
+  const getTotal = () => {
+    let acc = 0;
+    stockPayouts.map((val) => {
+      acc += parseFloat(val.amount);
+    });
+    console.log(acc);
+    return acc.toFixed(2);
+  };
   return (
     <Container>
       <Row>
@@ -108,7 +123,15 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
         <button onClick={() => handleSubmit()}>Enter</button>
       </Row>
       <History>
-        <h6>History:</h6>
+        <HistoryHeader>
+          <h6>History:</h6>
+          <>
+            <div>View All</div>
+          </>
+          <p>
+            Total: <span>{getTotal()}</span>
+          </p>
+        </HistoryHeader>
         {stockPayouts ? (
           <HistoryWrapper>
             {stockPayouts.map((pay, ind) => (
@@ -116,8 +139,12 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
                 <div>
                   <p>${pay.amount}</p>
                   <span>{pay.payDate}</span>
-                  <DeleteDividend onClick={() => handleDelete(ind)}>
-                    Delete
+                  <DeleteDividend>
+                    <img
+                      src={deleteIcon}
+                      alt="delete dividend"
+                      onClick={() => handleDelete(ind)}
+                    />
                   </DeleteDividend>
                 </div>
               </HistoryLine>
@@ -218,10 +245,28 @@ const History = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+`;
+const HistoryHeader = styled.div`
+  width: 100%;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0.7rem;
 
   h6 {
     font-size: 0.9rem;
     padding: 0.1rem 0 0 0.2rem;
+  }
+
+  div {
+    cursor: pointer;
+    color: blue;
+  }
+
+  p {
+    span {
+      color: #27d67b;
+    }
   }
 `;
 const HistoryWrapper = styled.div`
@@ -231,7 +276,6 @@ const HistoryWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 0.5rem;
-  /* overflow-y: scroll; */
   /* border: 1px solid red; */
 
   @media ${device.tabletS} {
@@ -249,6 +293,7 @@ const HistoryLine = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     padding: 0 0.5rem;
     width: 100%;
 
@@ -263,6 +308,8 @@ const HistoryLine = styled.div`
   }
 `;
 const DeleteDividend = styled.span`
-  width: 1.5rem;
-  height: 1.5rem;
+  img {
+    width: 1.2rem;
+    cursor: pointer;
+  }
 `;
