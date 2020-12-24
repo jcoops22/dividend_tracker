@@ -259,3 +259,28 @@ export const getStockDividends = async (userID, stock) => {
   // console.log(updatedStockArr);
   return updatedStockArr;
 };
+
+// delete incorrectly entered dividends
+export const deleteDividend = async (userID, stock, index) => {
+  let ref = firestore.doc(`users/${userID}`);
+  let updatedStockArr = await ref
+    .get()
+    .then((data) => {
+      return data.data().stocks.filter((s) => {
+        return s.ticker === stock.ticker;
+      });
+    })
+    .then((data) => {
+      console.log(data[0].payouts[index]);
+      data[0].payouts.splice(index, 1);
+      return data[0].payouts;
+    })
+    .catch((err) => {
+      console.log(err);
+      return {
+        message: err.message,
+      };
+    });
+  console.log(updatedStockArr);
+  return updatedStockArr;
+};

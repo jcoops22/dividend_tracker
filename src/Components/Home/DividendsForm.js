@@ -6,6 +6,7 @@ import { createStructuredSelector } from "reselect";
 import {
   updateStockDividend,
   getStockDividends,
+  deleteDividend,
 } from "../../resources/stockUtilities";
 import { selectCurrentUser } from "../../redux/user/user-selectors";
 
@@ -58,6 +59,26 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
     }
   };
 
+  // handle delete
+  const handleDelete = async (ind) => {
+    let newDividends = await deleteDividend(selectCurrentUser.id, stock, ind);
+    console.log(newDividends);
+    let success = await updateStockDividend(
+      selectCurrentUser.id,
+      stock,
+      newDividends
+    );
+    if (success.message === undefined) {
+      setCheck(true);
+      setStockPayouts(newDividends);
+    } else {
+      console.log("There was an error.");
+      return {
+        message: success.message,
+      };
+    }
+  };
+
   return (
     <Container>
       <Row>
@@ -95,6 +116,9 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
                 <div>
                   <p>${pay.amount}</p>
                   <span>{pay.payDate}</span>
+                  <DeleteDividend onClick={() => handleDelete(ind)}>
+                    Delete
+                  </DeleteDividend>
                 </div>
               </HistoryLine>
             ))}
@@ -237,4 +261,8 @@ const HistoryLine = styled.div`
       color: #999;
     }
   }
+`;
+const DeleteDividend = styled.span`
+  width: 1.5rem;
+  height: 1.5rem;
 `;
