@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
+import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
 import AddForm from "../Home/AddForm";
+import ViewAll from "../Home/ViewAll";
 
-const Toolbar = ({ stocks }) => {
+const Toolbar = ({ selectShowAllDivs }) => {
   const [add] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608615849/Dividend%20Tracker/Icons/Stock%20Toolbar/plus-svgrepo-com_mtsovt.svg"
   );
   const [showAddForm, setShowAddForm] = useState(false);
+
+  useEffect(() => {
+    console.log(selectShowAllDivs);
+  }, [selectShowAllDivs]);
 
   return (
     <Container
@@ -25,11 +34,19 @@ const Toolbar = ({ stocks }) => {
         </AddTicker>
       </AddTickerWrapper>
       {showAddForm ? <AddForm /> : null}
+      {selectShowAllDivs.show ? (
+        <ViewAll payouts={selectShowAllDivs.payouts} />
+      ) : null}
     </Container>
   );
 };
 
-export default Toolbar;
+const mapStateToProps = createStructuredSelector({
+  selectShowAllDivs: selectShowAllDivs,
+});
+const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
 
 // styles
 const Container = styled.div`

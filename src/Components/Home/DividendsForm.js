@@ -10,15 +10,14 @@ import {
   formatDateData,
 } from "../../resources/stockUtilities";
 import { selectCurrentUser } from "../../redux/user/user-selectors";
-import ViewAll from "./ViewAll";
+import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
 
-const DividendsForm = ({ stock, selectCurrentUser }) => {
-  const [amount, setAmount] = useState(null);
-  const [payDate, setPayDate] = useState(null);
+const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
+  const [amount, setAmount] = useState("");
+  const [payDate, setPayDate] = useState("");
   const [stockPayouts, setStockPayouts] = useState(stock.payouts);
   const [check, setCheck] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [showViewAll, setShowViewAll] = useState(false);
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
   );
@@ -70,13 +69,14 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
       console.log(dividends);
       // to reload
       setCheck(true);
-      // set the stock payouts array
-      setStockPayouts(dividends);
-      // clear the inputs and values
-      setAmount("");
-      setPayDate("");
-
-      setLoading(false);
+      if (dividends.message === undefined) {
+        // set the stock payouts array
+        setStockPayouts(dividends);
+        // clear the inputs and values
+        setAmount("");
+        setPayDate("");
+        setLoading(false);
+      }
     } else {
       console.log("There was an error.");
       return {
@@ -106,6 +106,7 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
       };
     }
   };
+  // generate total for history header
   const getTotal = () => {
     let acc = 0;
     stockPayouts.map((val) => {
@@ -130,7 +131,7 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
               step="0.01"
               default="0.00"
               value={amount}
-              onChange={() => setAmount()}
+              onChange={(e) => setAmount(e.target.value)}
             />
           </RowInput>
         </Amount>
@@ -140,7 +141,7 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
             id="payDate_input"
             type="date"
             value={payDate}
-            onChange={() => setPayDate()}
+            onChange={(e) => setPayDate(e.target.value)}
           />
         </DateWrapper>
         <SubmitDividend
@@ -158,14 +159,18 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
           <HistoryHeaderWrapper>
             <h6>History:</h6>
             <>
-              <div onClick={() => setShowViewAll(true)}>
+              <div
+                onClick={() =>
+                  setShowAllDivs({ show: true, payouts: stockPayouts })
+                }
+              >
                 View All
                 {stockPayouts && stockPayouts.length > 4
                   ? ` (${stockPayouts.length})`
                   : null}
               </div>
             </>
-            <p>Total: {stockPayouts ? <span>{getTotal()}</span> : "0"}</p>
+            <p>Total: {stockPayouts ? <span>{`$${getTotal()}`}</span> : "0"}</p>
           </HistoryHeaderWrapper>
         </HistoryHeader>
         {stockPayouts ? (
@@ -193,11 +198,6 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
           </HistoryWrapper>
         ) : null}
       </History>
-      {showViewAll ? (
-        <ViewAllWrapper onClick={() => setShowViewAll(!showViewAll)}>
-          <ViewAll payouts={stockPayouts} />
-        </ViewAllWrapper>
-      ) : null}
     </Container>
   );
 };
@@ -205,7 +205,9 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
 const mapStateToProps = createStructuredSelector({
   selectCurrentUser: selectCurrentUser,
 });
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  setShowAllDivs: (viewOjb) => dispatch(setShowAllDivs(viewOjb)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(DividendsForm);
 

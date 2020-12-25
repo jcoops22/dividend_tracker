@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import StockToolbar from "./StockToolbar";
+import { formatDateData } from "../../resources/stockUtilities";
 
 const StocksWrapper = ({ stocks }) => {
   useEffect(() => {}, [stocks]);
@@ -22,12 +23,20 @@ const StocksWrapper = ({ stocks }) => {
             <Row>
               <SectionDiv>
                 <StockLabel>
-                  Last Dividend: <span>{"$4.34"}</span>
+                  Last Dividend:
+                  <span>
+                    {stock.payouts ? stock.payouts[0].amount : "No payments"}
+                  </span>
                 </StockLabel>
               </SectionDiv>
               <SectionDiv>
                 <StockLabel>
-                  Last Payout: <span>{stock.last_payment}</span>
+                  Last Payout:
+                  <span>
+                    {stock.payouts
+                      ? formatDateData(stock.payouts[0].payDate)
+                      : "No payments"}
+                  </span>
                 </StockLabel>
               </SectionDiv>
             </Row>
