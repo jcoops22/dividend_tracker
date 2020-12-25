@@ -30,7 +30,6 @@ const StocksList = ({
   );
 
   useEffect(() => {
-    console.log("we reloaded");
     // handle searching
     if (!query) {
       setLoading(true);
@@ -45,7 +44,7 @@ const StocksList = ({
     setCurrentUserStocks(stocks);
     setFilteredStocks(stocks);
     setLoading(false);
-    console.log(stocks);
+    // console.log(stocks);
   };
 
   const handleSearchFilter = (query) => {

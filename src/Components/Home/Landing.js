@@ -16,9 +16,7 @@ const Landing = () => {
   );
   const [transform, setTransform] = useState(false);
 
-  useEffect(() => {
-    console.log("we transformed");
-  }, [transform]);
+  useEffect(() => {}, [transform]);
 
   return (
     <Container>

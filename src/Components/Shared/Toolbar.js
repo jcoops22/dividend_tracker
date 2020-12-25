@@ -15,7 +15,7 @@ const Toolbar = ({ selectShowAllDivs }) => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
-    console.log(selectShowAllDivs);
+    // console.log(selectShowAllDivs);
   }, [selectShowAllDivs]);
 
   return (
@@ -34,7 +34,7 @@ const Toolbar = ({ selectShowAllDivs }) => {
         </AddTicker>
       </AddTickerWrapper>
       {showAddForm ? <AddForm /> : null}
-      {selectShowAllDivs.show ? (
+      {Object.keys(selectShowAllDivs) ? (
         <ViewAll payouts={selectShowAllDivs.payouts} />
       ) : null}
     </Container>

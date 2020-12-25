@@ -34,7 +34,7 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
       getStockDividends(selectCurrentUser.id, stock).then((data) => {
         // shouldn't be undefined by the time this runs after dividend has been added
         if (stockPayouts !== undefined) {
-          // sort by date specified
+          // sort by date paid *decending*
           setStockPayouts(
             data.sort((a, b) => (a.payDate < b.payDate ? 1 : -1))
           );
@@ -43,8 +43,8 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
       // using the Check flag to only do one render of the getStockDividends func
       setCheck(false);
     }
-    console.log(check);
-    console.log(stockPayouts);
+    // console.log(check);
+    // console.log(stockPayouts);
   }, [stockPayouts]);
 
   // handle recording the dividend
@@ -56,19 +56,20 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
       amount: amount,
       payDate: payDate,
     };
-    console.log(stock.payouts);
+    // console.log(stock.payouts);
     let success = await updateStockDividend(
       selectCurrentUser.id,
       stock,
       currentPayouts.concat(payoutObj)
     );
+    console.log("updatestockdiv--return", success);
     if (success.message === undefined) {
-      // setStockPayouts(getStockDividends(selectCurrentUser.id, stock));
       let dividends = await getStockDividends(selectCurrentUser.id, stock);
-      // update the history arr
-      console.log(dividends);
+      // update the history/payouts arr
+      // console.log(dividends);
       // to reload
       setCheck(true);
+      // if successful
       if (dividends.message === undefined) {
         // set the stock payouts array
         setStockPayouts(dividends);

@@ -232,13 +232,14 @@ export const updateStockDividend = async (userID, stock, payout) => {
         message: err.message,
       };
     });
-  console.log(currentUserObj);
+  // console.log(currentUserObj);
   // console.log(updatedStockArr);
   let updatedObj = { ...currentUserObj, stocks: updatedStockArr };
 
   ref.set({
     ...updatedObj,
   });
+  console.log("from utilities--new payout added: ", updatedStockArr);
   return updatedStockArr;
 };
 
@@ -262,7 +263,7 @@ export const getStockDividends = async (userID, stock) => {
         message: err.message,
       };
     });
-  // console.log(updatedStockArr);
+  console.log("from utilities--GETStockDividend:", updatedStockArr);
   return updatedStockArr;
 };
 
@@ -287,6 +288,6 @@ export const deleteDividend = async (userID, stock, index) => {
         message: err.message,
       };
     });
-  console.log(updatedStockArr);
+  console.log("From utilities-- deleted stocks new array", updatedStockArr);
   return updatedStockArr;
 };
