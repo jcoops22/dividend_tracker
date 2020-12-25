@@ -4,17 +4,12 @@ import { device } from "../../resources/mediaquery";
 import StockToolbar from "./StockToolbar";
 
 const StocksWrapper = ({ stocks }) => {
-  const [selected, setSelected] = useState(false);
-  const [overviewData, setOverviewData] = useState({});
-  const [seriesData, setSeriesData] = useState({});
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {}, [loading, overviewData, seriesData]);
+  useEffect(() => {}, [stocks]);
 
   return (
     <Container>
       {stocks.map((stock, ind) => (
-        <StockLine key={ind}>
+        <StockLine key={stock.ticker}>
           <Row>
             <Col>
               <Name>
@@ -37,7 +32,7 @@ const StocksWrapper = ({ stocks }) => {
               </SectionDiv>
             </Row>
           </Row>
-          <StockToolbar stock={stock} />
+          <StockToolbar stock={stock} key={stock.ticker} />
         </StockLine>
       ))}
     </Container>

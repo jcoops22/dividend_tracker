@@ -16,3 +16,8 @@ export const selectReload = createSelector(
   [selectStocks],
   (stocks) => stocks.reload
 );
+
+export const selectShowAllDivs = createSelector(
+  [selectStocks],
+  (stocks) => stocks.showAllDivs
+);

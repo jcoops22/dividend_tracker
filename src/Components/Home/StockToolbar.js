@@ -177,6 +177,7 @@ const StockToolbar = ({
         </Modal>
       ) : null}
       <Drawer
+        key={stock.ticker}
         info={showInfo}
         dividends={showDividend}
         stock={stock}

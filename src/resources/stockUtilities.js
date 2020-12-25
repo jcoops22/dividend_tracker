@@ -174,7 +174,11 @@ export const addStock = async (userID, stock) => {
       };
     });
   // take current user object and update the stocks array property
-  let updatedObj = { ...currentUserObj, stocks: updatedStocksArray };
+  let updatedObj = {
+    ...currentUserObj,
+    stocks: updatedStocksArray,
+    created: new Date().getTime(),
+  };
   console.log(updatedStocksArray);
   console.log(updatedObj);
   // update the user's stocks
@@ -218,7 +222,9 @@ export const updateStockDividend = async (userID, stock, payout) => {
     .get()
     .then((data) => {
       return data.data().stocks.map((s) => {
-        return s.ticker === stock.ticker ? { ...s, payouts: payout } : s;
+        return s.ticker === stock.ticker
+          ? { ...s, payouts: payout, created: new Date().getTime() }
+          : s;
       });
     })
     .catch((err) => {
@@ -227,7 +233,7 @@ export const updateStockDividend = async (userID, stock, payout) => {
       };
     });
   console.log(currentUserObj);
-  console.log(updatedStockArr);
+  // console.log(updatedStockArr);
   let updatedObj = { ...currentUserObj, stocks: updatedStockArr };
 
   ref.set({

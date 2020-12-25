@@ -7,14 +7,18 @@ import {
   updateStockDividend,
   getStockDividends,
   deleteDividend,
+  formatDateData,
 } from "../../resources/stockUtilities";
 import { selectCurrentUser } from "../../redux/user/user-selectors";
+import ViewAll from "./ViewAll";
 
 const DividendsForm = ({ stock, selectCurrentUser }) => {
   const [amount, setAmount] = useState(null);
   const [payDate, setPayDate] = useState(null);
   const [stockPayouts, setStockPayouts] = useState(stock.payouts);
   const [check, setCheck] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [showViewAll, setShowViewAll] = useState(false);
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
   );
@@ -22,14 +26,22 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
   );
   useEffect(() => {
-    if (stockPayouts) {
+    // populate the total in the history header
+    if (stock.stockPayouts) {
       getTotal();
     }
+    // get the most updated list of dividends
     if (check) {
       getStockDividends(selectCurrentUser.id, stock).then((data) => {
-        console.log(data);
-        setStockPayouts(data);
+        // shouldn't be undefined by the time this runs after dividend has been added
+        if (stockPayouts !== undefined) {
+          // sort by date specified
+          setStockPayouts(
+            data.sort((a, b) => (a.payDate < b.payDate ? 1 : -1))
+          );
+        }
       });
+      // using the Check flag to only do one render of the getStockDividends func
       setCheck(false);
     }
     console.log(check);
@@ -38,6 +50,7 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
 
   // handle recording the dividend
   const handleSubmit = async () => {
+    setLoading(true);
     // if they don't have any payout yet make an empty array
     let currentPayouts = stockPayouts === undefined ? [] : stockPayouts;
     let payoutObj = {
@@ -55,10 +68,15 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
       let dividends = await getStockDividends(selectCurrentUser.id, stock);
       // update the history arr
       console.log(dividends);
+      // to reload
       setCheck(true);
+      // set the stock payouts array
       setStockPayouts(dividends);
+      // clear the inputs and values
       setAmount("");
       setPayDate("");
+
+      setLoading(false);
     } else {
       console.log("There was an error.");
       return {
@@ -69,6 +87,7 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
 
   // handle delete
   const handleDelete = async (ind) => {
+    setLoading(true);
     let newDividends = await deleteDividend(selectCurrentUser.id, stock, ind);
     console.log(newDividends);
     let success = await updateStockDividend(
@@ -79,6 +98,7 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
     if (success.message === undefined) {
       setCheck(true);
       setStockPayouts(newDividends);
+      setLoading(false);
     } else {
       console.log("There was an error.");
       return {
@@ -94,6 +114,7 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
     console.log(acc);
     return acc.toFixed(2);
   };
+
   return (
     <Container>
       <Row>
@@ -102,43 +123,63 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
           <RowInput>
             <span>&#36;</span>
             <input
+              id="amount_input"
               autoFocus
               type="number"
               min="0"
               step="0.01"
               default="0.00"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={() => setAmount()}
             />
           </RowInput>
         </Amount>
         <DateWrapper>
           <label>Date:</label>
           <input
+            id="payDate_input"
             type="date"
             value={payDate}
-            onChange={(e) => setPayDate(e.target.value)}
+            onChange={() => setPayDate()}
           />
         </DateWrapper>
-        <button onClick={() => handleSubmit()}>Enter</button>
+        <SubmitDividend
+          onClick={() => handleSubmit()}
+          disabled={loading || !(amount && payDate)}
+        >
+          {loading ? <img src={littleLoader} alt="loading" /> : "Add"}
+        </SubmitDividend>
       </Row>
-      <History>
+      <History
+        opacity={loading ? "0.5" : null}
+        p_events={loading ? "none" : null}
+      >
         <HistoryHeader>
-          <h6>History:</h6>
-          <>
-            <div>View All</div>
-          </>
-          <p>
-            Total: <span>{getTotal()}</span>
-          </p>
+          <HistoryHeaderWrapper>
+            <h6>History:</h6>
+            <>
+              <div onClick={() => setShowViewAll(true)}>
+                View All
+                {stockPayouts && stockPayouts.length > 4
+                  ? ` (${stockPayouts.length})`
+                  : null}
+              </div>
+            </>
+            <p>Total: {stockPayouts ? <span>{getTotal()}</span> : "0"}</p>
+          </HistoryHeaderWrapper>
         </HistoryHeader>
         {stockPayouts ? (
           <HistoryWrapper>
-            {stockPayouts.map((pay, ind) => (
+            {stockPayouts.slice(0, 4).map((pay, ind) => (
               <HistoryLine key={ind}>
+                <span>{ind + 1}</span>
                 <div>
-                  <p>${pay.amount}</p>
-                  <span>{pay.payDate}</span>
+                  <p>${parseFloat(pay.amount).toFixed(2)}</p>
+                  <span>
+                    {window.innerWidth >= 411
+                      ? formatDateData(pay.payDate)
+                      : formatDateData(pay.payDate).slice(0, -5)}
+                  </span>
                   <DeleteDividend>
                     <img
                       src={deleteIcon}
@@ -152,6 +193,11 @@ const DividendsForm = ({ stock, selectCurrentUser }) => {
           </HistoryWrapper>
         ) : null}
       </History>
+      {showViewAll ? (
+        <ViewAllWrapper onClick={() => setShowViewAll(!showViewAll)}>
+          <ViewAll payouts={stockPayouts} />
+        </ViewAllWrapper>
+      ) : null}
     </Container>
   );
 };
@@ -187,23 +233,35 @@ const Container = styled.div`
     max-width: 100px;
     /* border: 1px solid orange; */
   }
-  button {
-    &:focus {
-      outline: none;
+`;
+const SubmitDividend = styled.button`
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    background-color: #27d67b;
+    color: #fff;
+  }
+  color: #27d67b;
+  height: 2rem;
+  width: 7rem;
+  margin-left: auto;
+  background-color: #fff;
+  cursor: ${(props) => props.pointer};
+  transition-duration: 0.2s;
+  pointer-events: ${(props) => props.p_events};
+  border-radius: 20px;
+  border: 2px solid #27d67b;
+
+  img {
+    width: 1rem;
+    animation: spin_littleloader_in_dividend_submit 1s forwards infinite;
+
+    @keyframes spin_littleloader_in_dividend_submit {
+      to {
+        transform: rotate(360deg);
+      }
     }
-    &:hover {
-      background-color: #27d67b;
-      color: #fff;
-    }
-    color: #27d67b;
-    height: 2rem;
-    width: 7rem;
-    margin-left: auto;
-    background-color: #fff;
-    cursor: pointer;
-    transition-duration: 0.2s;
-    border-radius: 20px;
-    border: 2px solid #27d67b;
   }
 `;
 const Row = styled.div`
@@ -242,16 +300,25 @@ const Amount = styled.div`
   flex-direction: column;
 `;
 const History = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
+  opacity: ${(props) => props.opacity};
+  pointer-events: ${(props) => props.p_events};
 `;
 const HistoryHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const HistoryHeaderWrapper = styled.div`
   width: 100%;
   font-size: 0.9rem;
   display: flex;
   justify-content: space-between;
   padding: 0.3rem 0.7rem;
+  color: #fff;
+  background-color: #7249d1;
 
   h6 {
     font-size: 0.9rem;
@@ -260,7 +327,7 @@ const HistoryHeader = styled.div`
 
   div {
     cursor: pointer;
-    color: blue;
+    color: #fff;
   }
 
   p {
@@ -283,27 +350,38 @@ const HistoryWrapper = styled.div`
   }
 `;
 const HistoryLine = styled.div`
+  position: relative;
   width: 48%;
-  margin: 0 0.1rem;
+  margin: 0.1rem 0.1rem 0;
   border: 1px solid #333;
   border-top: none;
   /* border: 1px solid red; */
+
+  span:first-of-type {
+    position: absolute;
+    left: 0.1rem;
+    color: #333;
+    font-size: 0.5rem;
+  }
 
   div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0 0.5rem;
+    padding: 0 0.8rem;
     width: 100%;
 
     p {
       font-size: 1rem;
       color: #27d67b;
     }
-    span {
+
+    span:first-of-type {
+      position: static;
       font-size: 0.8rem;
       color: #999;
+      margin-left: 0.3rem;
     }
   }
 `;
@@ -313,3 +391,4 @@ const DeleteDividend = styled.span`
     cursor: pointer;
   }
 `;
+const ViewAllWrapper = styled.div``;

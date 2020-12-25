@@ -14,3 +14,8 @@ export const setReload = (bool) => ({
   type: StocksTypes.SET_RELOAD,
   payload: bool,
 });
+
+export const setShowAllDivs = (obj) => ({
+  type: StocksTypes.SHOW_ALL_DIVS,
+  payload: obj,
+});
