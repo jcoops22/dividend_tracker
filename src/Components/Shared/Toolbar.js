@@ -13,6 +13,7 @@ const Toolbar = ({ selectShowAllDivs }) => {
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608615849/Dividend%20Tracker/Icons/Stock%20Toolbar/plus-svgrepo-com_mtsovt.svg"
   );
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showViewAllForm, setShowViewAllForm] = useState(false);
 
   useEffect(() => {
     // console.log(selectShowAllDivs);
@@ -34,7 +35,7 @@ const Toolbar = ({ selectShowAllDivs }) => {
         </AddTicker>
       </AddTickerWrapper>
       {showAddForm ? <AddForm /> : null}
-      {Object.keys(selectShowAllDivs) ? (
+      {selectShowAllDivs.show !== undefined && selectShowAllDivs.show ? (
         <ViewAll payouts={selectShowAllDivs.payouts} />
       ) : null}
     </Container>
