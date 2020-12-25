@@ -13,7 +13,7 @@ import { selectCurrentUser } from "../../redux/user/user-selectors";
 import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
 
 const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
   const [payDate, setPayDate] = useState("");
   const [stockPayouts, setStockPayouts] = useState(stock.payouts);
   const [check, setCheck] = useState(true);
@@ -131,7 +131,7 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
               step="0.01"
               default="0.00"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(parseFloat(e.target.value).toFixed(2))}
             />
           </RowInput>
         </Amount>

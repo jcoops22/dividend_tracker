@@ -25,7 +25,9 @@ const StocksWrapper = ({ stocks }) => {
                 <StockLabel>
                   Last Dividend:
                   <span>
-                    {stock.payouts ? stock.payouts[0].amount : "No payments"}
+                    {stock.payouts
+                      ? parseFloat(stock.payouts[0].amount).toFixed(2)
+                      : "No payments"}
                   </span>
                 </StockLabel>
               </SectionDiv>

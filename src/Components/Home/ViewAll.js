@@ -10,7 +10,7 @@ import { formatDateData } from "../../resources/stockUtilities";
 const ViewAll = ({ payouts, setShowAllDivs }) => {
   return (
     <Container onClick={() => setShowAllDivs({ show: false, payouts: [] })}>
-      <DividendsWrapper>
+      <DividendsWrapper onClick={(e) => e.stopPropagation()}>
         <h5>Payouts: </h5>
         {payouts.map((payout, ind) => (
           <Row key={ind}>
