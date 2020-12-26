@@ -18,8 +18,9 @@ const Toolbar = ({ selectShowAllDivs }) => {
   );
 
   useEffect(() => {
-    // console.log(selectShowAllDivs);
-  }, [selectShowAllDivs]);
+    console.log(showViewAllForm);
+    setShowViewAllForm(selectShowAllDivs.show);
+  }, [selectShowAllDivs, showViewAllForm]);
 
   return (
     <Container

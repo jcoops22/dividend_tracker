@@ -29,12 +29,13 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
   );
   useEffect(() => {
     // populate the total in the history header
-    if (stock.stockPayouts) {
+    if (stockPayouts.length) {
       getTotal();
     }
     // get the most updated list of dividends
     if (check) {
       getStockDividends(selectCurrentUser.id, stock).then((data) => {
+        console.log("in the getstock");
         // shouldn't be undefined by the time this runs after dividend has been added
         if (stockPayouts.length) {
           // sort by date paid *decending*
@@ -45,6 +46,7 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
       });
       // using the Check flag to only do one render of the getStockDividends func
       setCheck(false);
+      setLoading(false);
     }
     // console.log(check);
     // console.log(stockPayouts);
@@ -78,8 +80,8 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
         // set the stock payouts array
         setStockPayouts(dividends);
         // clear the inputs and values
-        setAmount("");
-        setPayDate("");
+        setAmount(0);
+        setPayDate(makeTodaysDate());
         setLoading(false);
       }
     } else {
@@ -170,9 +172,10 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
             <h6>History:</h6>
             <>
               <div
-                onClick={() =>
-                  setShowAllDivs({ show: true, payouts: stockPayouts })
-                }
+                onClick={() => {
+                  setShowAllDivs({ show: true, payouts: stockPayouts });
+                  console.log(stockPayouts);
+                }}
               >
                 View All
                 {stockPayouts && stockPayouts.length > 4

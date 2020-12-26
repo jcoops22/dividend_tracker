@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   tickerData: null,
   showDrawer: false,
   reload: false,
-  showAllDivs: false,
+  showAllDivs: { show: false, payouts: [] },
 };
 // state = INITIAL_STATE is using default parameters from ES6, basically if state doesn't exist (like when its first initialized)
 // it will fall back on the INITIAL_STATE variable instead

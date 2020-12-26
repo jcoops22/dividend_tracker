@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { connect } from "react-redux";
@@ -7,17 +7,26 @@ import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
 import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
 import { formatDateData } from "../../resources/stockUtilities";
 
-const ViewAll = ({ payouts, setShowAllDivs }) => {
+const ViewAll = ({ setShowAllDivs, selectShowAllDivs }) => {
+  const [payouts, setPayouts] = useState(selectShowAllDivs.payouts);
+
+  useEffect(() => {
+    console.log(payouts);
+  }, [payouts]);
   return (
     <Container onClick={() => setShowAllDivs({ show: false, payouts: [] })}>
       <DividendsWrapper onClick={(e) => e.stopPropagation()}>
-        <h5>Payouts: </h5>
-        {payouts.map((payout, ind) => (
-          <Row key={ind}>
-            <p>${payout.amount}</p>
-            <p>{formatDateData(payout.payDate)}</p>
-          </Row>
-        ))}
+        {payouts ? (
+          <div>
+            <h5>Payouts: </h5>
+            {payouts.map((payout, ind) => (
+              <Row key={ind}>
+                <p>${payout.amount}</p>
+                <p>{formatDateData(payout.payDate)}</p>
+              </Row>
+            ))}
+          </div>
+        ) : null}
       </DividendsWrapper>
     </Container>
   );
