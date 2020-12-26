@@ -34,6 +34,10 @@ export const updateStocks = () => {
   // })
 };
 
+export const makeTodaysDate = () => {
+  const now = new Date();
+  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+};
 // format data to month * day * year
 export const formatDateData = (data) => {
   if (data === "No data" || data === "None") {

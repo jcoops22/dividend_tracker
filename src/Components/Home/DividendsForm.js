@@ -8,13 +8,14 @@ import {
   getStockDividends,
   deleteDividend,
   formatDateData,
+  makeTodaysDate,
 } from "../../resources/stockUtilities";
 import { selectCurrentUser } from "../../redux/user/user-selectors";
 import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
 
 const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
   const [amount, setAmount] = useState(0);
-  const [payDate, setPayDate] = useState("");
+  const [payDate, setPayDate] = useState(makeTodaysDate());
   const [stockPayouts, setStockPayouts] = useState(
     stock.payouts ? stock.payouts : []
   );
