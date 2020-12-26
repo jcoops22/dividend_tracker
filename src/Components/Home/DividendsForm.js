@@ -15,7 +15,9 @@ import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
 const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
   const [amount, setAmount] = useState(0);
   const [payDate, setPayDate] = useState("");
-  const [stockPayouts, setStockPayouts] = useState(stock.payouts);
+  const [stockPayouts, setStockPayouts] = useState(
+    stock.payouts ? stock.payouts : []
+  );
   const [check, setCheck] = useState(true);
   const [loading, setLoading] = useState(false);
   const [deleteIcon] = useState(
@@ -33,7 +35,7 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
     if (check) {
       getStockDividends(selectCurrentUser.id, stock).then((data) => {
         // shouldn't be undefined by the time this runs after dividend has been added
-        if (stockPayouts !== undefined) {
+        if (stockPayouts.length) {
           // sort by date paid *decending*
           setStockPayouts(
             data.sort((a, b) => (a.payDate < b.payDate ? 1 : -1))
@@ -55,6 +57,7 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
     let payoutObj = {
       amount: amount,
       payDate: payDate,
+      created: new Date().getTime(),
     };
     // console.log(stock.payouts);
     let success = await updateStockDividend(
@@ -87,9 +90,13 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
   };
 
   // handle delete
-  const handleDelete = async (ind) => {
+  const handleDelete = async (createdID) => {
     setLoading(true);
-    let newDividends = await deleteDividend(selectCurrentUser.id, stock, ind);
+    let newDividends = await deleteDividend(
+      selectCurrentUser.id,
+      stock,
+      createdID
+    );
     console.log(newDividends);
     let success = await updateStockDividend(
       selectCurrentUser.id,
@@ -110,11 +117,12 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
   // generate total for history header
   const getTotal = () => {
     let acc = 0;
-    stockPayouts.map((val) => {
-      acc += parseFloat(val.amount);
-    });
-    console.log(acc);
-    return acc.toFixed(2);
+    if (stockPayouts.length) {
+      stockPayouts.map((val) => {
+        return (acc += parseFloat(val.amount));
+      });
+      return acc.toFixed(2);
+    }
   };
 
   return (
@@ -132,7 +140,7 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
               step="0.01"
               default="0.00"
               value={amount}
-              onChange={(e) => setAmount(parseFloat(e.target.value).toFixed(2))}
+              onChange={(e) => setAmount(e.target.value)}
             />
           </RowInput>
         </Amount>
@@ -171,7 +179,14 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
                   : null}
               </div>
             </>
-            <p>Total: {stockPayouts ? <span>{`$${getTotal()}`}</span> : "0"}</p>
+            <p>
+              Total:{" "}
+              {stockPayouts ? (
+                <span>{stockPayouts.length ? `$${getTotal()}` : "$0"}</span>
+              ) : (
+                "$0"
+              )}
+            </p>
           </HistoryHeaderWrapper>
         </HistoryHeader>
         {stockPayouts ? (
@@ -190,7 +205,7 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
                     <img
                       src={deleteIcon}
                       alt="delete dividend"
-                      onClick={() => handleDelete(ind)}
+                      onClick={() => handleDelete(pay.created)}
                     />
                   </DeleteDividend>
                 </div>

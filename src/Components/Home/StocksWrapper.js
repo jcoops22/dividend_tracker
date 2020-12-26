@@ -5,6 +5,13 @@ import StockToolbar from "./StockToolbar";
 import { formatDateData } from "../../resources/stockUtilities";
 
 const StocksWrapper = ({ stocks }) => {
+  const [stockPayoutsDate] = useState(
+    stocks.payouts ? formatDateData(stocks.payouts[0].payDate) : null
+  );
+  const [stockPayoutsAmount] = useState(
+    stocks.payouts ? stocks.payouts[0].amount : null
+  );
+
   useEffect(() => {}, [stocks]);
 
   return (
@@ -25,8 +32,8 @@ const StocksWrapper = ({ stocks }) => {
                 <StockLabel>
                   Last Dividend:
                   <span>
-                    {stock.payouts
-                      ? parseFloat(stock.payouts[0].amount).toFixed(2)
+                    {stockPayoutsAmount
+                      ? parseFloat(stockPayoutsAmount).toFixed(2)
                       : "No payments"}
                   </span>
                 </StockLabel>
@@ -35,9 +42,7 @@ const StocksWrapper = ({ stocks }) => {
                 <StockLabel>
                   Last Payout:
                   <span>
-                    {stock.payouts
-                      ? formatDateData(stock.payouts[0].payDate)
-                      : "No payments"}
+                    {stockPayoutsDate ? stockPayoutsDate : "No payments"}
                   </span>
                 </StockLabel>
               </SectionDiv>

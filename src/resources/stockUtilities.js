@@ -222,9 +222,7 @@ export const updateStockDividend = async (userID, stock, payout) => {
     .get()
     .then((data) => {
       return data.data().stocks.map((s) => {
-        return s.ticker === stock.ticker
-          ? { ...s, payouts: payout, created: new Date().getTime() }
-          : s;
+        return s.ticker === stock.ticker ? { ...s, payouts: payout } : s;
       });
     })
     .catch((err) => {
@@ -239,7 +237,10 @@ export const updateStockDividend = async (userID, stock, payout) => {
   ref.set({
     ...updatedObj,
   });
-  console.log("from utilities--new payout added: ", updatedStockArr);
+  console.log(
+    "from utilities--UpdateStocksDividens new payout added: ",
+    updatedStockArr
+  );
   return updatedStockArr;
 };
 
@@ -254,7 +255,7 @@ export const getStockDividends = async (userID, stock) => {
       });
     })
     .then((data) => {
-      console.log(data[0].payouts);
+      // console.log(data[0].payouts);
       return data[0].payouts;
     })
     .catch((err) => {
@@ -268,7 +269,7 @@ export const getStockDividends = async (userID, stock) => {
 };
 
 // delete incorrectly entered dividends
-export const deleteDividend = async (userID, stock, index) => {
+export const deleteDividend = async (userID, stock, id) => {
   let ref = firestore.doc(`users/${userID}`);
   let updatedStockArr = await ref
     .get()
@@ -278,9 +279,9 @@ export const deleteDividend = async (userID, stock, index) => {
       });
     })
     .then((data) => {
-      console.log(data[0].payouts[index]);
-      data[0].payouts.splice(index, 1);
-      return data[0].payouts;
+      // console.log(data[0].payouts[index]);
+      return data[0].payouts.filter((pay) => pay.created !== id);
+      // return data[0].payouts;
     })
     .catch((err) => {
       console.log(err);
