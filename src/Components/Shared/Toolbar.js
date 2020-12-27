@@ -13,7 +13,7 @@ const Toolbar = ({ selectShowAllDivs }) => {
   );
   const [showAddForm, setShowAddForm] = useState(false);
   const [showViewAllForm, setShowViewAllForm] = useState(
-    selectShowAllDivs.show
+    selectShowAllDivs.show || false
   );
 
   useEffect(() => {
