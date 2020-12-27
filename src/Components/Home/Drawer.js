@@ -164,7 +164,7 @@ const Hr = styled.hr`
 `;
 
 const InfoWrapper = styled.div`
-  height: 8rem;
+  height: 9rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

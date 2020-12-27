@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import {
   updateStockDividend,
-  getStockDividends,
   deleteDividend,
   formatDateData,
   makeTodaysDate,
@@ -27,12 +26,10 @@ const DividendsForm = ({
   setShowAllDivs,
   setCurrentUserStocks,
   selectCurrentUserStocks,
-  selectShowAllDivs,
 }) => {
   const [amount, setAmount] = useState(0);
   const [payDate, setPayDate] = useState(makeTodaysDate());
   const [stockPayouts, setStockPayouts] = useState([]);
-  const [check, setCheck] = useState(true);
   const [loading, setLoading] = useState(false);
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
@@ -40,7 +37,9 @@ const DividendsForm = ({
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
   );
-
+  const [openModalIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609038418/Dividend%20Tracker/Icons/Stock%20Toolbar/share-arrows-svgrepo-com_npdvvm.svg"
+  );
   useEffect(() => {
     // set the stockPayouts variable
     setStockPayouts(
@@ -97,7 +96,6 @@ const DividendsForm = ({
       newDividends
     );
     if (success.message === undefined) {
-      setCheck(true);
       setStockPayouts(newDividends);
       setLoading(false);
     } else {
@@ -175,6 +173,7 @@ const DividendsForm = ({
                 {stockPayouts && stockPayouts.length > 4
                   ? ` (${stockPayouts.length})`
                   : null}
+                <img src={openModalIcon} alt="view all" width="18px" />
               </div>
             </>
             <p>
@@ -194,11 +193,7 @@ const DividendsForm = ({
                 <span>{ind + 1}</span>
                 <div>
                   <p>${parseFloat(pay.amount).toFixed(2)}</p>
-                  <span>
-                    {window.innerWidth >= 411
-                      ? formatDateData(pay.payDate)
-                      : formatDateData(pay.payDate).slice(0, -5)}
-                  </span>
+                  <span>{formatDateData(pay.payDate)}</span>
                   <DeleteDividend>
                     <img
                       src={deleteIcon}
@@ -348,6 +343,13 @@ const HistoryHeaderWrapper = styled.div`
   div {
     cursor: pointer;
     color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      margin-left: 0.4rem;
+    }
   }
 
   p {
@@ -358,6 +360,7 @@ const HistoryHeaderWrapper = styled.div`
 `;
 const HistoryWrapper = styled.div`
   width: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

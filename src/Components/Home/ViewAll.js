@@ -65,10 +65,22 @@ const ViewAll = ({
       <DividendsWrapper onClick={(e) => e.stopPropagation()}>
         {payouts ? (
           <Wrapper opacity={loading ? "0.5" : null}>
-            <h5>Payouts: {stock.name.split(" ").slice(0, 2).join(" ")} </h5>
+            <h5>
+              <span>
+                <span style={{ fontSize: "1.1rem" }}>
+                  (<span style={{ color: "#ccc" }}> {payouts.length} </span>)
+                </span>{" "}
+                {payouts.length > 1 ? "Payouts" : "Payout"}:
+              </span>
+              <span>
+                {stock.name.split(" ").slice(0, 2).join(" ")}
+                {`(${stock.ticker})`}
+              </span>
+            </h5>
             {payouts.map((payout, ind) => (
               <Row key={ind}>
-                <p>${payout.amount}</p>
+                <span>{ind + 1}</span>
+                <p>${parseFloat(payout.amount).toFixed(2)}</p>
                 <p>{formatDateData(payout.payDate)}</p>
                 <img
                   src={deleteIcon}
@@ -127,6 +139,8 @@ const DividendsWrapper = styled.div`
   border: 1px solid #333;
 
   h5 {
+    display: flex;
+    justify-content: space-between;
     color: #fff;
     font-size: 1.4rem;
     background-color: #7249d1;
@@ -137,11 +151,20 @@ const Wrapper = styled.div`
   opacity: ${(props) => props.opacity};
 `;
 const Row = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
   margin-bottom: 1px;
   padding: 0.4rem 2rem;
   border: 2px solid #333;
+
+  span {
+    position: absolute;
+    left: 0.2rem;
+    font-size: 0.7rem;
+    text-decoration: underline;
+    color: #000;
+  }
 
   img {
     width: 1.5rem;

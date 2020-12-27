@@ -12,16 +12,18 @@ const StocksWrapper = ({ stocks }) => {
     stocks.payouts ? stocks.payouts[0].amount : null
   );
 
-  useEffect(() => {}, [stocks]);
+  useEffect(() => {
+    console.log(stocks);
+  }, [stocks]);
 
   return (
     <Container>
-      {stocks.map((stock, ind) => (
+      {stocks.map((stock) => (
         <StockLine key={stock.ticker}>
           <Row>
             <Col>
               <Name>
-                <span>{stock.name}</span>
+                <span>{stock.name.split(" ").slice(0, 2).join(" ")}</span>
               </Name>
               <Ticker>
                 <span>{stock.ticker}</span>
@@ -32,8 +34,8 @@ const StocksWrapper = ({ stocks }) => {
                 <StockLabel>
                   Last Dividend:
                   <span>
-                    {stockPayoutsAmount
-                      ? parseFloat(stockPayoutsAmount).toFixed(2)
+                    {stock.payouts.length
+                      ? parseFloat(stock.payouts[0].amount).toFixed(2)
                       : "No payments"}
                   </span>
                 </StockLabel>
@@ -42,7 +44,9 @@ const StocksWrapper = ({ stocks }) => {
                 <StockLabel>
                   Last Payout:
                   <span>
-                    {stockPayoutsDate ? stockPayoutsDate : "No payments"}
+                    {stock.payouts.length
+                      ? formatDateData(stock.payouts[0].payDate)
+                      : "No payments"}
                   </span>
                 </StockLabel>
               </SectionDiv>
@@ -129,4 +133,9 @@ const SectionDiv = styled.div`
 const StockLabel = styled.label`
   font-size: 1rem;
   color: #999;
+
+  span {
+    color: #333;
+    font-weight: bold;
+  }
 `;

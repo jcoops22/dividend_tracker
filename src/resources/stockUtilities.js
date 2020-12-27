@@ -43,7 +43,7 @@ export const formatDateData = (data) => {
   if (data === "No data" || data === "None") {
     return "No Data";
   }
-  let year = data.slice(0, 4);
+  let year = data.slice(2, 4);
   let month = data.slice(5, 7);
   let day = data.slice(8, 10);
 
