@@ -4,6 +4,7 @@ import { device } from "../../resources/mediaquery";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../redux/user/user-selectors";
+import { setCurrentUserStocks } from "../../redux/user/user-actions";
 import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
 import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
 import {
@@ -12,9 +13,14 @@ import {
   updateStockDividend,
 } from "../../resources/stockUtilities";
 
-const ViewAll = ({ setShowAllDivs, selectShowAllDivs, selectCurrentUser }) => {
+const ViewAll = ({
+  setShowAllDivs,
+  selectShowAllDivs,
+  selectCurrentUser,
+  setCurrentUserStocks,
+}) => {
   const [stock] = useState(selectShowAllDivs.stock);
-  const [payouts] = useState(selectShowAllDivs.payouts);
+  const [payouts, setPayouts] = useState(selectShowAllDivs.payouts);
   const [loading, setLoading] = useState(false);
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
@@ -39,6 +45,12 @@ const ViewAll = ({ setShowAllDivs, selectShowAllDivs, selectCurrentUser }) => {
       newDividends
     );
     if (success.message === undefined) {
+      setPayouts(payouts.filter((pay) => pay.created !== createdID));
+      setShowAllDivs({
+        ...selectShowAllDivs,
+        payouts: payouts.filter((pay) => pay.created !== createdID),
+      });
+      setCurrentUserStocks(success);
       setLoading(false);
     } else {
       console.log("There was an error.");
@@ -78,6 +90,7 @@ const mapStateToProps = createStructuredSelector({
 });
 const mapDispatchToProps = (dispatch) => ({
   setShowAllDivs: (viewOjb) => dispatch(setShowAllDivs(viewOjb)),
+  setCurrentUserStocks: (arr) => dispatch(setCurrentUserStocks(arr)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewAll);

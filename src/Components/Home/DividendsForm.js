@@ -10,25 +10,28 @@ import {
   formatDateData,
   makeTodaysDate,
 } from "../../resources/stockUtilities";
-import { selectCurrentUser } from "../../redux/user/user-selectors";
+import {
+  selectCurrentUser,
+  selectCurrentUserStocks,
+} from "../../redux/user/user-selectors";
 import {
   setShowAllDivs,
   setShowAllDivsStock,
 } from "../../redux/stocks/stocks-actions";
+import { setCurrentUserStocks } from "../../redux/user/user-actions";
 import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
 
 const DividendsForm = ({
   stock,
   selectCurrentUser,
   setShowAllDivs,
-  setShowAllDivsStock,
+  setCurrentUserStocks,
+  selectCurrentUserStocks,
   selectShowAllDivs,
 }) => {
   const [amount, setAmount] = useState(0);
   const [payDate, setPayDate] = useState(makeTodaysDate());
-  const [stockPayouts, setStockPayouts] = useState(
-    stock.payouts ? stock.payouts : []
-  );
+  const [stockPayouts, setStockPayouts] = useState([]);
   const [check, setCheck] = useState(true);
   const [loading, setLoading] = useState(false);
   const [deleteIcon] = useState(
@@ -37,36 +40,23 @@ const DividendsForm = ({
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
   );
+
   useEffect(() => {
+    // set the stockPayouts variable
+    setStockPayouts(
+      selectCurrentUserStocks.filter((s) => s.ticker === stock.ticker)[0]
+        .payouts
+    );
     // populate the total in the history header
     if (stockPayouts.length) {
       getTotal();
     }
-    // get the most updated list of dividends
-    if (check) {
-      getStockDividends(selectCurrentUser.id, stock).then((data) => {
-        console.log("in the getstock");
-        // shouldn't be undefined by the time this runs after dividend has been added
-        if (stockPayouts.length) {
-          // sort by date paid *decending*
-          setStockPayouts(
-            data.sort((a, b) => (a.payDate < b.payDate ? 1 : -1))
-          );
-        }
-      });
-      // using the Check flag to only do one render of the getStockDividends func
-      setCheck(false);
-      setLoading(false);
-    }
-    // console.log(check);
-    // console.log(stockPayouts);
-  }, [stockPayouts]);
+  }, [selectCurrentUserStocks]);
 
   // handle recording the dividend
   const handleSubmit = async () => {
     setLoading(true);
     // if they don't have any payout yet make an empty array
-    let currentPayouts = stockPayouts === undefined ? [] : stockPayouts;
     let payoutObj = {
       amount: amount,
       payDate: payDate,
@@ -76,24 +66,14 @@ const DividendsForm = ({
     let success = await updateStockDividend(
       selectCurrentUser.id,
       stock,
-      currentPayouts.concat(payoutObj)
+      stockPayouts.concat(payoutObj)
     );
     console.log("updatestockdiv--return", success);
     if (success.message === undefined) {
-      let dividends = await getStockDividends(selectCurrentUser.id, stock);
-      // update the history/payouts arr
-      // console.log(dividends);
-      // to reload
-      setCheck(true);
-      // if successful
-      if (dividends.message === undefined) {
-        // set the stock payouts array
-        setStockPayouts(dividends);
-        // clear the inputs and values
-        setAmount(0);
-        setPayDate(makeTodaysDate());
-        setLoading(false);
-      }
+      setCurrentUserStocks(success);
+      setAmount(0);
+      setPayDate(makeTodaysDate());
+      setLoading(false);
     } else {
       console.log("There was an error.");
       return {
@@ -238,11 +218,13 @@ const DividendsForm = ({
 
 const mapStateToProps = createStructuredSelector({
   selectCurrentUser: selectCurrentUser,
+  selectCurrentUserStocks: selectCurrentUserStocks,
   selectShowAllDivs: selectShowAllDivs,
 });
 const mapDispatchToProps = (dispatch) => ({
   setShowAllDivs: (viewOjb) => dispatch(setShowAllDivs(viewOjb)),
   setShowAllDivsStock: (obj) => dispatch(setShowAllDivsStock(obj)),
+  setCurrentUserStocks: (arr) => dispatch(setCurrentUserStocks(arr)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DividendsForm);

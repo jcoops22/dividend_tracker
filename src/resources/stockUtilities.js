@@ -226,7 +226,12 @@ export const updateStockDividend = async (userID, stock, payout) => {
     .get()
     .then((data) => {
       return data.data().stocks.map((s) => {
-        return s.ticker === stock.ticker ? { ...s, payouts: payout } : s;
+        return s.ticker === stock.ticker
+          ? {
+              ...s,
+              payouts: payout.sort((a, b) => (a.payDate < b.payDate ? 1 : -1)), //sort chonologically by date decending
+            }
+          : s;
       });
     })
     .catch((err) => {
