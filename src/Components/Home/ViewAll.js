@@ -70,7 +70,7 @@ const ViewAll = ({
                 <span style={{ fontSize: "1.1rem" }}>
                   (<span style={{ color: "#ccc" }}> {payouts.length} </span>)
                 </span>{" "}
-                {payouts.length > 1 ? "Payouts" : "Payout"}:
+                {payouts.length === 1 ? "Payout" : "Payouts"}:
               </span>
               <span>
                 {stock.name.split(" ").slice(0, 2).join(" ")}

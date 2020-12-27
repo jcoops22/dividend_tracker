@@ -1,20 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import StockToolbar from "./StockToolbar";
 import { formatDateData } from "../../resources/stockUtilities";
 
 const StocksWrapper = ({ stocks }) => {
-  const [stockPayoutsDate] = useState(
-    stocks.payouts ? formatDateData(stocks.payouts[0].payDate) : null
-  );
-  const [stockPayoutsAmount] = useState(
-    stocks.payouts ? stocks.payouts[0].amount : null
-  );
-
-  useEffect(() => {
-    console.log(stocks.payouts);
-  }, [stocks]);
+  useEffect(() => {}, [stocks]);
 
   return (
     <Container>
