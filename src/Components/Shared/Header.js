@@ -32,13 +32,12 @@ const H1 = styled.h1`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 2.5rem;
+  font-size: 1.2rem;
   width: 60%;
   height: 100%;
   padding: 1rem 0.5rem;
-  margin-left: 40%;
+  margin-left: 0;
   cursor: pointer;
-  animation: slide_header_over 0.7s 0.5s ease-out forwards;
   /* border: 1px solid red; */
 
   @keyframes slide_header_over {
@@ -46,6 +45,12 @@ const H1 = styled.h1`
       margin-left: 0;
       font-size: 1.5rem;
     }
+  }
+
+  @media ${device.tabletS} {
+    animation: slide_header_over 0.7s 0.5s ease-out forwards;
+    margin-left: 40%;
+    font-size: 2.5rem;
   }
 `;
 const Welcome = styled.div`

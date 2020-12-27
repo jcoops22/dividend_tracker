@@ -14,9 +14,11 @@ const Landing = () => {
   const [coin] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608095060/Dividend%20Tracker/Icons/coin-svgrepo-com_kejmkv.svg"
   );
-  const [transform, setTransform] = useState(false);
+  const [spiral] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609045408/Dividend%20Tracker/road-curve-svgrepo-com_njavke.svg"
+  );
 
-  useEffect(() => {}, [transform]);
+  useEffect(() => {}, []);
 
   return (
     <Container>
@@ -25,7 +27,7 @@ const Landing = () => {
         <SignIn />
       </HeaderWrapper>
       <h3>Record and manage your dividends</h3>
-      <Section>
+      <Section bg={spiral}>
         <RegisterDiv>
           <h3>Start tracking your dividends!</h3>
           <Button
@@ -47,20 +49,6 @@ const Landing = () => {
           <li>Generate reports to track your progress</li>
         </ul>
       </Section>
-      <div
-        onClick={() => {
-          console.log("clicked");
-          setTransform(!transform);
-        }}
-      >
-        <TransformIcon
-          first={piggyBank}
-          second={coin}
-          transform={transform}
-          w1={"30px"}
-          w2={"30px"}
-        />
-      </div>
     </Container>
   );
 };
@@ -69,7 +57,7 @@ export default Landing;
 
 // styles
 const Container = styled.div`
-  height: 100vh;
+  /* height: 100vh; */
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -78,7 +66,7 @@ const Container = styled.div`
   /* border: 1px solid red; */
 
   @media ${device.tabletS} {
-    padding: 0 3rem;
+    /* padding: 0 3rem; */
   }
 `;
 const HeaderWrapper = styled.div`
@@ -98,8 +86,10 @@ const Section = styled.section`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 0 2rem;
-  margin-top: 3rem;
+  background-image: url(${(props) => props.bg});
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  border: 1px solid red;
 
   ul {
     line-height: 1.5;
