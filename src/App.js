@@ -10,6 +10,7 @@ import Landing from "./Components/Home/Landing";
 import AddForm from "./Components/Home/AddForm";
 import { selectCurrentUser } from "./redux/user/user-selectors";
 import { setCurrentUser } from "./redux/user/user-actions";
+import SignIn from "./Components/Home/SignIn";
 
 function App({ selectCurrentUser, setCurrentUser, history }) {
   useEffect(() => {
@@ -23,6 +24,7 @@ function App({ selectCurrentUser, setCurrentUser, history }) {
     <Container className="App">
       <Switch>
         <Route exact path="/" component={Landing} />
+        <Route exact path="/signin" component={SignIn} />
         <Route
           exact
           path="/home"

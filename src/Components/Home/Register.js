@@ -69,7 +69,7 @@ const Register = ({ setCurrentUser }) => {
           onChange={(e) => setConfirm(e.target.value)}
         />
       </fieldset>
-      <button onClick={(e) => handleSubmit(e)}>Submit</button>
+      <button onClick={(e) => handleSubmit(e)}>Create Account</button>
     </Form>
   );
 };
@@ -85,28 +85,80 @@ export default connect(mapStateToProps, mapDispatchToProps)(Register);
 
 // styles
 const Form = styled.form`
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  opacity: 1;
-  animation: fade_in_registration_form 1.3s 1.5s backwards;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fade_in_registration_form 1.3s 2s backwards;
+  /* border: 1px solid red; */
+
+  legend {
+    width: 100%;
+    text-align: left;
+    padding-left: 1rem;
+    margin: 1rem 0;
+  }
 
   fieldset {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    left: 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 3px;
+    /* animation: slide_fieldset_in_register_form 1s 1.5s backwards; */
+    border: none;
+
+    input {
+      font-family: "Exo", sans-serif;
+      padding: 0.5rem 1rem;
+      width: 80%;
+      font-size: 20px;
+      font-weight: bolder;
+    }
+    input::placeholder {
+      color: #ccc;
+    }
+
+    @keyframes slide_fieldset_in_register_form {
+      from {
+        left: -100%;
+      }
+    }
+
+    @media ${device.tabletS} {
+      border: 2px solid #7249d1;
+    }
   }
 
   label {
     color: #999;
   }
 
-  input {
-    font-size: 17px;
-    height: 2.3rem;
-    width: 8rem;
+  button {
+    cursor: pointer;
+    width: 6.5rem;
+    height: 3.3rem;
+    align-self: center;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    background-color: #27d67b;
+    border-radius: 3px;
+    border: none;
+    outline: none;
   }
-
   @keyframes fade_in_registration_form {
     from {
       height: 0;
+      opacity: 0;
     }
   }
 `;
