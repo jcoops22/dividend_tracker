@@ -4,7 +4,6 @@ import { device } from "../../resources/mediaquery";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
-import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
 import AddForm from "../Home/AddForm";
 import ViewAll from "../Home/ViewAll";
 

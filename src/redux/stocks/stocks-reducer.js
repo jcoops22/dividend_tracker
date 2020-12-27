@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   tickerData: null,
   showDrawer: false,
   reload: false,
-  showAllDivs: { show: false, payouts: [] },
+  showAllDivs: { show: false, payouts: [], stock: {} },
 };
 // state = INITIAL_STATE is using default parameters from ES6, basically if state doesn't exist (like when its first initialized)
 // it will fall back on the INITIAL_STATE variable instead
@@ -32,6 +32,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
       };
     }
     case StocksTypes.SHOW_ALL_DIVS: {
+      return {
+        ...state,
+        showAllDivs: action.payload,
+      };
+    }
+    case StocksTypes.SHOW_ALL_DIVS_STOCK: {
       return {
         ...state,
         showAllDivs: action.payload,

@@ -8,17 +8,18 @@ import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
 import { formatDateData } from "../../resources/stockUtilities";
 
 const ViewAll = ({ setShowAllDivs, selectShowAllDivs }) => {
-  const [payouts, setPayouts] = useState(selectShowAllDivs.payouts);
+  const [stock] = useState(selectShowAllDivs.stock);
+  const [payouts] = useState(selectShowAllDivs.payouts);
 
   useEffect(() => {
-    console.log(payouts);
+    // console.log(payouts);
   }, [payouts]);
   return (
     <Container onClick={() => setShowAllDivs({ show: false, payouts: [] })}>
       <DividendsWrapper onClick={(e) => e.stopPropagation()}>
         {payouts ? (
           <div>
-            <h5>Payouts: </h5>
+            <h5>Payouts:{stock.name.split(" ").slice(0, 2)} </h5>
             {payouts.map((payout, ind) => (
               <Row key={ind}>
                 <p>${payout.amount}</p>

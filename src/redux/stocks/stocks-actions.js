@@ -19,3 +19,8 @@ export const setShowAllDivs = (obj) => ({
   type: StocksTypes.SHOW_ALL_DIVS,
   payload: obj,
 });
+
+export const setShowAllDivsStock = (obj) => ({
+  type: StocksTypes.SHOW_ALL_DIVS_STOCK,
+  payload: obj,
+});

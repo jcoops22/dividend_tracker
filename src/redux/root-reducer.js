@@ -12,7 +12,7 @@ const persistConfig = {
   // uses whatever storage objects we imported
   storage,
   // whitelist is an array of string names of the reducers that we want to store
-  // whitelist: ["stocks", "user"],
+  whitelist: ["stocks", "user"],
 };
 
 const rootreducer = combineReducers({

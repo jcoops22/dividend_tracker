@@ -11,9 +11,19 @@ import {
   makeTodaysDate,
 } from "../../resources/stockUtilities";
 import { selectCurrentUser } from "../../redux/user/user-selectors";
-import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
+import {
+  setShowAllDivs,
+  setShowAllDivsStock,
+} from "../../redux/stocks/stocks-actions";
+import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
 
-const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
+const DividendsForm = ({
+  stock,
+  selectCurrentUser,
+  setShowAllDivs,
+  setShowAllDivsStock,
+  selectShowAllDivs,
+}) => {
   const [amount, setAmount] = useState(0);
   const [payDate, setPayDate] = useState(makeTodaysDate());
   const [stockPayouts, setStockPayouts] = useState(
@@ -173,7 +183,11 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
             <>
               <div
                 onClick={() => {
-                  setShowAllDivs({ show: true, payouts: stockPayouts });
+                  setShowAllDivs({
+                    show: true,
+                    payouts: stockPayouts,
+                    stock: stock,
+                  });
                   console.log(stockPayouts);
                 }}
               >
@@ -224,9 +238,11 @@ const DividendsForm = ({ stock, selectCurrentUser, setShowAllDivs }) => {
 
 const mapStateToProps = createStructuredSelector({
   selectCurrentUser: selectCurrentUser,
+  selectShowAllDivs: selectShowAllDivs,
 });
 const mapDispatchToProps = (dispatch) => ({
   setShowAllDivs: (viewOjb) => dispatch(setShowAllDivs(viewOjb)),
+  setShowAllDivsStock: (obj) => dispatch(setShowAllDivsStock(obj)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DividendsForm);
