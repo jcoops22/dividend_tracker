@@ -154,6 +154,7 @@ const Row = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
+  height: 2rem;
   margin-bottom: 1px;
   padding: 0.4rem 2rem;
   border: 2px solid #333;

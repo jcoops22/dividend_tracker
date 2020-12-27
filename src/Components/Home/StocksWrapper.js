@@ -13,7 +13,7 @@ const StocksWrapper = ({ stocks }) => {
   );
 
   useEffect(() => {
-    console.log(stocks);
+    console.log(stocks.payouts);
   }, [stocks]);
 
   return (
@@ -33,21 +33,29 @@ const StocksWrapper = ({ stocks }) => {
               <SectionDiv>
                 <StockLabel>
                   Last Dividend:
-                  <span>
-                    {stock.payouts.length
-                      ? parseFloat(stock.payouts[0].amount).toFixed(2)
-                      : "No payments"}
-                  </span>
+                  {stock.payouts ? (
+                    <span>
+                      {stock.payouts.length
+                        ? parseFloat(stock.payouts[0].amount).toFixed(2)
+                        : "No payments"}
+                    </span>
+                  ) : (
+                    <span>No Payments</span>
+                  )}
                 </StockLabel>
               </SectionDiv>
               <SectionDiv>
                 <StockLabel>
                   Last Payout:
-                  <span>
-                    {stock.payouts.length
-                      ? formatDateData(stock.payouts[0].payDate)
-                      : "No payments"}
-                  </span>
+                  {stock.payouts ? (
+                    <span>
+                      {stock.payouts.length
+                        ? formatDateData(stock.payouts[0].payDate)
+                        : "No payments"}
+                    </span>
+                  ) : (
+                    <span>No Payments</span>
+                  )}
                 </StockLabel>
               </SectionDiv>
             </Row>

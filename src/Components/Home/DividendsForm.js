@@ -44,7 +44,7 @@ const DividendsForm = ({
     // set the stockPayouts variable
     setStockPayouts(
       selectCurrentUserStocks.filter((s) => s.ticker === stock.ticker)[0]
-        .payouts
+        .payouts || []
     );
     // populate the total in the history header
     if (stockPayouts.length) {
