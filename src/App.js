@@ -7,36 +7,29 @@ import { createStructuredSelector } from "reselect";
 import { auth } from "./Components/Firebase/firebase";
 import Home from "./Components/Home/Home";
 import Landing from "./Components/Home/Landing";
-import AddForm from "./Components/Home/AddForm";
 import { selectCurrentUser } from "./redux/user/user-selectors";
 import { setCurrentUser } from "./redux/user/user-actions";
 import SignIn from "./Components/Home/SignIn";
 
 function App({ selectCurrentUser, setCurrentUser, history }) {
   useEffect(() => {
+    console.log("in the app.js");
     auth.onAuthStateChanged((user) => {
       if (!user) {
         setCurrentUser(null);
       }
     });
   }, [auth]);
+
   return (
     <Container className="App">
       <Switch>
-        <Route
-          exact
-          path="/"
-          component={Landing}
-          render={() =>
-            selectCurrentUser ? <Home history={history} /> : <Redirect to="/" />
-          }
-        />
+        <Route exact path="/" component={Landing} />
         <Route
           exact
           path="/signin"
-          component={SignIn}
           render={() =>
-            selectCurrentUser ? <Home history={history} /> : <Redirect to="/" />
+            !selectCurrentUser ? <SignIn /> : <Redirect to="/home" />
           }
         />
         <Route
