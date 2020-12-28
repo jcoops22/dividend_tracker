@@ -84,6 +84,7 @@ const Container = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  border: 1px solid red;
 `;
 const Header = styled.div`
   display: flex;
@@ -143,6 +144,7 @@ const Form = styled.form`
   }
 
   button {
+    cursor: pointer;
     width: 5.5rem;
     height: 2rem;
     margin: 2rem 0;
@@ -150,5 +152,6 @@ const Form = styled.form`
     background-color: #27d67b;
     border: none;
     outline: none;
+    /* border: 1px solid red; */
   }
 `;
