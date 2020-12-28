@@ -35,7 +35,9 @@ const Landing = ({ selectCurrentUser }) => {
   const [reports] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609111414/Dividend%20Tracker/Icons/report-svgrepo-com_ysbigv.svg"
   );
-  useEffect(() => {}, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const scrollBackToGetStarted = () => {
     let form = document.getElementById("getStarted");
