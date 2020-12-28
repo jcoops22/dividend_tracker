@@ -23,8 +23,22 @@ function App({ selectCurrentUser, setCurrentUser, history }) {
   return (
     <Container className="App">
       <Switch>
-        <Route exact path="/" component={Landing} />
-        <Route exact path="/signin" component={SignIn} />
+        <Route
+          exact
+          path="/"
+          component={Landing}
+          render={() =>
+            selectCurrentUser ? <Home history={history} /> : <Redirect to="/" />
+          }
+        />
+        <Route
+          exact
+          path="/signin"
+          component={SignIn}
+          render={() =>
+            selectCurrentUser ? <Home history={history} /> : <Redirect to="/" />
+          }
+        />
         <Route
           exact
           path="/home"
@@ -32,7 +46,6 @@ function App({ selectCurrentUser, setCurrentUser, history }) {
             selectCurrentUser ? <Home history={history} /> : <Landing />
           }
         />
-        <Route exact path="/add" component={AddForm} />
       </Switch>
     </Container>
   );
