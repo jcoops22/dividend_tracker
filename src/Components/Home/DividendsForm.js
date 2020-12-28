@@ -96,7 +96,7 @@ const DividendsForm = ({
       newDividends
     );
     if (success.message === undefined) {
-      setStockPayouts(newDividends);
+      setCurrentUserStocks(success);
       setLoading(false);
     } else {
       console.log("There was an error.");

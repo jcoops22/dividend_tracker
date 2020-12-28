@@ -261,6 +261,7 @@ const H3 = styled.h3`
   animation: ${(props) => props.animationName} 4s forwards;
   span {
     color: #7249d1;
+    text-decoration: underline;
   }
 
   @keyframes fade_header_out {

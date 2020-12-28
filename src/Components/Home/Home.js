@@ -81,6 +81,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home);
 // styles
 const Container = styled.div`
   width: 100%;
+  min-height: 100vh;
   padding-bottom: 4rem;
   /* border: 1px solid red; */
 `;

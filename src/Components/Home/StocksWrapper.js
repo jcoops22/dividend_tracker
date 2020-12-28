@@ -27,7 +27,7 @@ const StocksWrapper = ({ stocks }) => {
                   {stock.payouts ? (
                     <span>
                       {stock.payouts.length
-                        ? parseFloat(stock.payouts[0].amount).toFixed(2)
+                        ? "$" + parseFloat(stock.payouts[0].amount).toFixed(2)
                         : "No payments"}
                     </span>
                   ) : (
