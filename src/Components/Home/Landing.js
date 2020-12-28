@@ -193,12 +193,6 @@ const HeaderWrapper = styled.div`
       font-size: 1.5rem;
     }
   }
-
-  @media ${device.tabletS} {
-    h3 {
-      font-size: 1.9rem;
-    }
-  }
 `;
 const SignInWrapper = styled.div`
   width: 100%;

@@ -12,8 +12,13 @@ const Register = ({ setCurrentUser }) => {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [littleLoader] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
+  );
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     if (password !== confirm) {
       alert("Passwords don't match");
@@ -35,7 +40,7 @@ const Register = ({ setCurrentUser }) => {
   };
 
   return (
-    <Form>
+    <Form opacity={loading ? "0.5" : null}>
       <legend>Create your account:</legend>
       <fieldset>
         <label>First Name:</label>
@@ -69,7 +74,10 @@ const Register = ({ setCurrentUser }) => {
           onChange={(e) => setConfirm(e.target.value)}
         />
       </fieldset>
-      <button onClick={(e) => handleSubmit(e)}>Create Account</button>
+      <button disabled={loading} onClick={(e) => handleSubmit(e)}>
+        Create Account
+      </button>
+      {loading ? <img src={littleLoader} alt="loading" /> : null}
     </Form>
   );
 };
@@ -85,6 +93,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Register);
 
 // styles
 const Form = styled.form`
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -92,6 +101,7 @@ const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  opacity: ${(props) => props.opacity};
   animation: fade_in_registration_form 1.3s 2s backwards;
   /* border: 1px solid red; */
 
@@ -139,6 +149,19 @@ const Form = styled.form`
     }
   }
 
+  img {
+    position: absolute;
+    width: 2rem;
+    animation: spin_loader_in_register_form 1s linear infinite;
+    /* border: 1px solid red; */
+
+    @keyframes spin_loader_in_register_form {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+
   label {
     color: #999;
   }
@@ -155,6 +178,7 @@ const Form = styled.form`
     border: none;
     outline: none;
   }
+
   @keyframes fade_in_registration_form {
     from {
       height: 0;
