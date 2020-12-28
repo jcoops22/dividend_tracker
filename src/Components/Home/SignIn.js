@@ -6,17 +6,22 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { auth, firestore } from "../Firebase/firebase";
 import GoogleSignInButton from "../Shared/Buttons/GoogleSignInButton";
+import Register from "./Register";
 import { setCurrentUser } from "../../redux/user/user-actions";
 
 const SignIn = ({ setCurrentUser, history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showRegistrationForm, setShowRegistrationForm] = useState(true);
   const [cash] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609109955/Dividend%20Tracker/Icons/dollar-svgrepo-com_1_qdtatm.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609172536/Dividend%20Tracker/Icons/cash-bill-svgrepo-com_dtqrjh.svg"
   );
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
+  );
+  const [close] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616936/Dividend%20Tracker/Icons/SearchResults/close-svgrepo-com_c2ygft.svg"
   );
 
   const handleSubmit = async (e) => {
@@ -51,7 +56,10 @@ const SignIn = ({ setCurrentUser, history }) => {
       </Header>
       <Wrapper opacity={loading ? "0.5" : null}>
         <h3>Sign In to your account</h3>
-        <Form>
+        <Form
+          opacity={showRegistrationForm ? "0.5" : null}
+          events={showRegistrationForm ? "none" : null}
+        >
           <label htmlFor="email">Email:</label>
           <input
             name="email"
@@ -76,7 +84,17 @@ const SignIn = ({ setCurrentUser, history }) => {
             Sign In
           </Button>
         </Form>
-        {loading ? <img src={littleLoader} alt="loading" /> : null}
+        {loading ? <Loader src={littleLoader} alt="loading" /> : null}
+        {showRegistrationForm ? (
+          <RegWrapper>
+            <Close
+              src={close}
+              alt="close"
+              onClick={() => setShowRegistrationForm(false)}
+            />
+            <Register />
+          </RegWrapper>
+        ) : null}
       </Wrapper>
     </Container>
   );
@@ -91,7 +109,7 @@ export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignIn));
 
 // styles
 const Container = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   /* border: 1px solid red; */
@@ -122,17 +140,12 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* border: 1px solid red; */
   opacity: ${(props) => props.opacity};
+  /* border: 1px solid red; */
 
   h3 {
     margin: 6rem 0 2rem;
     /* border: 1px solid red; */
-  }
-
-  img {
-    width: 2rem;
-    animation: spin_loader_at_sign_in 1s linear infinite;
   }
 
   @keyframes spin_loader_at_sign_in {
@@ -141,6 +154,11 @@ const Wrapper = styled.div`
     }
   }
 `;
+const Loader = styled.img`
+  width: 2rem;
+  animation: spin_loader_at_sign_in 1s linear infinite;
+`;
+
 const Form = styled.form`
   width: 100%;
   max-width: 400px;
@@ -149,6 +167,8 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   padding-top: 2rem;
+  opacity: ${(props) => props.opacity};
+  pointer-events: ${(props) => props.events};
   /* border: 1px solid red; */
 
   label {
@@ -175,4 +195,25 @@ const Button = styled.button`
   border: none;
   outline: none;
   /* border: 1px solid red; */
+`;
+const RegWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  padding: 2rem 0;
+  opacity: 0;
+  animation: fade_reg_wrapper_in 1s linear forwards;
+  border: 1px solid blue;
+
+  @keyframes fade_reg_wrapper_in {
+    to {
+      opacity: 1;
+    }
+  }
+`;
+const Close = styled.img`
+  cursor: pointer;
+  width: 1.5rem;
+  top: 1rem;
+  position: absolute;
+  left: calc(100% - 7rem);
 `;

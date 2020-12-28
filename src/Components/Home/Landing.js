@@ -20,8 +20,7 @@ const Landing = ({ selectCurrentUser }) => {
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609045408/Dividend%20Tracker/road-curve-svgrepo-com_njavke.svg"
   );
   const [cash] = useState(
-    // "https://res.cloudinary.com/drucvvo7f/image/upload/v1609109955/Dividend%20Tracker/Icons/dollar-svgrepo-com_1_qdtatm.svg"
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609121510/Dividend%20Tracker/Icons/Screen_Shot_2020-12-27_at_7.10.32_PM_kptcp9.jpg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609172536/Dividend%20Tracker/Icons/cash-bill-svgrepo-com_dtqrjh.svg"
   );
   const [addStock] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609110754/Dividend%20Tracker/Icons/file-svgrepo-com_nnfjpo.svg"
@@ -226,8 +225,9 @@ const Header = styled.div`
 
   img {
     display: none;
-    width: 5rem;
+    width: 2rem;
     margin-left: 1rem;
+    transform: rotate(-45deg);
     /* border: 1px solid red; */
   }
 
@@ -249,7 +249,7 @@ const Header = styled.div`
   }
 
   @media ${device.tabletS} {
-    font-size: 2rem;
+    font-size: 1.5rem;
 
     h1 {
       padding-left: 20%;

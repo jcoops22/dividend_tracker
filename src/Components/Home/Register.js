@@ -34,6 +34,7 @@ const Register = ({ setCurrentUser }) => {
       let createdUser = await creatUserProfileDocument(user, { first, last });
       setCurrentUser(createdUser);
     } catch (err) {
+      setLoading(false);
       alert(err);
       console.error(err);
     }
