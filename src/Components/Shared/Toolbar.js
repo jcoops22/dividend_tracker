@@ -57,6 +57,7 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
+  background-color: #7249d1;
   margin-bottom: 3rem;
   padding: 0;
   overflow: hidden;
@@ -101,8 +102,10 @@ const AddTicker = styled.div`
   align-items: center;
   padding: 0 1rem;
   box-shadow: 2px 2px 8px 0 #999;
+  background-color: #fff;
   cursor: pointer;
   /* border: 1px solid orange; */
+
   img {
     margin-left: 1rem;
     width: 2rem;

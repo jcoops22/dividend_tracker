@@ -149,6 +149,7 @@ const HeaderWrapper = styled.div`
     align-items: center;
     text-align: right;
     padding-right: 0.6rem;
+    margin: 2rem;
     color: #fff;
     width: 100%;
     height: 6rem;
@@ -175,7 +176,7 @@ const SignInSpan = styled.span`
 `;
 const Header = styled.div`
   width: 100%;
-  margin: 2.5rem 0;
+  margin: 3.5rem 0;
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
@@ -209,6 +210,10 @@ const Header = styled.div`
     img {
       margin-left: 1rem;
     }
+  }
+
+  @media ${device.tabletS} {
+    font-size: 2rem;
   }
 `;
 const Underline = styled.div`
@@ -329,7 +334,7 @@ const Asterick = styled.div`
   font-size: 0.8rem;
 `;
 const GetStarted = styled.div`
-  height: 15rem;
+  height: 18rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -342,6 +347,7 @@ const GetStarted = styled.div`
   }
 
   button {
+    cursor: pointer;
     width: 6rem;
     height: 2.5rem;
     background-color: #27d67b;
