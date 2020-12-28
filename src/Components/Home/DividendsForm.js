@@ -125,7 +125,7 @@ const DividendsForm = ({
             <span>&#36;</span>
             <input
               id="amount_input"
-              autoFocus
+              autoFocus={window.innerWidth > 580 ? true : null}
               type="number"
               min="0"
               step="0.01"

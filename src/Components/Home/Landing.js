@@ -217,6 +217,7 @@ const Header = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
+  /* border: 1px solid red; */
 
   h1 {
     position: relative;
