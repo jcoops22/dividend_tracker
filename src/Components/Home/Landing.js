@@ -4,6 +4,7 @@ import { device } from "../../resources/mediaquery";
 import { Link } from "react-router-dom";
 import Register from "../Home/Register";
 import { auth } from "../Firebase/firebase";
+import Footer from "../Shared/Footer";
 
 const Landing = () => {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
@@ -17,10 +18,29 @@ const Landing = () => {
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609045408/Dividend%20Tracker/road-curve-svgrepo-com_njavke.svg"
   );
   const [cash] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608094687/Dividend%20Tracker/Icons/dollar-svgrepo-com_1_flt8lu.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609109955/Dividend%20Tracker/Icons/dollar-svgrepo-com_1_qdtatm.svg"
   );
-
+  const [addStock] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609110754/Dividend%20Tracker/Icons/file-svgrepo-com_nnfjpo.svg"
+  );
+  const [enterDivs] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609111143/Dividend%20Tracker/Icons/data-scientist-research-data-profession-svgrepo-com_toyjvx.svg"
+  );
+  const [graph] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609111143/Dividend%20Tracker/Icons/graph-svgrepo-com_pqko55.svg"
+  );
+  const [reports] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609111414/Dividend%20Tracker/Icons/report-svgrepo-com_ysbigv.svg"
+  );
   useEffect(() => {}, []);
+
+  const scrollBackToGetStarted = () => {
+    let form = document.getElementById("getStarted");
+    form.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  };
 
   return (
     <Container>
@@ -31,8 +51,15 @@ const Landing = () => {
           </Link>
         </SignInWrapper>
         <Header>
-          <h1 onClick={() => auth.signOut()}>Dividend Tracker</h1>
-          <img src={cash} alt="cash" />
+          <h1 onClick={() => auth.signOut()}>
+            Dividend Tracker <img src={cash} alt="cash" />
+          </h1>
+
+          <section>
+            <Underline left={"10%"} color={"#7249d1"} />
+            <Underline left={"20%"} color={"#27d67b"} />
+            <Underline left={"30%"} color={"#edc639"} />
+          </section>
         </Header>
         <h3>Record and manage your stock dividends</h3>
       </HeaderWrapper>
@@ -46,6 +73,7 @@ const Landing = () => {
             Start tracking <span>your</span> dividends!
           </H3>
           <Button
+            id="getStarted"
             url={coin}
             animationName={showRegistrationForm ? "circle_and_drop_out" : null}
             onClick={() => setShowRegistrationForm(true)}
@@ -60,14 +88,37 @@ const Landing = () => {
       </Section>
       <ListWrapper>
         <List>
+          <h3>How it works: </h3>
           <ul>
-            <li>Add stocks to your list</li>
-            <li>Enter your dividend payouts</li>
-            <li>Get up to date* information on your tracked stocks</li>
-            <li>Generate reports to track your progress</li>
+            <li>
+              <img src={addStock} alt="add stocks" />
+              Add stocks to your list
+            </li>
+            <li>
+              <img src={enterDivs} alt="enter dividends" />
+              Enter your dividend payouts
+            </li>
+            <li>
+              <img src={graph} alt="get info on stocks" />
+              Get up to date* information on your tracked stocks
+            </li>
+            <li>
+              <img src={reports} alt="reports" />
+              Generate reports to track your progress
+            </li>
           </ul>
+          <Asterick>
+            *Stock market data is updated daily (generally every hour)
+          </Asterick>
         </List>
       </ListWrapper>
+      <GetStarted>
+        <h3>Get Started Now.</h3>
+        <button onClick={() => scrollBackToGetStarted()}>
+          Create your account
+        </button>
+      </GetStarted>
+      <Footer />
     </Container>
   );
 };
@@ -96,31 +147,19 @@ const HeaderWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: right;
+    padding-right: 0.6rem;
     color: #fff;
     width: 100%;
     height: 6rem;
+    font-size: 1rem;
     background-color: #7249d1;
     border-bottom-left-radius: 100px;
   }
-`;
-const Header = styled.div`
-  width: 100%;
-  padding-left: 0.3rem;
-  margin: 1.5rem 0;
-  display: flex;
-  justify-content: flex-start;
-
-  img {
-    margin-left: 0.3rem;
-    width: 2rem;
-    transform: rotate(-45deg);
-  }
 
   @media ${device.mobileL} {
-    padding-left: 20%;
-
-    img {
-      margin-left: 1rem;
+    h3 {
+      font-size: 1.5rem;
     }
   }
 `;
@@ -128,10 +167,57 @@ const SignInWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  margin-top: 1rem;
   padding: 0.5rem 1rem;
 `;
 const SignInSpan = styled.span`
   color: #7249d1;
+`;
+const Header = styled.div`
+  width: 100%;
+  margin: 2.5rem 0;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+  h1 {
+    width: 100%;
+    padding-left: 0.3rem;
+    width: 100%;
+    /* border: 1px solid red; */
+  }
+
+  img {
+    margin-left: 0.3rem;
+    width: 2rem;
+    transform: rotate(-45deg);
+  }
+
+  section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* border: 1px solid red; */
+  }
+
+  @media ${device.mobileL} {
+    h1 {
+      padding-left: 20%;
+    }
+
+    img {
+      margin-left: 1rem;
+    }
+  }
+`;
+const Underline = styled.div`
+  width: 50%;
+  height: 4px;
+  margin-left: ${(props) => props.left};
+  background-color: ${(props) => props.color};
+  margin-top: 0.6rem;
+  /* border: 1px solid red; */
 `;
 const Section = styled.section`
   width: 100%;
@@ -193,7 +279,7 @@ const H3 = styled.h3`
   }
 
   @media ${device.mobileL} {
-    margin-top: 0;
+    margin-top: 20%;
   }
 `;
 
@@ -202,21 +288,65 @@ const ListWrapper = styled.div`
 `;
 const List = styled.div`
   width: 100%;
-  height: 15rem;
-  margin-top: -3rem;
+  margin-top: -4rem;
+  padding: 3rem 0.4rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #7249d1;
+  /* border: 1px solid red; */
 
+  h3 {
+    font-size: 1.8rem;
+    color: #fff;
+    margin: 1rem 0;
+    padding-bottom: 0.3rem;
+    border-bottom: 2px solid #fff;
+  }
   ul {
     color: #fff;
-    line-height: 1.5;
+    line-height: 3.5;
+    list-style: none;
+    padding: 0.5rem;
     /* border: 1px solid red; */
+
+    img {
+      width: 1.5rem;
+      margin-right: 1rem;
+    }
   }
 
   @media ${device.tablet} {
     border-top-left-radius: 100px;
+  }
+`;
+const Asterick = styled.div`
+  margin: 3rem 0 1rem;
+  padding-left: 1rem;
+  width: 100%;
+  font-size: 0.8rem;
+`;
+const GetStarted = styled.div`
+  height: 15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
+  /* border: 1px solid red; */
+
+  h3 {
+    margin: 2rem;
+  }
+
+  button {
+    width: 6rem;
+    height: 2.5rem;
+    background-color: #27d67b;
+    border-radius: 3px;
+    border: none;
+    outline: none;
   }
 `;
 const Button = styled.button`
