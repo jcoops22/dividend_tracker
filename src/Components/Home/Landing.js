@@ -18,7 +18,8 @@ const Landing = () => {
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609045408/Dividend%20Tracker/road-curve-svgrepo-com_njavke.svg"
   );
   const [cash] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609109955/Dividend%20Tracker/Icons/dollar-svgrepo-com_1_qdtatm.svg"
+    // "https://res.cloudinary.com/drucvvo7f/image/upload/v1609109955/Dividend%20Tracker/Icons/dollar-svgrepo-com_1_qdtatm.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609121510/Dividend%20Tracker/Icons/Screen_Shot_2020-12-27_at_7.10.32_PM_kptcp9.jpg"
   );
   const [addStock] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609110754/Dividend%20Tracker/Icons/file-svgrepo-com_nnfjpo.svg"
@@ -51,10 +52,30 @@ const Landing = () => {
           </Link>
         </SignInWrapper>
         <Header>
-          <h1 onClick={() => auth.signOut()}>
-            Dividend Tracker <img src={cash} alt="cash" />
+          <h1>
+            Dividend Tracker
+            <img src={cash} alt="cash" />
+            <ImgsWrapper>
+              <Img
+                src={cash}
+                alt="cash"
+                left={"53%"}
+                rotate={"rotate(-45deg)"}
+              />
+              <Img
+                src={cash}
+                alt="cash"
+                left={"54%"}
+                rotate={"rotate(-35deg)"}
+              />
+              <Img
+                src={cash}
+                alt="cash"
+                left={"55%"}
+                rotate={"rotate(-25deg)"}
+              />
+            </ImgsWrapper>
           </h1>
-
           <section>
             <Underline left={"10%"} color={"#7249d1"} />
             <Underline left={"20%"} color={"#27d67b"} />
@@ -163,6 +184,12 @@ const HeaderWrapper = styled.div`
       font-size: 1.5rem;
     }
   }
+
+  @media ${device.tabletS} {
+    h3 {
+      font-size: 1.9rem;
+    }
+  }
 `;
 const SignInWrapper = styled.div`
   width: 100%;
@@ -182,16 +209,19 @@ const Header = styled.div`
   flex-wrap: wrap;
 
   h1 {
+    position: relative;
     width: 100%;
     padding-left: 0.3rem;
-    width: 100%;
+    display: flex;
+    justify-content: flex-start;
     /* border: 1px solid red; */
   }
 
   img {
-    margin-left: 0.3rem;
-    width: 2rem;
-    transform: rotate(-45deg);
+    display: none;
+    width: 5rem;
+    margin-left: 1rem;
+    /* border: 1px solid red; */
   }
 
   section {
@@ -204,17 +234,32 @@ const Header = styled.div`
 
   @media ${device.mobileL} {
     h1 {
-      padding-left: 20%;
+      padding-left: 4%;
     }
-
     img {
-      margin-left: 1rem;
+      display: initial;
     }
   }
 
   @media ${device.tabletS} {
     font-size: 2rem;
+
+    h1 {
+      padding-left: 20%;
+    }
   }
+`;
+const ImgsWrapper = styled.div`
+  display: inline;
+  display: none;
+`;
+const Img = styled.img`
+  position: absolute;
+  top: 2rem;
+  left: ${(props) => props.left};
+  margin-left: 0.3rem;
+  width: 2rem;
+  transform: ${(props) => props.rotate};
 `;
 const Underline = styled.div`
   width: 50%;
@@ -240,7 +285,7 @@ const Section = styled.section`
 const RegisterDiv = styled.div`
   position: relative;
   width: 100%;
-  height: 560px;
+  height: 600px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -264,8 +309,10 @@ const RegisterDiv = styled.div`
 const H3 = styled.h3`
   margin-top: 40%;
   animation: ${(props) => props.animationName} 4s forwards;
+
   span {
     color: #7249d1;
+    color: #27d67b;
     text-decoration: underline;
   }
 
@@ -286,6 +333,10 @@ const H3 = styled.h3`
 
   @media ${device.mobileL} {
     margin-top: 20%;
+  }
+
+  @media ${device.tabletS} {
+    font-size: 1.7rem;
   }
 `;
 
@@ -323,6 +374,12 @@ const List = styled.div`
     }
   }
 
+  @media ${device.tabletS} {
+    ul {
+      font-size: 1.3rem;
+    }
+  }
+
   @media ${device.tablet} {
     border-top-left-radius: 100px;
   }
@@ -350,10 +407,21 @@ const GetStarted = styled.div`
     cursor: pointer;
     width: 6rem;
     height: 2.5rem;
+    font-size: 0.8rem;
     background-color: #27d67b;
     border-radius: 3px;
     border: none;
     outline: none;
+  }
+
+  @media ${device.tabletS} {
+    font-size: 1.5rem;
+
+    button {
+      width: 7rem;
+      height: 3.5rem;
+      font-size: 1rem;
+    }
   }
 `;
 const Button = styled.button`
@@ -413,6 +481,12 @@ const Button = styled.button`
       border: none;
       background-image: url(${(props) => props.url});
     }
+  }
+
+  @media ${device.tabletS} {
+    width: 7rem;
+    height: 3.5rem;
+    font-size: 1rem;
   }
 `;
 const PiggyBank = styled.img`

@@ -11,6 +11,9 @@ import { setCurrentUser } from "../../redux/user/user-actions";
 const SignIn = ({ setCurrentUser, history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cash] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609109955/Dividend%20Tracker/Icons/dollar-svgrepo-com_1_qdtatm.svg"
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,34 +34,40 @@ const SignIn = ({ setCurrentUser, history }) => {
   };
   return (
     <Container>
-      <Link to="/home">Home</Link>
-      <h3>Sign In to your account</h3>
-      <Form>
-        <label htmlFor="email">Email:</label>
-        <input
-          name="email"
-          type="email"
-          placeholder="email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label htmlFor="password">Password:</label>
-        <input
-          name="password"
-          type="password"
-          placeholder="enter password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <Header>
+        <Link to="/">
+          <h1>
+            Dividend Tracker <img src={cash} alt="cash" />
+          </h1>
+        </Link>
+      </Header>
+      <Wrapper>
+        <h3>Sign In to your account</h3>
+        <Form>
+          <label htmlFor="email">Email:</label>
+          <input
+            name="email"
+            type="email"
+            placeholder="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <label htmlFor="password">Password:</label>
+          <input
+            name="password"
+            type="password"
+            placeholder="enter password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <button
-          onClick={(e) => {
-            handleSubmit(e);
-          }}
-        >
-          Submit
-        </button>
-
-        <GoogleSignInButton />
-      </Form>
+          <button
+            onClick={(e) => {
+              handleSubmit(e);
+            }}
+          >
+            Sign In
+          </button>
+        </Form>
+      </Wrapper>
     </Container>
   );
 };
@@ -72,10 +81,40 @@ export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignIn));
 
 // styles
 const Container = styled.div`
+  height: 100vh;
   display: flex;
   flex-direction: column;
+`;
+const Header = styled.div`
+  display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 3rem;
+  background-color: #333;
+
+  h1 {
+    font-size: 1.5rem;
+    color: #fff;
+  }
+
+  img {
+    width: 2rem;
+    transform: rotate(-45deg);
+    margin-left: 1rem;
+  }
+`;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 20rem;
+
+  h3 {
+    margin: 6rem 0 2rem;
+    /* border: 1px solid red; */
+  }
 `;
 const Form = styled.form`
   width: 100%;
@@ -84,5 +123,30 @@ const Form = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 3px solid #333;
+  padding-top: 2rem;
+  /* border: 1px solid red; */
+
+  label {
+    margin-top: 2rem;
+  }
+
+  input {
+    padding: 0.4rem 1rem;
+    width: 80%;
+    font-size: 18px;
+  }
+
+  input::placeholder {
+    color: #ccc;
+  }
+
+  button {
+    width: 5.5rem;
+    height: 2rem;
+    margin: 2rem 0;
+    border-radius: 3px;
+    background-color: #27d67b;
+    border: none;
+    outline: none;
+  }
 `;

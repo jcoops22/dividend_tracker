@@ -17,7 +17,6 @@ const Toolbar = ({ selectShowAllDivs }) => {
   );
 
   useEffect(() => {
-    console.log(showViewAllForm);
     setShowViewAllForm(selectShowAllDivs.show);
   }, [selectShowAllDivs, showViewAllForm]);
 
@@ -58,6 +57,8 @@ const Container = styled.div`
   align-items: center;
   background-color: #fff;
   background-color: #7249d1;
+  background-color: #edc639;
+  background-color: #fff;
   margin-bottom: 3rem;
   padding: 0;
   overflow: hidden;

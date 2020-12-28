@@ -206,6 +206,7 @@ const DividendsForm = ({
             ))}
           </HistoryWrapper>
         ) : null}
+        {loading ? <DivLoader src={littleLoader} alt="loading" /> : null}
       </History>
     </Container>
   );
@@ -270,7 +271,7 @@ const SubmitDividend = styled.button`
 
   img {
     width: 1rem;
-    animation: spin_littleloader_in_dividend_submit 1s forwards infinite;
+    animation: spin_littleloader_in_dividend_submit 1s forwards linear infinite;
 
     @keyframes spin_littleloader_in_dividend_submit {
       to {
@@ -321,6 +322,17 @@ const History = styled.div`
   flex-direction: column;
   opacity: ${(props) => props.opacity};
   pointer-events: ${(props) => props.p_events};
+`;
+const DivLoader = styled.img`
+  width: 2rem;
+  margin: 0 auto;
+  animation: spin_div_loader 1s linear infinite;
+
+  @keyframes spin_div_loader {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `;
 const HistoryHeader = styled.div`
   display: flex;

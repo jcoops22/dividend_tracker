@@ -25,6 +25,9 @@ const ViewAll = ({
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
   );
+  const [littleLoader] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
+  );
 
   useEffect(() => {
     // console.log(payouts);
@@ -91,6 +94,7 @@ const ViewAll = ({
             ))}
           </Wrapper>
         ) : null}
+        {loading ? <ViewAllLoader src={littleLoader} alt="loading" /> : null}
       </DividendsWrapper>
     </Container>
   );
@@ -170,5 +174,18 @@ const Row = styled.div`
   img {
     width: 1.5rem;
     cursor: pointer;
+  }
+`;
+const ViewAllLoader = styled.img`
+  position: absolute;
+  left: calc(50% - 1rem);
+  top: calc(50% - 1rem);
+  width: 2rem;
+  animation: spin_div_loader 1s linear infinite;
+
+  @keyframes spin_div_loader {
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;

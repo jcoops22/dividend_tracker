@@ -24,6 +24,9 @@ import {device} from "../../resources/mediaquery"
   padding: 0;
   margin: 0;
 }
+a {
+  text-decoration: none;
+}
 html {
   background-color: #333;
 }
