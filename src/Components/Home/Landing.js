@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { selectCurrentUser } from "../../redux/user/user-selectors";
 import { Link } from "react-router-dom";
 import Register from "../Home/Register";
-import { auth } from "../Firebase/firebase";
 import Footer from "../Shared/Footer";
 
-const Landing = () => {
+const Landing = ({ selectCurrentUser }) => {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
   const [piggyBank] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608094687/Dividend%20Tracker/Icons/piggy-bank-svgrepo-com_vi5aua.svg"
@@ -47,8 +49,10 @@ const Landing = () => {
     <Container>
       <HeaderWrapper>
         <SignInWrapper>
-          <Link to="/signin">
-            <SignInSpan>Sign In</SignInSpan>
+          <Link to={selectCurrentUser ? "/home" : "/signin"}>
+            <SignInSpan>
+              {selectCurrentUser ? "Go to Dashboard" : "Sign In to Dashboard"}
+            </SignInSpan>
           </Link>
         </SignInWrapper>
         <Header>
@@ -144,7 +148,12 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+const mapStateToProps = createStructuredSelector({
+  selectCurrentUser: selectCurrentUser,
+});
+const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);
 
 // styles
 const Container = styled.div`
@@ -200,6 +209,7 @@ const SignInWrapper = styled.div`
 `;
 const SignInSpan = styled.span`
   color: #7249d1;
+  border-bottom: 2px solid #7249d1;
 `;
 const Header = styled.div`
   width: 100%;

@@ -87,15 +87,17 @@ const Container = styled.div`
 `;
 const Header = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   height: 3rem;
   background-color: #333;
 
   h1 {
+    margin-left: 2rem;
     font-size: 1.5rem;
     color: #fff;
+    /* border: 1px solid red; */
   }
 
   img {
