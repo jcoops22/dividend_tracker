@@ -59,7 +59,8 @@ const SearchStocks = ({
   // adding stock function
   const handleAddStock = async (user, stock) => {
     setLoading(true);
-    let success = await addStock(user, stock);
+    let timeStampeStock = { ...stock, added: new Date().getTime() };
+    let success = await addStock(user, timeStampeStock);
     if (success.message === undefined) {
       setCurrentUserStocks(selectCurrentUserStocks.concat(stock));
       setAlreadyAdded(!alreadyAdded);

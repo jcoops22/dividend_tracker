@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { device } from "../../resources/mediaquery";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import SearchStocks from "../Home/SearchStocks";

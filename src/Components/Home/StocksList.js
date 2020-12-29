@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { device } from "../../resources/mediaquery";
 import { getUserStocks } from "../../resources/stockUtilities";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -17,11 +16,11 @@ const StocksList = ({
   selectCurrentUser,
   setCurrentUserStocks,
   selectCurrentUserStocks,
-  selectReload,
 }) => {
   const [loading, setLoading] = useState(true);
   const [filteredStocks, setFilteredStocks] = useState(selectCurrentUserStocks);
   const [query, setQuery] = useState(null);
+  const [sortType, setSortType] = useState(null);
   const [scrollUpIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608673604/Dividend%20Tracker/Icons/Stocklist/up-arrow-svgrepo-com_ghr6pj.svg"
   );
@@ -33,20 +32,80 @@ const StocksList = ({
     // handle searching
     if (!query) {
       setLoading(true);
+      setSortType(null);
       updateUserStocks();
     } else {
       handleSearchFilter(query);
     }
-  }, [setCurrentUserStocks, query, selectReload]);
+  }, [setCurrentUserStocks, query]);
 
   const updateUserStocks = async () => {
     let stocks = await getUserStocks(selectCurrentUser.id);
     setCurrentUserStocks(stocks);
     setFilteredStocks(stocks);
+
     setLoading(false);
-    // console.log(stocks);
+  };
+  // sort the filteredStocks array
+  const handleSort = (arr, sort) => {
+    // NEWEST
+    if (sort === "Newest") {
+      return arr.sort((a, b) => (a.added < b.added ? 1 : -1));
+    }
+    // OLDEST
+    else if (sort === "Oldest") {
+      return arr.sort((a, b) => (a.added > b.added ? 1 : -1));
+    }
+    // MOST DIVIDENDS
+    else if (sort === "Most Dividends") {
+      let amountsArr = arr.map((s) => {
+        if (s.payouts) {
+          return { ...s, total: getTotal(s.payouts) };
+        } else {
+          return { ...s, total: 0 };
+        }
+      });
+      return amountsArr.sort((a, b) => (a.total < b.total ? 1 : -1));
+    }
+    // LEAST DIVIDENDS
+    else if (sort === "Least Dividends") {
+      let amountsArr = arr.map((s) => {
+        if (s.payouts) {
+          return { ...s, total: getTotal(s.payouts) };
+        } else {
+          return { ...s, total: 0 };
+        }
+      });
+      return amountsArr.sort((a, b) => (a.total > b.total ? 1 : -1));
+    }
+    // MOST PAYOUTS
+    else if (sort === "Most Payouts") {
+      let payoutsArr = arr.map((s) => {
+        if (s.payouts) {
+          return { ...s };
+        } else {
+          return { ...s, payouts: [] };
+        }
+      });
+      return payoutsArr.sort((a, b) =>
+        a.payouts.length < b.payouts.length ? 1 : -1
+      );
+    } else {
+      return arr;
+    }
+  };
+  // generate total for dividend sorts
+  const getTotal = (divsArr) => {
+    let total = 0;
+    divsArr.forEach((payout) => {
+      let amount = parseFloat(payout.amount);
+      total += amount;
+    });
+    console.log(total);
+    return total;
   };
 
+  // handle the query and set filtered results
   const handleSearchFilter = (query) => {
     if (query.length) {
       setFilteredStocks(
@@ -66,21 +125,45 @@ const StocksList = ({
         <LoadingIcon big={true} height={"6rem"} />
       ) : (
         <StockContainer>
-          <SearchBar>
-            <img src={searchIcon} alt="search" />
-            <input
-              autoFocus
-              type="text"
-              placeholder="search your stocks"
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            {query ? (
-              <span onClick={() => setQuery(null)}> &#10005; </span>
-            ) : null}
-          </SearchBar>
+          <Row>
+            <SearchBar>
+              <img src={searchIcon} alt="search" />
+              <input
+                autoFocus
+                type="text"
+                placeholder="search your stocks"
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              {query ? (
+                <span onClick={() => setQuery(null)}> &#10005; </span>
+              ) : null}
+            </SearchBar>
+            <SortWrapper>
+              <p>Sort by:</p>
+              <SortBy
+                onChange={(e) => {
+                  setSortType(e.target.value);
+                  handleSort(e.target.value);
+                }}
+              >
+                <option default value={null}>
+                  None
+                </option>
+                <option value={"Most Dividends"}>Most Dividends</option>
+                <option value={"Least Dividends"}>Least Dividends</option>
+                <option value={"Most Payouts"}>Most Payouts</option>
+                <option value={"Newest"}>Newest</option>
+                <option value={"Oldest"}>Oldest</option>
+              </SortBy>
+            </SortWrapper>
+          </Row>
           {selectCurrentUserStocks.length ? (
             <StocksWrapper
-              stocks={query ? filteredStocks : selectCurrentUserStocks}
+              stocks={
+                query
+                  ? handleSort(filteredStocks, sortType)
+                  : handleSort(selectCurrentUserStocks, sortType)
+              }
             />
           ) : (
             "Add some stocks!"
@@ -103,7 +186,6 @@ const StocksList = ({
 const mapStateToProps = createStructuredSelector({
   selectCurrentUser: selectCurrentUser,
   selectCurrentUserStocks: selectCurrentUserStocks,
-  selectReload: selectReload,
 });
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUserStocks: (stocks) => dispatch(setCurrentUserStocks(stocks)),
@@ -127,6 +209,12 @@ const StockContainer = styled.div`
   align-items: center;
   flex-direction: column;
   /* border: 1px solid red; */
+`;
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 const SearchBar = styled.div`
   position: relative;
@@ -162,7 +250,26 @@ const SearchBar = styled.div`
     /* border: 1px solid red; */
   }
 `;
+const SortWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid red; */
 
+  p {
+    margin-left: 1rem;
+  }
+`;
+const SortBy = styled.select`
+  position: relative;
+  width: 8rem;
+  height: 2rem;
+  margin-left: 1rem;
+
+  p {
+    position: absolute;
+  }
+`;
 const ScrollUp = styled.div`
   width: 100%;
   display: flex;

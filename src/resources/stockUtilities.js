@@ -166,6 +166,7 @@ export const addStock = async (userID, stock) => {
         if (s.ticker !== stock.ticker) {
           newArr.push(s);
         } else {
+          alert("Stock already exists in your list");
           console.log("already exists in stocks");
           return;
         }
@@ -181,7 +182,6 @@ export const addStock = async (userID, stock) => {
   let updatedObj = {
     ...currentUserObj,
     stocks: updatedStocksArray,
-    created: new Date().getTime(),
   };
   console.log(updatedStocksArray);
   console.log(updatedObj);
