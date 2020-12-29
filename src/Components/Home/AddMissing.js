@@ -64,7 +64,7 @@ const AddMissing = ({
 
   const handleSubmit = () => {
     let stock = {
-      ticker: ticker,
+      ticker: ticker.toUpperCase(),
       name: name,
     };
     if (!alreadyAdded) {
@@ -82,6 +82,7 @@ const AddMissing = ({
           type="text"
           placeholder="ticker"
           onChange={(e) => setTicker(e.target.value)}
+          style={ticker ? { textTransform: "uppercase" } : null}
         />
       </Col>
       <Col>
@@ -133,10 +134,15 @@ const Container = styled.div`
   }
 
   input {
+    font-family: "Exo", sans-serif;
     height: 2rem;
     width: 100%;
     font-size: 18px;
     padding: 0.2rem 0 0.2rem 0.2rem;
+  }
+
+  input::placeholder {
+    color: #ccc;
   }
 `;
 const Col = styled.div`
