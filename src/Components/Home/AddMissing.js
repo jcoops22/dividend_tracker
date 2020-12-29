@@ -93,7 +93,7 @@ const AddMissing = ({
           onChange={(e) => setName(e.target.value)}
         />
       </Col>
-      <IconsDiv onClick={() => handleSubmit()}>
+      <IconsDiv onClick={() => (name && ticker ? handleSubmit() : null)}>
         {loading ? (
           <AlreadyAddedLoader>
             <img src={littleLoader} alt="little loader" />
