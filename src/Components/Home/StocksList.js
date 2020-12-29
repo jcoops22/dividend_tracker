@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { device } from "../../resources/mediaquery";
 import { getUserStocks } from "../../resources/stockUtilities";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import LoadingIcon from "../Shared/LoadingIcon";
 import StocksWrapper from "./StocksWrapper";
-import { selectReload } from "../../redux/stocks/stocks-selectors";
 import {
   selectCurrentUser,
   selectCurrentUserStocks,
@@ -125,7 +125,7 @@ const StocksList = ({
         <LoadingIcon big={true} height={"6rem"} />
       ) : (
         <StockContainer>
-          <Row>
+          <UtilitiesRow>
             <SearchBar>
               <img src={searchIcon} alt="search" />
               <input
@@ -156,7 +156,7 @@ const StocksList = ({
                 <option value={"Oldest"}>Oldest</option>
               </SortBy>
             </SortWrapper>
-          </Row>
+          </UtilitiesRow>
           {selectCurrentUserStocks.length ? (
             <StocksWrapper
               stocks={
@@ -201,6 +201,10 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   /* background-color: blue; */
+
+  h1 {
+    margin-bottom: 0.8rem;
+  }
 `;
 const StockContainer = styled.div`
   width: 100%;
@@ -208,13 +212,18 @@ const StockContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  padding: 0 0.3rem;
   /* border: 1px solid red; */
 `;
-const Row = styled.div`
+const UtilitiesRow = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column-reverse;
   justify-content: space-between;
   align-items: center;
+
+  @media ${device.mobileL} {
+    flex-direction: row;
+  }
 `;
 const SearchBar = styled.div`
   position: relative;
@@ -252,6 +261,7 @@ const SearchBar = styled.div`
 `;
 const SortWrapper = styled.div`
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   /* border: 1px solid red; */
@@ -265,10 +275,6 @@ const SortBy = styled.select`
   width: 8rem;
   height: 2rem;
   margin-left: 1rem;
-
-  p {
-    position: absolute;
-  }
 `;
 const ScrollUp = styled.div`
   width: 100%;
