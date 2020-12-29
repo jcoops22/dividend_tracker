@@ -9,6 +9,7 @@ import {
 } from "../../redux/user/user-selectors";
 import { setCurrentUserStocks } from "../../redux/user/user-actions";
 import TransformIcon from "../Shared/TransformIcon";
+import AddMissing from "./AddMissing";
 
 const SearchStocks = ({
   allstocks,
@@ -20,6 +21,7 @@ const SearchStocks = ({
   const [tickersArr, setTickersArr] = useState(null);
   const [filteredResults, setFilteredResults] = useState([]);
   const [alreadyAdded, setAlreadyAdded] = useState(null);
+  const [showAddMissing, setShowAddMissing] = useState(false);
   const [alreadyAddedIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608509562/Dividend%20Tracker/Icons/SearchResults/check-svgrepo-com_1_g7pyz8.svg"
   );
@@ -32,6 +34,7 @@ const SearchStocks = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    console.log(!!query && filteredResults.length === 0);
     if (!tickersArr) {
       buildTickersArr(selectCurrentUserStocks);
     }
@@ -160,11 +163,44 @@ const SearchStocks = ({
               </ResultRow>
             ))}
           </ResultsWrapper>
-        ) : (
-          <ResultsWrapper>
-            <ResultRow>No results</ResultRow>
-          </ResultsWrapper>
-        )}
+        ) : null}
+        <ResultsWrapper>
+          {filteredResults.length === 0 && query ? (
+            <NoResultRow>
+              {!showAddMissing ? <p>Sorry, no results</p> : null}
+              <div>
+                {!showAddMissing ? (
+                  <AddMissingText onClick={() => setShowAddMissing(true)}>
+                    Need to add a missing stock/fund?
+                  </AddMissingText>
+                ) : (
+                  <span
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "80%",
+                    }}
+                  >
+                    <span style={{ color: "#7249d1" }}>Add stock:</span>
+                    <span
+                      style={{
+                        width: "1rem",
+                        cursor: "pointer",
+                        color: "#FF3501",
+                      }}
+                      onClick={() => setShowAddMissing(false)}
+                    >
+                      &#10005;
+                    </span>
+                  </span>
+                )}
+              </div>
+              {showAddMissing ? (
+                <AddMissing user={selectCurrentUser.id} />
+              ) : null}
+            </NoResultRow>
+          ) : null}
+        </ResultsWrapper>
       </Results>
     </Container>
   );
@@ -185,7 +221,7 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   max-width: 530px;
-  height: 16rem;
+  height: 20rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -193,7 +229,7 @@ const Container = styled.div`
   padding: 0.5rem;
   background-color: #fff;
   font-family: "Exo", sans-serif;
-  /* border: 2px solid blue; */
+  /* border: 1px solid #333; */
 
   h5 {
     width: 100%;
@@ -277,6 +313,28 @@ const ResultRow = styled.div`
     font-size: 1.2rem;
     /* border: 2px solid red; */
   }
+`;
+const NoResultRow = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 0 1rem;
+  cursor: default;
+  /* border: 1px solid red; */
+
+  p {
+    font-size: 1.2rem;
+    /* border: 2px solid red; */
+  }
+`;
+const AddMissingText = styled.span`
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  color: #7249d1;
 `;
 const Row = styled.div`
   display: flex;
