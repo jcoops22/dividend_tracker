@@ -30,11 +30,11 @@ const AddMissing = ({
   // adding stock function
   const handleAddStock = async (user, stock) => {
     setLoading(true);
-    let timeStampeStock = { ...stock, added: new Date().getTime() };
-    let success = await addStock(user, timeStampeStock);
+    let timeStampedStock = { ...stock, added: new Date().getTime() };
+    let success = await addStock(user, timeStampedStock);
+    console.log(success);
     if (success.message === undefined) {
-      console.log("from Add", success);
-      setCurrentUserStocks(selectCurrentUserStocks.concat(timeStampeStock));
+      setCurrentUserStocks(selectCurrentUserStocks.concat(timeStampedStock));
       setAlreadyAdded(!alreadyAdded);
       setLoading(false);
     } else {
@@ -48,7 +48,6 @@ const AddMissing = ({
     setLoading(true);
     let success = await deleteStock(user, stock);
     if (success.message === undefined) {
-      console.log("from delete", success);
       setCurrentUserStocks(
         selectCurrentUserStocks.filter(
           (stocks) => stocks.ticker !== stock.ticker
@@ -58,6 +57,7 @@ const AddMissing = ({
       setLoading(false);
     } else {
       setLoading(false);
+      alert(success.message);
       console.log(success.message);
     }
   };

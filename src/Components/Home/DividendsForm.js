@@ -324,8 +324,10 @@ const History = styled.div`
   pointer-events: ${(props) => props.p_events};
 `;
 const DivLoader = styled.img`
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 1rem);
   width: 2rem;
-  margin: 0 auto;
   animation: spin_div_loader 1s linear infinite;
 
   @keyframes spin_div_loader {

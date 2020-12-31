@@ -126,16 +126,17 @@ const Landing = ({ selectCurrentUser }) => {
             </li>
             <li>
               <img src={graph} alt="get info on stocks" />
-              Get up to date* information on your tracked stocks
+              Get up to date* information on your tracked stocks**
             </li>
             <li>
               <img src={reports} alt="reports" />
               Generate reports to track your progress
             </li>
           </ul>
-          <Asterick>
-            *Stock market data is updated daily (generally every hour)
-          </Asterick>
+          <Asterisk>
+            <p>*Stock market data is updated daily (generally every hour)</p>
+            <p>**currently API calls are limited to only 3 per minute</p>
+          </Asterisk>
         </List>
       </ListWrapper>
       <GetStarted>
@@ -391,7 +392,9 @@ const List = styled.div`
     border-top-left-radius: 100px;
   }
 `;
-const Asterick = styled.div`
+const Asterisk = styled.div`
+  display: flex;
+  flex-direction: column;
   margin: 3rem 0 1rem;
   padding-left: 1rem;
   width: 100%;

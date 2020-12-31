@@ -58,6 +58,7 @@ const StockToolbar = ({
     setTickerData(data);
     setTickerInfo(data);
     setLoading(!!!data);
+    console.log(data);
   };
 
   // BUTTONS Functions

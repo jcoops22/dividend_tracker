@@ -7,11 +7,13 @@ import { selectTickerData } from "../../redux/stocks/stocks-selectors";
 import { formatDateData } from "../../resources/stockUtilities";
 import LoadingIcon from "../Shared/LoadingIcon";
 import DividendsForm from "../Home/DividendsForm";
+import D3Graph from "../Shared/D3Graph";
 
 const Drawer = ({ info, open, loading, data, dividends, stock }) => {
   const [point, setPoint] = useState(
     info ? "calc(100% - 4.8rem)" : "calc(100% - 7.8rem)"
   );
+
   useEffect(() => {
     if (info) {
       setPoint("calc(100% - 4.9rem)");
@@ -55,7 +57,11 @@ const Drawer = ({ info, open, loading, data, dividends, stock }) => {
               </Row>
             </Col>
             <Col padding="0 0 0 0.5rem">
-              <D3Div>D3 here</D3Div>
+              <D3Div>
+                {data.timeDate.yield === "No data" ? null : (
+                  <D3Graph arr={data.timeDate} stock={stock} />
+                )}
+              </D3Div>
             </Col>
           </Row>
           <Row>
@@ -213,9 +219,9 @@ const Loader = styled.div`
 
 const D3Div = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid gray;
+  /* border: 2px solid gray; */
 `;

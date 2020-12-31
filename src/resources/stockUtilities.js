@@ -163,12 +163,11 @@ export const addStock = async (userID, stock) => {
     .then((data) => {
       let newArr = [stock];
       data.data().stocks.forEach((s) => {
-        if (s.ticker !== stock.ticker) {
-          newArr.push(s);
-        } else {
+        if (s.ticker === stock.ticker) {
           alert("Stock already exists in your list");
-          console.log("already exists in stocks");
           return;
+        } else {
+          newArr.push(s);
         }
       });
       return newArr;
@@ -183,8 +182,8 @@ export const addStock = async (userID, stock) => {
     ...currentUserObj,
     stocks: updatedStocksArray,
   };
-  console.log(updatedStocksArray);
-  console.log(updatedObj);
+  // console.log(updatedStocksArray);
+  // console.log(updatedObj);
   // update the user's stocks
   ref.set({
     ...updatedObj,
