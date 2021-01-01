@@ -54,7 +54,7 @@ const StockToolbar = ({
       return;
     }
 
-    let data = await getTickerInfo(stock.ticker, 5);
+    let data = await getTickerInfo(stock.ticker, 60);
     setTickerData(data);
     setTickerInfo(data);
     setLoading(!!!data);

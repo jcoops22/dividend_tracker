@@ -55,39 +55,32 @@ const Drawer = ({ info, open, loading, data, dividends, stock }) => {
                   {isNaN(data.divPerShare) ? 0 : data.divPerShare}
                 </span>
               </Row>
+              <HideOnMobile>
+                <Row>
+                  <span>
+                    Ex-Dividend date:{" "}
+                    {data.exDivDate
+                      ? formatDateData(data.exDivDate)
+                      : "No data"}
+                  </span>
+                </Row>
+                <Row>
+                  <span>
+                    Payout date:{" "}
+                    {data.payDivDate
+                      ? formatDateData(data.payDivDate)
+                      : "No data"}
+                  </span>
+                </Row>
+              </HideOnMobile>
             </Col>
-            <Col padding="0 0 0 0.5rem">
+            <D3Wrapper padding="0 0 0 0.5rem">
               <D3Div>
                 {data.timeDate.yield === "No data" ? null : (
                   <D3Graph arr={data.timeDate} stock={stock} />
                 )}
               </D3Div>
-            </Col>
-          </Row>
-          <Row>
-            {loading ? (
-              <Loader />
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  padding: "0 0.5rem",
-                }}
-              >
-                <div style={{ width: "50%" }}>
-                  Ex-Dividend date:{" "}
-                  {data.exDivDate ? formatDateData(data.exDivDate) : "No data"}
-                </div>
-                <div style={{ width: "50%", paddingLeft: "1rem" }}>
-                  Payout date:{" "}
-                  {data.payDivDate
-                    ? formatDateData(data.payDivDate)
-                    : "No data"}
-                </div>
-              </div>
-            )}
+            </D3Wrapper>
           </Row>
         </InfoWrapper>
       ) : null}
@@ -193,35 +186,36 @@ const Row = styled.div`
 const Col = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   padding: ${(props) => props.padding};
   width: 50%;
-`;
-const Loader = styled.div`
-  position: absolute;
-  top: calc(50% - 15px);
-  left: calc(50% - 15px);
-  height: 30px;
-  width: 30px;
-  opacity: 1;
-  visibility: ${(props) => props.visibiliy};
-  animation: rotate_drawer_loader 0.5s ease-in infinite alternate;
-  border-radius: 50%;
-  border: 3px solid red;
-  border-top-color: blue;
 
-  @keyframes rotate_drawer_loader {
-    to {
-      border-radius: 20%;
-      transform: rotate(408deg);
-    }
+  @media ${device.tabletS} {
+    justify-content: center;
   }
 `;
+const HideOnMobile = styled.div`
+  display: none;
 
+  @media ${device.tablet} {
+    display: initial;
+  }
+`;
+const D3Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 50%;
+  /* border: 1px solid red; */
+`;
 const D3Div = styled.div`
   width: 100%;
   height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 0.5rem;
+  /* margin-top: 20%; */
   /* border: 2px solid gray; */
 `;

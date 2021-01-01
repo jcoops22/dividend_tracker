@@ -66,6 +66,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
   // intervals options: 1, 5, 15, 30, 60
   let interval = timeInterval;
   let api_KEY = "3M8136KILLJ20M9K";
+  // let currentInfo = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${api_KEY}`;
   let currentInfo = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=${interval}min&apikey=${api_KEY}`;
   let overview = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=${api_KEY}`;
   // OVERVIEW API CALL
@@ -80,7 +81,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
           payDivDate: "No data",
         };
       } else {
-        console.log("All data", data);
+        // console.log("All data", data);
         const {
           DividendYield,
           DividendPerShare,
@@ -110,6 +111,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
   let seriesData = await axios
     .get(currentInfo)
     .then((data) => {
+      console.log(data);
       if (data.data.Note) {
         console.log("Timeout occurred");
         return {
@@ -119,7 +121,10 @@ export const getTickerInfo = async (ticker, timeInterval) => {
           payDivDate: "No data",
         };
       }
-      let time_series_arr = Object.entries(data.data["Time Series (5min)"]);
+      let time_series_arr = Object.entries(
+        data.data[`Time Series (${interval}min)`]
+      );
+      // let time_series_arr = Object.entries(data.data["Time Series (Daily)"]);
       let obj = time_series_arr.map((arr) => {
         return {
           lastUpdated: arr[0],
