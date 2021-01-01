@@ -110,7 +110,7 @@ const D3Graph = ({ arr, stock }) => {
   return (
     <Container id={`${stock.ticker}`}>
       <Legend>
-        Market Value <span>(last 4 days)</span>
+        Market Value <span>(last 7 trading days)</span>
       </Legend>
       <LeftInfoBar>
         <span>0</span>
