@@ -64,13 +64,13 @@ const D3Graph = ({ arr, stock }) => {
       .duration(800)
       .attr("x", (d, i) => `${i}%`)
       .attr("y", (d, i) => 0)
-      .attr("width", "4px")
+      .attr("width", "3px")
       .attr("height", (d) => {
         let cents = getCents(d);
 
-        console.log(
-          ("The D:", d, "DBASE:", dbase, "PERCENT:", cents / dbase) * 100
-        );
+        // console.log(
+        //   ("The D:", d, "DBASE:", dbase, "PERCENT:", cents / dbase) * 100
+        // );
 
         return (d / dbase) * 100;
       })
@@ -81,7 +81,7 @@ const D3Graph = ({ arr, stock }) => {
 
   return (
     <Container id={`${stock.ticker}`}>
-      <Legend>Legend</Legend>
+      <Legend>Time Range (last 100 hours)</Legend>
       <LeftInfoBar>
         <span>0</span>
         {valueArr ? <span>${average(valueArr).toFixed(2)}</span> : null}
@@ -115,10 +115,12 @@ const Legend = styled.div`
   position: absolute;
   width: 50%;
   height: 2rem;
+  font-size: 0.8rem;
+  text-align: center;
   top: calc(100% - 2rem);
   left: calc(50% - 25%);
   transform: rotate(180deg);
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
 `;
 const LeftInfoBar = styled.div`
   position: absolute;

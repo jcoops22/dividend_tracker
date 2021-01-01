@@ -216,6 +216,5 @@ const D3Div = styled.div`
   justify-content: center;
   align-items: center;
   padding-bottom: 0.5rem;
-  /* margin-top: 20%; */
   /* border: 2px solid gray; */
 `;

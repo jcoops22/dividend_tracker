@@ -120,7 +120,12 @@ const StocksList = ({
 
   return (
     <Container>
-      <h1>Your Stocks:</h1>
+      <h1>
+        Your Stocks:{" "}
+        <span>
+          ({query ? filteredStocks.length : selectCurrentUserStocks.length})
+        </span>
+      </h1>
       {loading ? (
         <LoadingIcon big={true} height={"6rem"} />
       ) : (
@@ -204,6 +209,10 @@ const Container = styled.div`
 
   h1 {
     margin-bottom: 0.8rem;
+
+    span {
+      font-size: 1.3rem;
+    }
   }
 `;
 const StockContainer = styled.div`
