@@ -5,16 +5,18 @@ import * as d3 from "d3";
 
 const D3Graph = ({ arr, stock }) => {
   const [valueArr, setValueArr] = useState(null);
+  const [infoValues, setInfoValues] = useState(null);
 
   useEffect(() => {
     // console.log(arr);
-    if (!valueArr) {
+    if (!valueArr && !infoValues) {
       makeValuesArray(arr);
+      makeInfoValues(arr);
     } else {
       drawChart("100%", 100);
     }
     //   console.log("we running");
-  }, [valueArr]);
+  }, [valueArr, infoValues]);
 
   // make a values array from the time series data
   const makeValuesArray = (obj) => {
@@ -24,7 +26,28 @@ const D3Graph = ({ arr, stock }) => {
     });
     setValueArr(values);
   };
+  // get first middle and last values for the infobar
+  const makeInfoValues = (obj) => {
+    let arr = Object.entries(obj);
+    setInfoValues([
+      formatInfo(arr[0][1].lastUpdated),
+      formatInfo(arr[49][1].lastUpdated),
+      formatInfo(arr[99][1].lastUpdated),
+    ]);
+  };
 
+  // format the info data
+  const formatInfo = (info) => {
+    let date = (info) => {
+      return info.slice(5, 10).replace("-", "/");
+    };
+    let time = (info) => {
+      let rawTime = info.slice(11, -6);
+      return rawTime > 12 ? rawTime - 12 + "pm" : parseInt(rawTime) + "am";
+    };
+
+    return date(info) + " " + time(info);
+  };
   // average for baseline value
   const average = (array) => array.reduce((a, b) => a + b) / array.length;
 
@@ -81,17 +104,21 @@ const D3Graph = ({ arr, stock }) => {
 
   return (
     <Container id={`${stock.ticker}`}>
-      <Legend>Time Range (last 100 hours)</Legend>
+      <Legend>
+        Market Value <span>(last 4 days)</span>
+      </Legend>
       <LeftInfoBar>
         <span>0</span>
         {valueArr ? <span>${average(valueArr).toFixed(2)}</span> : null}
         {valueArr ? <span>${getHigh(valueArr) / 0.5}</span> : null}
       </LeftInfoBar>
-      <BottomInfoBar>
-        <span>Info</span>
-        <span>info</span>
-        <span>more info</span>
-      </BottomInfoBar>
+      {infoValues ? (
+        <BottomInfoBar>
+          {infoValues.map((i, ind) => (
+            <span key={ind}>{i}</span>
+          ))}
+        </BottomInfoBar>
+      ) : null}
     </Container>
   );
 };
@@ -121,6 +148,14 @@ const Legend = styled.div`
   left: calc(50% - 25%);
   transform: rotate(180deg);
   /* border: 1px solid gray; */
+
+  span {
+    display: none;
+
+    @media ${device.tabletS} {
+      display: initial;
+    }
+  }
 `;
 const LeftInfoBar = styled.div`
   position: absolute;
@@ -137,6 +172,7 @@ const LeftInfoBar = styled.div`
 
   span {
     font-size: 0.6rem;
+    padding-right: 0.1rem;
     background-color: #fff;
   }
 `;
@@ -146,8 +182,19 @@ const BottomInfoBar = styled.div`
   left: 0;
   width: 100%;
   height: 1rem;
-  display: flex;
+  font-size: 0.6rem;
+  padding-top: 0.5rem;
+  display: none;
   justify-content: space-between;
   transform: rotate(180deg);
   /* border: 1px solid red; */
+
+  span {
+    transform: rotate(-15deg);
+    /* background-color: #fff; */
+  }
+
+  @media ${device.tabletS} {
+    display: flex;
+  }
 `;
