@@ -21,18 +21,23 @@ const D3Graph = ({ arr, stock }) => {
   // make a values array from the time series data
   const makeValuesArray = (obj) => {
     let arr = Object.entries(obj);
-    let values = arr.slice(0, 100).map((val) => {
-      return parseFloat(val[1].value.slice(1));
-    });
-    setValueArr(values);
+    let values = arr
+      .slice(0, 100)
+      .reverse()
+      .map((val) => {
+        return parseFloat(val[1].value.slice(1));
+      });
+    setValueArr(values.reverse());
   };
   // get first middle and last values for the infobar
   const makeInfoValues = (obj) => {
-    let arr = Object.entries(obj);
+    let arr = Object.entries(obj).reverse();
+    // console.log(arr);
+    // console.log(arr.reverse());
     setInfoValues([
-      formatInfo(arr[0][1].lastUpdated),
-      formatInfo(arr[49][1].lastUpdated),
-      formatInfo(arr[99][1].lastUpdated),
+      formatInfo(arr[1][1].lastUpdated),
+      formatInfo(arr[50][1].lastUpdated),
+      formatInfo(arr[100][1].lastUpdated),
     ]);
   };
 
@@ -174,6 +179,10 @@ const LeftInfoBar = styled.div`
     font-size: 0.6rem;
     padding-right: 0.1rem;
     background-color: #fff;
+  }
+
+  span:nth-child(2) {
+    margin-bottom: 1rem;
   }
 `;
 const BottomInfoBar = styled.div`
