@@ -40,7 +40,14 @@ function App({ selectCurrentUser, setCurrentUser, history }) {
             selectCurrentUser ? <Home history={history} /> : <Landing />
           }
         />
-        <Route exact path="/reports" component={Reports} />
+        <Route
+          exact
+          path="/reports"
+          render={() =>
+            selectCurrentUser ? <Reports history={history} /> : <SignIn />
+          }
+        />
+        <Route path="*" component={Landing} />
       </Switch>
     </Container>
   );

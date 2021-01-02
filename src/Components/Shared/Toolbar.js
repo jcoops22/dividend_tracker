@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
@@ -27,7 +28,9 @@ const Toolbar = ({ selectShowAllDivs }) => {
       }}
     >
       <ReportButton>
-        <button>Reports</button>
+        <Link to="/reports">
+          <button>Reports</button>
+        </Link>
       </ReportButton>
       <AddTickerWrapper>
         <AddTicker onClick={() => setShowAddForm(true)}>

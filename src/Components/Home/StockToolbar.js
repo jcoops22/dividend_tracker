@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { connect } from "react-redux";
@@ -194,7 +194,6 @@ const mapStateToProps = createStructuredSelector({
   selectCurrentUser: selectCurrentUser,
   selectTickerData: selectTickerData,
   selectCurrentUserStocks: selectCurrentUserStocks,
-  selectReload: selectReload,
 });
 const mapDispatchToProps = (dispatch) => ({
   setTickerData: (data) => dispatch(setTickerData(data)),
