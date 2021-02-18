@@ -14,7 +14,6 @@ import Reports from "./Components/Home/Reports";
 
 function App({ selectCurrentUser, setCurrentUser, history }) {
   useEffect(() => {
-    console.log("in the app.js");
     auth.onAuthStateChanged((user) => {
       if (!user) {
         setCurrentUser(null);

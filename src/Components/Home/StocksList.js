@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { getUserStocks } from "../../resources/stockUtilities";
@@ -11,12 +11,15 @@ import {
   selectCurrentUserStocks,
 } from "../../redux/user/user-selectors";
 import { setCurrentUserStocks } from "../../redux/user/user-actions";
+import { formatDateData } from "../../resources/stockUtilities";
+import StocksContext from "../Context/stocksContext";
 
 const StocksList = ({
   selectCurrentUser,
   setCurrentUserStocks,
   selectCurrentUserStocks,
 }) => {
+  const stocks = useContext(StocksContext);
   const [loading, setLoading] = useState(true);
   const [filteredStocks, setFilteredStocks] = useState(selectCurrentUserStocks);
   const [query, setQuery] = useState(null);
@@ -29,6 +32,7 @@ const StocksList = ({
   );
 
   useEffect(() => {
+    console.log(stocks.stocks);
     // handle searching
     if (!query) {
       setLoading(true);
@@ -90,10 +94,51 @@ const StocksList = ({
       return payoutsArr.sort((a, b) =>
         a.payouts.length < b.payouts.length ? 1 : -1
       );
+    }
+    // NEWEST PAYOUTS
+    else if (sort === "Newest Payouts") {
+      let payoutsArr = arr.map((s) => {
+        if (s.payouts && s.payouts.length) {
+          return {
+            ...s,
+            lastPayout: new Date(
+              formatDateData(s.payouts[0].payDate)
+            ).getTime(),
+          };
+        } else {
+          return {
+            ...s,
+            payouts: [],
+            lastPayout: 0,
+          };
+        }
+      });
+      return payoutsArr.sort((a, b) => (a.lastPayout < b.lastPayout ? 1 : -1));
+    }
+    // OLDEST PAYOUTS
+    else if (sort === "Oldest Payouts") {
+      let payoutsArr = arr.map((s) => {
+        if (s.payouts && s.payouts.length) {
+          return {
+            ...s,
+            lastPayout: new Date(
+              formatDateData(s.payouts[0].payDate)
+            ).getTime(),
+          };
+        } else {
+          return {
+            ...s,
+            payouts: [],
+            lastPayout: 0,
+          };
+        }
+      });
+      return payoutsArr.sort((a, b) => (a.lastPayout > b.lastPayout ? 1 : -1));
     } else {
       return arr;
     }
   };
+
   // generate total for dividend sorts
   const getTotal = (divsArr) => {
     let total = 0;
@@ -104,6 +149,7 @@ const StocksList = ({
     console.log(total);
     return total;
   };
+  // get the last payout date
 
   // handle the query and set filtered results
   const handleSearchFilter = (query) => {
@@ -159,6 +205,8 @@ const StocksList = ({
                 <option value={"Most Payouts"}>Most Payouts</option>
                 <option value={"Newest"}>Newest</option>
                 <option value={"Oldest"}>Oldest</option>
+                <option value={"Newest Payouts"}>Newest Payouts</option>
+                <option value={"Oldest Payouts"}>Oldest Payouts</option>
               </SortBy>
             </SortWrapper>
           </UtilitiesRow>

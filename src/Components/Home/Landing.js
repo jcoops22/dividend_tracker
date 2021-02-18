@@ -418,6 +418,7 @@ const GetStarted = styled.div`
     width: 6rem;
     height: 2.5rem;
     font-size: 0.8rem;
+    font-family: "Exo", sans-serif;
     background-color: #27d67b;
     border-radius: 3px;
     border: none;
@@ -448,6 +449,7 @@ const Button = styled.button`
   background-color: #27d67b;
   margin-top: 1rem;
   cursor: pointer;
+  font-family: "Exo", sans-serif;
   border-radius: 3px;
   border: none;
   outline: none;

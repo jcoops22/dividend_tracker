@@ -1,19 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { device } from "../../resources/mediaquery";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { deleteStock, getTickerInfo } from "../../resources/stockUtilities";
 import { setCurrentUserStocks } from "../../redux/user/user-actions";
-import { setTickerData, setReload } from "../../redux/stocks/stocks-actions";
+import { setTickerData } from "../../redux/stocks/stocks-actions";
 import {
   selectCurrentUser,
   selectCurrentUserStocks,
 } from "../../redux/user/user-selectors";
-import {
-  selectReload,
-  selectTickerData,
-} from "../../redux/stocks/stocks-selectors";
+import { selectTickerData } from "../../redux/stocks/stocks-selectors";
 import TransformIcon from "../Shared/TransformIcon";
 import Drawer from "./Drawer";
 
@@ -23,8 +19,6 @@ const StockToolbar = ({
   setTickerData,
   setCurrentUserStocks,
   selectCurrentUserStocks,
-  setReload,
-  selectReload,
 }) => {
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
@@ -72,7 +66,6 @@ const StockToolbar = ({
           (stocks) => stocks.ticker !== stock.ticker
         )
       );
-      setReload(!selectReload);
     } else {
       console.log(success.message);
     }
@@ -198,7 +191,6 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   setTickerData: (data) => dispatch(setTickerData(data)),
   setCurrentUserStocks: (stocks) => dispatch(setCurrentUserStocks(stocks)),
-  setReload: (bool) => dispatch(setReload(bool)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StockToolbar);
@@ -207,7 +199,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(StockToolbar);
 const Container = styled.div`
   width: 100%;
   height: 25%;
+  /* user-select: none; */
   /* background-color: #3ed; */
+  /* border: 1px solid red; */
 `;
 const Wrapper = styled.div`
   width: 100%;
@@ -215,6 +209,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-start;
+  /* border: 1px solid red; */
 `;
 const IconWrapper = styled.div`
   display: flex;
