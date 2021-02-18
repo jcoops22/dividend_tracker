@@ -23,7 +23,7 @@ const StocksList = ({
   const [loading, setLoading] = useState(true);
   const [filteredStocks, setFilteredStocks] = useState(selectCurrentUserStocks);
   const [query, setQuery] = useState(null);
-  const [sortType, setSortType] = useState(null);
+  const [sortType, setSortType] = useState("Newest Payouts");
   const [scrollUpIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608673604/Dividend%20Tracker/Icons/Stocklist/up-arrow-svgrepo-com_ghr6pj.svg"
   );
@@ -32,11 +32,11 @@ const StocksList = ({
   );
 
   useEffect(() => {
-    console.log(stocks.stocks);
+    // console.log(stocks.stocks);
     // handle searching
     if (!query) {
       setLoading(true);
-      setSortType(null);
+      // setSortType(null);
       updateUserStocks();
     } else {
       handleSearchFilter(query);
@@ -146,7 +146,6 @@ const StocksList = ({
       let amount = parseFloat(payout.amount);
       total += amount;
     });
-    console.log(total);
     return total;
   };
   // get the last payout date
@@ -194,19 +193,15 @@ const StocksList = ({
               <SortBy
                 onChange={(e) => {
                   setSortType(e.target.value);
-                  handleSort(e.target.value);
                 }}
               >
-                <option default value={null}>
-                  None
-                </option>
+                <option value={"Newest Payouts"}>Newest Payouts</option>
+                <option value={"Oldest Payouts"}>Oldest Payouts</option>
                 <option value={"Most Dividends"}>Most Dividends</option>
                 <option value={"Least Dividends"}>Least Dividends</option>
                 <option value={"Most Payouts"}>Most Payouts</option>
                 <option value={"Newest"}>Newest</option>
                 <option value={"Oldest"}>Oldest</option>
-                <option value={"Newest Payouts"}>Newest Payouts</option>
-                <option value={"Oldest Payouts"}>Oldest Payouts</option>
               </SortBy>
             </SortWrapper>
           </UtilitiesRow>

@@ -7,7 +7,7 @@ const Footer = () => {
     <Container>
       Developed by:
       <a
-        href="https://frosty-borg-f4c129.netlify.app/"
+        href="https://hungry-saha-ad752d.netlify.app/"
         target="_blank"
         rel="noopener noreferrer"
       >

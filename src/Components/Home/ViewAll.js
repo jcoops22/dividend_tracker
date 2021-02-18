@@ -63,6 +63,14 @@ const ViewAll = ({
     }
   };
 
+  const getTotal = (arr) => {
+    let total = 0;
+    arr.forEach((pay) => {
+      total += parseFloat(pay.amount);
+    });
+    return total;
+  };
+
   return (
     <Container onClick={() => setShowAllDivs({ show: false, payouts: [] })}>
       <DividendsWrapper onClick={(e) => e.stopPropagation()}>
@@ -92,6 +100,9 @@ const ViewAll = ({
                 />
               </Row>
             ))}
+            <Total>
+              Total: <span>${getTotal(payouts).toFixed(2)}</span>
+            </Total>
           </Wrapper>
         ) : null}
         {loading ? <ViewAllLoader src={littleLoader} alt="loading" /> : null}
@@ -153,6 +164,13 @@ const DividendsWrapper = styled.div`
 `;
 const Wrapper = styled.div`
   opacity: ${(props) => props.opacity};
+`;
+const Total = styled.p`
+  margin: 1rem 0;
+  span {
+    color: #27d67b;
+    font-weight: 700;
+  }
 `;
 const Row = styled.div`
   position: relative;

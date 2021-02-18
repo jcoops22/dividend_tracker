@@ -33,10 +33,18 @@ export const updateStocks = () => {
   // ref.doc().set({
   // })
 };
-
+const addZero = (i) => {
+  if (i < 10) {
+    i = "0" + i;
+  }
+  return i;
+};
 export const makeTodaysDate = () => {
   const now = new Date();
-  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+  let year = now.getFullYear();
+  let month = addZero(now.getMonth() + 1);
+  let day = now.getDate();
+  return `${year}-${month}-${day}`;
 };
 // format data to month * day * year
 export const formatDateData = (data) => {
