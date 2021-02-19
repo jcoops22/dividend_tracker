@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { selectCurrentUser } from "../../redux/user/user-selectors";
 import { Link } from "react-router-dom";
 import Register from "../Home/Register";
 import Footer from "../Shared/Footer";
+import { UserContext } from "../Context/UserProvider";
 
-const Landing = ({ selectCurrentUser }) => {
+const Landing = () => {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
   const [piggyBank] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608094687/Dividend%20Tracker/Icons/piggy-bank-svgrepo-com_vi5aua.svg"
@@ -34,6 +32,8 @@ const Landing = ({ selectCurrentUser }) => {
   const [reports] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609111414/Dividend%20Tracker/Icons/report-svgrepo-com_ysbigv.svg"
   );
+  const { currentUser } = useContext(UserContext);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -50,9 +50,9 @@ const Landing = ({ selectCurrentUser }) => {
     <Container>
       <HeaderWrapper>
         <SignInWrapper>
-          <Link to={selectCurrentUser ? "/home" : "/signin"}>
+          <Link to={currentUser ? "/home" : "/signin"}>
             <SignInSpan>
-              {selectCurrentUser ? "Go to Dashboard" : "Sign In to Dashboard"}
+              {currentUser ? "Go to Dashboard" : "Sign In to Dashboard"}
             </SignInSpan>
           </Link>
         </SignInWrapper>
@@ -150,12 +150,7 @@ const Landing = ({ selectCurrentUser }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectCurrentUser: selectCurrentUser,
-});
-const mapDispatchToProps = (dispatch) => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Landing);
+export default Landing;
 
 // styles
 const Container = styled.div`

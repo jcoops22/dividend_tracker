@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { UserContext } from "../Context/UserProvider";
 
 const Header = ({ text, user, auth, history }) => {
+  const { setCurrentUserAction } = useContext(UserContext);
   return (
     <Container>
       <H1 onClick={() => history.push("/")}>{text}</H1>
       <Welcome>Welcome, {user}</Welcome>
-      <SignOut onClick={() => auth.signOut()}>Sign Out</SignOut>
+      <SignOut
+        onClick={() => {
+          auth.signOut();
+          setCurrentUserAction(null);
+        }}
+      >
+        Sign Out
+      </SignOut>
     </Container>
   );
 };

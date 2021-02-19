@@ -1,25 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
 import { deleteStock, getTickerInfo } from "../../resources/stockUtilities";
-import { setCurrentUserStocks } from "../../redux/user/user-actions";
-import { setTickerData } from "../../redux/stocks/stocks-actions";
-import {
-  selectCurrentUser,
-  selectCurrentUserStocks,
-} from "../../redux/user/user-selectors";
-import { selectTickerData } from "../../redux/stocks/stocks-selectors";
 import TransformIcon from "../Shared/TransformIcon";
 import Drawer from "./Drawer";
+import { StocksContext } from "../Context/StocksProvider";
+import { UserContext } from "../Context/UserProvider";
 
-const StockToolbar = ({
-  stock,
-  selectCurrentUser,
-  setTickerData,
-  setCurrentUserStocks,
-  selectCurrentUserStocks,
-}) => {
+const StockToolbar = ({ stock }) => {
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
   );
@@ -36,35 +23,36 @@ const StockToolbar = ({
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616032/Dividend%20Tracker/Icons/Stock%20Toolbar/close-svgrepo-com_nohmjc.svg"
   );
   const [showModal, setShowModal] = useState(false);
-  const [showDrawer, setShowDrawer] = useState(false);
   const [tickerInfo, setTickerInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showDividend, setShowDividend] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
+  const { setTickerDataAction } = useContext(StocksContext);
+  const {
+    setCurrentUserStocksAction,
+    currentUserStocks,
+    currentUser,
+  } = useContext(UserContext);
 
   const assignTickerData = async () => {
     setLoading(true);
     if (showDrawer && showInfo) {
       return;
     }
-
     let data = await getTickerInfo(stock.ticker, 60);
-    setTickerData(data);
+    setTickerDataAction(data);
     setTickerInfo(data);
     setLoading(!!!data);
-    console.log(data);
   };
-
   // BUTTONS Functions
   // update the stocks list after delete
   const updateAfterDelete = async (user, stock) => {
     let success = await deleteStock(user, stock);
     if (success.message === undefined) {
       console.log("success");
-      setCurrentUserStocks(
-        selectCurrentUserStocks.filter(
-          (stocks) => stocks.ticker !== stock.ticker
-        )
+      setCurrentUserStocksAction(
+        currentUserStocks.filter((stocks) => stocks.ticker !== stock.ticker)
       );
     } else {
       console.log(success.message);
@@ -82,7 +70,6 @@ const StockToolbar = ({
       setShowInfo(false);
     }
   };
-
   // tasks when INFO drawer is opened
   const handleShowInfo = () => {
     if (showInfo) {
@@ -156,7 +143,7 @@ const StockToolbar = ({
                     setShowDrawer(false);
                     setShowInfo(false);
                     setShowDividend(false);
-                    updateAfterDelete(selectCurrentUser.id, stock);
+                    updateAfterDelete(currentUser.id, stock);
                   }}
                 />
                 <input
@@ -183,17 +170,7 @@ const StockToolbar = ({
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectCurrentUser: selectCurrentUser,
-  selectTickerData: selectTickerData,
-  selectCurrentUserStocks: selectCurrentUserStocks,
-});
-const mapDispatchToProps = (dispatch) => ({
-  setTickerData: (data) => dispatch(setTickerData(data)),
-  setCurrentUserStocks: (stocks) => dispatch(setCurrentUserStocks(stocks)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(StockToolbar);
+export default StockToolbar;
 
 // styles
 const Container = styled.div`

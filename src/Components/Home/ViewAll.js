@@ -1,26 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import { device } from "../../resources/mediaquery";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { selectCurrentUser } from "../../redux/user/user-selectors";
-import { setCurrentUserStocks } from "../../redux/user/user-actions";
-import { setShowAllDivs } from "../../redux/stocks/stocks-actions";
-import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
 import {
   formatDateData,
   deleteDividend,
   updateStockDividend,
 } from "../../resources/stockUtilities";
+import { StocksContext } from "../Context/StocksProvider";
+import { UserContext } from "../Context/UserProvider";
 
-const ViewAll = ({
-  setShowAllDivs,
-  selectShowAllDivs,
-  selectCurrentUser,
-  setCurrentUserStocks,
-}) => {
-  const [stock] = useState(selectShowAllDivs.stock);
-  const [payouts, setPayouts] = useState(selectShowAllDivs.payouts);
+const ViewAll = () => {
+  const { currentUser, setCurrentUserStocksAction } = useContext(UserContext);
+  const { showAllDivs, showAllDivsAction } = useContext(StocksContext);
+  const [stock] = useState(showAllDivs.stock);
+  const [payouts, setPayouts] = useState(showAllDivs.payouts);
   const [loading, setLoading] = useState(false);
   const [deleteIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
@@ -29,31 +21,25 @@ const ViewAll = ({
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
   );
 
-  useEffect(() => {
-    // console.log(payouts);
-  }, [payouts]);
+  useEffect(() => {}, [payouts]);
 
   // handle delete
   const handleDelete = async (createdID) => {
     setLoading(true);
-    let newDividends = await deleteDividend(
-      selectCurrentUser.id,
-      stock,
-      createdID
-    );
+    let newDividends = await deleteDividend(currentUser.id, stock, createdID);
     console.log(newDividends);
     let success = await updateStockDividend(
-      selectCurrentUser.id,
+      currentUser.id,
       stock,
       newDividends
     );
     if (success.message === undefined) {
       setPayouts(payouts.filter((pay) => pay.created !== createdID));
-      setShowAllDivs({
-        ...selectShowAllDivs,
+      showAllDivsAction({
+        ...showAllDivs,
         payouts: payouts.filter((pay) => pay.created !== createdID),
       });
-      setCurrentUserStocks(success);
+      setCurrentUserStocksAction(success);
       setLoading(false);
     } else {
       console.log("There was an error.");
@@ -72,22 +58,24 @@ const ViewAll = ({
   };
 
   return (
-    <Container onClick={() => setShowAllDivs({ show: false, payouts: [] })}>
+    <Container onClick={() => showAllDivsAction({ show: false, payouts: [] })}>
       <DividendsWrapper onClick={(e) => e.stopPropagation()}>
         {payouts ? (
           <Wrapper opacity={loading ? "0.5" : null}>
-            <h5>
-              <span>
-                <span style={{ fontSize: "1.1rem" }}>
-                  (<span style={{ color: "#ccc" }}> {payouts.length} </span>)
-                </span>{" "}
-                {payouts.length === 1 ? "Payout" : "Payouts"}:
-              </span>
-              <span>
-                {stock.name.split(" ").slice(0, 2).join(" ")}
-                {`(${stock.ticker})`}
-              </span>
-            </h5>
+            {stock ? (
+              <h5>
+                <span>
+                  <span style={{ fontSize: "1.1rem" }}>
+                    (<span style={{ color: "#ccc" }}> {payouts.length} </span>)
+                  </span>{" "}
+                  {payouts.length === 1 ? "Payout" : "Payouts"}:
+                </span>
+                <span>
+                  {stock.name.split(" ").slice(0, 2).join(" ")}
+                  {`(${stock.ticker})`}
+                </span>
+              </h5>
+            ) : null}
             {payouts.map((payout, ind) => (
               <Row key={ind}>
                 <span>{ind + 1}</span>
@@ -111,16 +99,7 @@ const ViewAll = ({
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectShowAllDivs: selectShowAllDivs,
-  selectCurrentUser: selectCurrentUser,
-});
-const mapDispatchToProps = (dispatch) => ({
-  setShowAllDivs: (viewOjb) => dispatch(setShowAllDivs(viewOjb)),
-  setCurrentUserStocks: (arr) => dispatch(setCurrentUserStocks(arr)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ViewAll);
+export default ViewAll;
 
 // styles
 const Container = styled.div`
@@ -169,6 +148,7 @@ const Total = styled.p`
   margin: 1rem 0;
   span {
     color: #27d67b;
+    color: #333;
     font-weight: 700;
   }
 `;

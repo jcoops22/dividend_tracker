@@ -5,8 +5,6 @@ import { StocksTypes } from "./stocks-types";
 const INITIAL_STATE = {
   stocks: null,
   tickerData: null,
-  showDrawer: false,
-  reload: false,
   showAllDivs: { show: false, payouts: [], stock: {} },
 };
 // state = INITIAL_STATE is using default parameters from ES6, basically if state doesn't exist (like when its first initialized)
@@ -23,12 +21,6 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         tickerData: action.payload,
-      };
-    }
-    case StocksTypes.SET_RELOAD: {
-      return {
-        ...state,
-        reload: action.payload,
       };
     }
     case StocksTypes.SHOW_ALL_DIVS: {

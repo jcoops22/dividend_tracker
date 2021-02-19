@@ -1,32 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
 import {
   updateStockDividend,
   deleteDividend,
   formatDateData,
   makeTodaysDate,
 } from "../../resources/stockUtilities";
-import {
-  selectCurrentUser,
-  selectCurrentUserStocks,
-} from "../../redux/user/user-selectors";
-import {
-  setShowAllDivs,
-  setShowAllDivsStock,
-} from "../../redux/stocks/stocks-actions";
-import { setCurrentUserStocks } from "../../redux/user/user-actions";
-import { selectShowAllDivs } from "../../redux/stocks/stocks-selectors";
+import { StocksContext } from "../Context/StocksProvider";
+import { UserContext } from "../Context/UserProvider";
 
-const DividendsForm = ({
-  stock,
-  selectCurrentUser,
-  setShowAllDivs,
-  setCurrentUserStocks,
-  selectCurrentUserStocks,
-}) => {
+const DividendsForm = ({ stock }) => {
+  const {
+    currentUser,
+    currentUserStocks,
+    setCurrentUserStocksAction,
+  } = useContext(UserContext);
+  const { showAllDivsAction } = useContext(StocksContext);
   const [amount, setAmount] = useState(0);
   const [payDate, setPayDate] = useState(makeTodaysDate());
   const [stockPayouts, setStockPayouts] = useState([]);
@@ -43,14 +33,14 @@ const DividendsForm = ({
   useEffect(() => {
     // set the stockPayouts variable
     setStockPayouts(
-      selectCurrentUserStocks.filter((s) => s.ticker === stock.ticker)[0]
-        .payouts || []
+      currentUserStocks.filter((s) => s.ticker === stock.ticker)[0].payouts ||
+        []
     );
     // populate the total in the history header
     if (stockPayouts.length) {
       getTotal();
     }
-  }, [selectCurrentUserStocks]);
+  }, [currentUserStocks]);
 
   // handle recording the dividend
   const handleSubmit = async () => {
@@ -63,13 +53,13 @@ const DividendsForm = ({
     };
     // console.log(stock.payouts);
     let success = await updateStockDividend(
-      selectCurrentUser.id,
+      currentUser.id,
       stock,
       stockPayouts.concat(payoutObj)
     );
     console.log("updatestockdiv--return", success);
     if (success.message === undefined) {
-      setCurrentUserStocks(success);
+      setCurrentUserStocksAction(success);
       setAmount(0);
       setPayDate(makeTodaysDate());
       setLoading(false);
@@ -84,19 +74,15 @@ const DividendsForm = ({
   // handle delete
   const handleDelete = async (createdID) => {
     setLoading(true);
-    let newDividends = await deleteDividend(
-      selectCurrentUser.id,
-      stock,
-      createdID
-    );
+    let newDividends = await deleteDividend(currentUser.id, stock, createdID);
     console.log(newDividends);
     let success = await updateStockDividend(
-      selectCurrentUser.id,
+      currentUser.id,
       stock,
       newDividends
     );
     if (success.message === undefined) {
-      setCurrentUserStocks(success);
+      setCurrentUserStocksAction(success);
       setLoading(false);
     } else {
       console.log("There was an error.");
@@ -161,12 +147,11 @@ const DividendsForm = ({
             <>
               <div
                 onClick={() => {
-                  setShowAllDivs({
+                  showAllDivsAction({
                     show: true,
                     payouts: stockPayouts,
                     stock: stock,
                   });
-                  console.log(stockPayouts);
                 }}
               >
                 View All
@@ -212,18 +197,7 @@ const DividendsForm = ({
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectCurrentUser: selectCurrentUser,
-  selectCurrentUserStocks: selectCurrentUserStocks,
-  selectShowAllDivs: selectShowAllDivs,
-});
-const mapDispatchToProps = (dispatch) => ({
-  setShowAllDivs: (viewOjb) => dispatch(setShowAllDivs(viewOjb)),
-  setShowAllDivsStock: (obj) => dispatch(setShowAllDivsStock(obj)),
-  setCurrentUserStocks: (arr) => dispatch(setCurrentUserStocks(arr)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DividendsForm);
+export default DividendsForm;
 
 // styles
 const Container = styled.div`

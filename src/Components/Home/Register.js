@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
 import { auth, creatUserProfileDocument } from "../Firebase/firebase";
-import { setCurrentUser } from "../../redux/user/user-actions";
+import { UserContext } from "../Context/UserProvider";
 
-const Register = ({ setCurrentUser }) => {
+const Register = () => {
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [password, setPassword] = useState("");
@@ -16,6 +14,7 @@ const Register = ({ setCurrentUser }) => {
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
   );
+  const { setCurrentUserAction } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -32,7 +31,7 @@ const Register = ({ setCurrentUser }) => {
       );
       // create user in firestore and set as current user in redux
       let createdUser = await creatUserProfileDocument(user, { first, last });
-      setCurrentUser(createdUser);
+      setCurrentUserAction(createdUser);
     } catch (err) {
       setLoading(false);
       alert(err);
@@ -83,14 +82,7 @@ const Register = ({ setCurrentUser }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  // currentUser: selectCurrentUser,
-});
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default Register;
 
 // styles
 const Form = styled.form`

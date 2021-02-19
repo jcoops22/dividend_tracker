@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { selectTickerData } from "../../redux/stocks/stocks-selectors";
 import { formatDateData } from "../../resources/stockUtilities";
 import LoadingIcon from "../Shared/LoadingIcon";
 import DividendsForm from "../Home/DividendsForm";
@@ -102,12 +99,7 @@ const Drawer = ({ info, open, loading, data, dividends, stock }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectTickerData: selectTickerData,
-});
-const mapDispatchToProps = (dispatch) => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Drawer);
+export default Drawer;
 
 // styles
 const Container = styled.div`

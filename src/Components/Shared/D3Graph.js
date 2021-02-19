@@ -25,7 +25,7 @@ const D3Graph = ({ arr, stock }) => {
       .slice(0, 100)
       .reverse()
       .map((val) => {
-        return parseFloat(val[1].value.slice(1));
+        return val[1].value ? parseFloat(val[1].value.slice(1)) : null;
       });
     setValueArr(values.reverse());
   };
@@ -34,21 +34,27 @@ const D3Graph = ({ arr, stock }) => {
     let arr = Object.entries(obj).reverse();
     // console.log(arr);
     // console.log(arr.reverse());
-    setInfoValues([
-      formatInfo(arr[1][1].lastUpdated),
-      formatInfo(arr[50][1].lastUpdated),
-      formatInfo(arr[100][1].lastUpdated),
-    ]);
+    if (arr[0][1] === "Data Not Available") {
+      return;
+    } else {
+      setInfoValues([
+        formatInfo(arr[1][1].lastUpdated),
+        formatInfo(arr[50][1].lastUpdated),
+        formatInfo(arr[100][1].lastUpdated),
+      ]);
+    }
   };
 
   // format the info data
   const formatInfo = (info) => {
     let date = (info) => {
-      return info.slice(5, 10).replace("-", "/");
+      return info ? info.slice(5, 10).replace("-", "/") : null;
     };
     let time = (info) => {
-      let rawTime = info.slice(11, -6);
-      return rawTime > 12 ? rawTime - 12 + "pm" : parseInt(rawTime) + "am";
+      if (info) {
+        let rawTime = info.slice(11, -6);
+        return rawTime > 12 ? rawTime - 12 + "pm" : parseInt(rawTime) + "am";
+      }
     };
 
     return date(info) + " " + time(info);
@@ -61,7 +67,7 @@ const D3Graph = ({ arr, stock }) => {
 
   // get correct cents
   const getCents = (num) => {
-    if (num.toString().includes(".")) {
+    if (num && num.toString().includes(".")) {
       return num.toString().slice(-2).includes(".")
         ? (num.toString() + 0).slice(-2)
         : num.toString().slice(-2);

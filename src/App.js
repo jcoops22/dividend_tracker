@@ -1,24 +1,30 @@
 import "./App.css";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
 import { auth } from "./Components/Firebase/firebase";
 import Home from "./Components/Home/Home";
 import Landing from "./Components/Home/Landing";
-import { selectCurrentUser } from "./redux/user/user-selectors";
-import { setCurrentUser } from "./redux/user/user-actions";
 import SignIn from "./Components/Home/SignIn";
 import Reports from "./Components/Home/Reports";
+import { UserContext } from "./Components/Context/UserProvider";
 
-function App({ selectCurrentUser, setCurrentUser, history }) {
+function App({ history }) {
+  const { setCurrentUserAction, currentUser } = useContext(UserContext);
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    // check for user in localStorage
+    let user = JSON.parse(window.localStorage.getItem("currentUser"));
+    setCurrentUserAction(user);
+    // listen for changes like sign out
+    const unsub = auth.onAuthStateChanged(async (user) => {
       if (!user) {
-        setCurrentUser(null);
+        setCurrentUserAction(null);
       }
     });
+    // clean up
+    return () => {
+      unsub();
+    };
   }, [auth]);
 
   return (
@@ -28,22 +34,20 @@ function App({ selectCurrentUser, setCurrentUser, history }) {
         <Route
           exact
           path="/signin"
-          render={() =>
-            !selectCurrentUser ? <SignIn /> : <Redirect to="/home" />
-          }
+          render={() => (!currentUser ? <SignIn /> : <Redirect to="/home" />)}
         />
         <Route
           exact
           path="/home"
           render={() =>
-            selectCurrentUser ? <Home history={history} /> : <Landing />
+            currentUser ? <Home history={history} /> : <Landing />
           }
         />
         <Route
           exact
           path="/reports"
           render={() =>
-            selectCurrentUser ? <Reports history={history} /> : <SignIn />
+            currentUser ? <Reports history={history} /> : <Redirect to="/" />
           }
         />
         <Route path="*" component={Landing} />
@@ -52,14 +56,7 @@ function App({ selectCurrentUser, setCurrentUser, history }) {
   );
 }
 
-const mapStateToProps = createStructuredSelector({
-  selectCurrentUser: selectCurrentUser,
-});
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(App);
 // styles
 const Container = styled.div`
   /* border: 2px solid blue; */

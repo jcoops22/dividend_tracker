@@ -1,66 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from "styled-components";
-import { auth, firestore } from "../Firebase/firebase";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
+import { auth } from "../Firebase/firebase";
 import Header from "../Shared/Header";
 import Toolbar from "../Shared/Toolbar";
 import StocksList from "./StocksList";
 import LoadingIcon from "../Shared/LoadingIcon";
-import { setStocks } from "../../redux/stocks/stocks-actions";
-import { setCurrentUser } from "../../redux/user/user-actions";
-import { selectAllStocks } from "../../redux/stocks/stocks-selectors";
-import { selectCurrentUser } from "../../redux/user/user-selectors";
+import { StocksContext } from "../Context/StocksProvider";
+import { UserContext } from "../Context/UserProvider";
 
-const Home = ({
-  setCurrentUser,
-  selectCurrentUser,
-  setStocks,
-  selectAllStocks,
-  history,
-}) => {
-  const [loading, setLoading] = useState(false);
-  const [allStocks, setAllStocks] = useState(null);
+const Home = ({ history }) => {
+  const { loading, getStocks, stocks } = useContext(StocksContext);
+  const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
-    // updated user on signout
-    const unsub = auth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        setCurrentUser(null);
-        setStocks(null);
-      }
-    });
-
-    if (!selectAllStocks) {
-      // console.log("we dont' have stocks already");
+    // get stocks from firebase or retrieve them from localStorage
+    if (!stocks) {
       getStocks();
     }
-
-    return () => {
-      unsub();
-    };
-  }, [auth]);
-
-  const getStocks = () => {
-    setLoading(true);
-    const stocksCollectionRef = firestore.collection("symbols");
-    stocksCollectionRef.get().then((data) => {
-      setStocks(data.docs[0].data().symbols);
-      setAllStocks(data.docs[0].data().symbols);
-      setLoading(false);
-    });
-  };
-
+  }, [auth, stocks]);
   return (
     <Container>
       <Sticky>
         <Header
           text={"Dividend Tracker"}
-          user={selectCurrentUser.first}
+          user={currentUser.first}
           auth={auth}
           history={history}
         />
-        <Toolbar stocks={allStocks} />
+        <Toolbar stocks={stocks} />
       </Sticky>
       <StocksList />
       {loading ? <LoadingIcon big={true} height={"6rem"} /> : null}
@@ -68,16 +35,8 @@ const Home = ({
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectAllStocks: selectAllStocks,
-  selectCurrentUser: selectCurrentUser,
-});
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-  setStocks: (stocks) => dispatch(setStocks(stocks)),
-});
+export default Home;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
 // styles
 const Container = styled.div`
   width: 100%;

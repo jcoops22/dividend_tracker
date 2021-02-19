@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
 import SearchStocks from "../Home/SearchStocks";
-import { selectAllStocks } from "../../redux/stocks/stocks-selectors";
 
-const Add = ({ selectAllStocks }) => {
+const Add = () => {
   const [close] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616936/Dividend%20Tracker/Icons/SearchResults/close-svgrepo-com_c2ygft.svg"
   );
@@ -14,18 +11,13 @@ const Add = ({ selectAllStocks }) => {
     <Container>
       <CloseForm src={close} alt="close" />
       <Form>
-        <SearchStocks allstocks={selectAllStocks} />
+        <SearchStocks />
       </Form>
     </Container>
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectAllStocks: selectAllStocks,
-});
-const mapDispatchToProps = (dispatch) => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Add);
+export default Add;
 
 // styles
 const Container = styled.div`

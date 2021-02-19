@@ -1,34 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import D3Graph from "../Shared/D3Graph";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import {
-  selectCurrentUser,
-  selectCurrentUserStocks,
-} from "../../redux/user/user-selectors";
-import {
-  selectTickerData,
-  selectShowAllDivs,
-} from "../../redux/stocks/stocks-selectors";
 import HowManyStocks from "./ReportComponents/HowManyStocks";
+import { UserContext } from "../Context/UserProvider";
+import { StocksContext } from "../Context/StocksProvider";
 
-const Reports = ({
-  selectCurrentUser,
-  selectCurrentUserStocks,
-  selectTickerData,
-  selectShowAllDivs,
-}) => {
+const Reports = () => {
+  const { currentUserStocks, currentUser } = useContext(UserContext);
+  const { showAllDivsAction, tickerData } = useContext(StocksContext);
+
   return (
     <Container>
       <h1>Analysis Report:</h1>
       <Wrapper>
         <ReportWrapper>
           <HowManyStocks
-            stocks={selectCurrentUserStocks}
-            user={selectCurrentUser}
-            tickers={selectTickerData}
-            divs={selectShowAllDivs}
+            stocks={currentUserStocks}
+            user={currentUser}
+            tickers={tickerData}
+            divs={showAllDivsAction}
           />
         </ReportWrapper>
       </Wrapper>
@@ -36,15 +26,7 @@ const Reports = ({
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectCurrentUser: selectCurrentUser,
-  selectCurrentUserStocks: selectCurrentUserStocks,
-  selectTickerData: selectTickerData,
-  selectShowAllDivs: selectShowAllDivs,
-});
-const mapDispatchToProps = (dispatch) => ({});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Reports);
+export default Reports;
 
 // styles
 

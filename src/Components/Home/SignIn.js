@@ -1,19 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
-import { device } from "../../resources/mediaquery";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
 import { auth, firestore } from "../Firebase/firebase";
 import GoogleSignInButton from "../Shared/Buttons/GoogleSignInButton";
 import Register from "./Register";
-import { setCurrentUser } from "../../redux/user/user-actions";
+import { UserContext } from "../Context/UserProvider";
 
-const SignIn = ({ setCurrentUser, history }) => {
+const SignIn = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+  const { setCurrentUserAction } = useContext(UserContext);
   const [cash] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609172536/Dividend%20Tracker/Icons/cash-bill-svgrepo-com_dtqrjh.svg"
   );
@@ -35,7 +33,11 @@ const SignIn = ({ setCurrentUser, history }) => {
         .doc(`users/${user.uid}`)
         .get()
         .then((data) => {
-          setCurrentUser(data.data());
+          let user = data.data();
+          // set current user
+          setCurrentUserAction(user);
+          // set in localStorage storage as well
+          window.localStorage.setItem("currentUser", JSON.stringify(user));
           history.push("/home");
           return;
         });
@@ -45,7 +47,7 @@ const SignIn = ({ setCurrentUser, history }) => {
       console.error(err);
     }
   };
-
+  // for loading the registration form
   const handleLoadRegistration = () => {
     setLoading(true);
     let wrapper = document.querySelector("#register_wrapper");
@@ -124,12 +126,7 @@ const SignIn = ({ setCurrentUser, history }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({});
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignIn));
+export default withRouter(SignIn);
 
 // styles
 const Container = styled.div`

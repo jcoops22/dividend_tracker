@@ -2,26 +2,19 @@ import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { getUserStocks } from "../../resources/stockUtilities";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
 import LoadingIcon from "../Shared/LoadingIcon";
 import StocksWrapper from "./StocksWrapper";
-import {
-  selectCurrentUser,
-  selectCurrentUserStocks,
-} from "../../redux/user/user-selectors";
-import { setCurrentUserStocks } from "../../redux/user/user-actions";
 import { formatDateData } from "../../resources/stockUtilities";
-import StocksContext from "../Context/stocksContext";
+import { UserContext } from "../Context/UserProvider";
 
-const StocksList = ({
-  selectCurrentUser,
-  setCurrentUserStocks,
-  selectCurrentUserStocks,
-}) => {
-  const stocks = useContext(StocksContext);
+const StocksList = () => {
+  const {
+    currentUser,
+    setCurrentUserStocksAction,
+    currentUserStocks,
+  } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
-  const [filteredStocks, setFilteredStocks] = useState(selectCurrentUserStocks);
+  const [filteredStocks, setFilteredStocks] = useState(currentUserStocks);
   const [query, setQuery] = useState(null);
   const [sortType, setSortType] = useState("Newest Payouts");
   const [scrollUpIcon] = useState(
@@ -32,7 +25,6 @@ const StocksList = ({
   );
 
   useEffect(() => {
-    // console.log(stocks.stocks);
     // handle searching
     if (!query) {
       setLoading(true);
@@ -41,11 +33,12 @@ const StocksList = ({
     } else {
       handleSearchFilter(query);
     }
-  }, [setCurrentUserStocks, query]);
+  }, [query]);
 
   const updateUserStocks = async () => {
-    let stocks = await getUserStocks(selectCurrentUser.id);
-    setCurrentUserStocks(stocks);
+    let stocks = await getUserStocks(currentUser.id);
+
+    setCurrentUserStocksAction(stocks);
     setFilteredStocks(stocks);
 
     setLoading(false);
@@ -154,7 +147,7 @@ const StocksList = ({
   const handleSearchFilter = (query) => {
     if (query.length) {
       setFilteredStocks(
-        selectCurrentUserStocks.filter(
+        currentUserStocks.filter(
           (stock) =>
             stock.name.toLowerCase().includes(query.toLowerCase()) ||
             stock.ticker.toLowerCase().includes(query.toLowerCase())
@@ -168,7 +161,7 @@ const StocksList = ({
       <h1>
         Your Stocks:{" "}
         <span>
-          ({query ? filteredStocks.length : selectCurrentUserStocks.length})
+          ({query ? filteredStocks.length : currentUserStocks.length})
         </span>
       </h1>
       {loading ? (
@@ -205,18 +198,18 @@ const StocksList = ({
               </SortBy>
             </SortWrapper>
           </UtilitiesRow>
-          {selectCurrentUserStocks.length ? (
+          {currentUserStocks.length ? (
             <StocksWrapper
               stocks={
                 query
                   ? handleSort(filteredStocks, sortType)
-                  : handleSort(selectCurrentUserStocks, sortType)
+                  : handleSort(currentUserStocks, sortType)
               }
             />
           ) : (
             "Add some stocks!"
           )}
-          {selectCurrentUserStocks.length > 6 ? (
+          {currentUserStocks.length > 6 ? (
             <ScrollUp>
               <img
                 src={scrollUpIcon}
@@ -231,15 +224,7 @@ const StocksList = ({
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectCurrentUser: selectCurrentUser,
-  selectCurrentUserStocks: selectCurrentUserStocks,
-});
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUserStocks: (stocks) => dispatch(setCurrentUserStocks(stocks)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(StocksList);
+export default StocksList;
 
 // styles
 const Container = styled.div`

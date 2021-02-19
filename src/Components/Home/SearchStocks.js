@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
 import { addStock, deleteStock } from "../../resources/stockUtilities";
-import {
-  selectCurrentUser,
-  selectCurrentUserStocks,
-} from "../../redux/user/user-selectors";
-import { setCurrentUserStocks } from "../../redux/user/user-actions";
 import TransformIcon from "../Shared/TransformIcon";
 import AddMissing from "./AddMissing";
+import { UserContext } from "../Context/UserProvider";
+import { StocksContext } from "../Context/StocksProvider";
 
-const SearchStocks = ({
-  allstocks,
-  selectCurrentUser,
-  setCurrentUserStocks,
-  selectCurrentUserStocks,
-}) => {
+const SearchStocks = () => {
+  const [loading, setLoading] = useState(false);
+  const {
+    currentUser,
+    currentUserStocks,
+    setCurrentUserStocksAction,
+  } = useContext(UserContext);
+  const { stocks } = useContext(StocksContext);
   const [query, setQuery] = useState("");
   const [tickersArr, setTickersArr] = useState(null);
   const [filteredResults, setFilteredResults] = useState([]);
@@ -31,12 +28,11 @@ const SearchStocks = ({
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
   );
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log(!!query && filteredResults.length === 0);
+    // console.log(!!query && filteredResults.length === 0);
     if (!tickersArr) {
-      buildTickersArr(selectCurrentUserStocks);
+      buildTickersArr(currentUserStocks);
     }
     // set the focus on the input on render
     document.querySelector("#search_input").focus();
@@ -46,7 +42,7 @@ const SearchStocks = ({
 
   // filter the query through the array of stocks
   const filterResults = (query) => {
-    let temp = allstocks.filter((stock) => {
+    let temp = stocks.filter((stock) => {
       return stock.ticker.toLowerCase() === query.toLowerCase() ? stock : null;
     });
     setFilteredResults(temp);
@@ -65,7 +61,7 @@ const SearchStocks = ({
     let timeStampeStock = { ...stock, added: new Date().getTime() };
     let success = await addStock(user, timeStampeStock);
     if (success.message === undefined) {
-      setCurrentUserStocks(selectCurrentUserStocks.concat(stock));
+      setCurrentUserStocksAction(currentUserStocks.concat(stock));
       setAlreadyAdded(!alreadyAdded);
       let arr = tickersArr;
       arr.push(query.toUpperCase());
@@ -90,10 +86,8 @@ const SearchStocks = ({
     let success = await deleteStock(user, stock);
     if (success.message === undefined) {
       console.log("success");
-      setCurrentUserStocks(
-        selectCurrentUserStocks.filter(
-          (stocks) => stocks.ticker !== stock.ticker
-        )
+      setCurrentUserStocksAction(
+        currentUserStocks.filter((stocks) => stocks.ticker !== stock.ticker)
       );
       setAlreadyAdded(!alreadyAdded);
       setTickersArr(
@@ -147,8 +141,8 @@ const SearchStocks = ({
                   <IconsDiv
                     onClick={() =>
                       alreadyAdded
-                        ? handleDelete(selectCurrentUser.id, stock)
-                        : handleAddStock(selectCurrentUser.id, stock)
+                        ? handleDelete(currentUser.id, stock)
+                        : handleAddStock(currentUser.id, stock)
                     }
                   >
                     <TransformIcon
@@ -195,9 +189,7 @@ const SearchStocks = ({
                   </span>
                 )}
               </div>
-              {showAddMissing ? (
-                <AddMissing user={selectCurrentUser.id} />
-              ) : null}
+              {showAddMissing ? <AddMissing user={currentUser.id} /> : null}
             </NoResultRow>
           ) : null}
         </ResultsWrapper>
@@ -206,15 +198,7 @@ const SearchStocks = ({
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  selectCurrentUser: selectCurrentUser,
-  selectCurrentUserStocks: selectCurrentUserStocks,
-});
-const mapDispatchToProps = (dispatch) => ({
-  setCurrentUserStocks: (stocks) => dispatch(setCurrentUserStocks(stocks)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchStocks);
+export default SearchStocks;
 
 // styles
 const Container = styled.div`
