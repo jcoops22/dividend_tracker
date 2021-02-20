@@ -26,6 +26,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 0.8rem;
   color: #fff;
 
   a {

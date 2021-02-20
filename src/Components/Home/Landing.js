@@ -7,7 +7,6 @@ import Footer from "../Shared/Footer";
 import { UserContext } from "../Context/UserProvider";
 
 const Landing = () => {
-  const [showRegistrationForm, setShowRegistrationForm] = useState(false);
   const [spiral] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609045408/Dividend%20Tracker/road-curve-svgrepo-com_njavke.svg"
   );
@@ -26,7 +25,7 @@ const Landing = () => {
   const [reports] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609111414/Dividend%20Tracker/Icons/report-svgrepo-com_ysbigv.svg"
   );
-  const [whiteCircles] = useState(
+  const [threePurpleCircles] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1613756512/Dividend%20Tracker/Icons/Frame_1_l9oihd.svg"
   );
   const [sinlgeWhiteCircle] = useState(
@@ -38,22 +37,23 @@ const Landing = () => {
   const [investingForHeader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1613778050/Dividend%20Tracker/Icons/undraw_investing_7u74_d1vsuv.svg"
   );
+  const [endDataIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1613792946/Dividend%20Tracker/Icons/undraw_All_the_data_re_hh4w_mqs0xb.svg"
+  );
   const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const scrollBackToGetStarted = () => {
-    let form = document.getElementById("getStarted");
-    form.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-    });
-  };
-
   return (
     <Container>
+      <PurpleCircles
+        src={threePurpleCircles}
+        alt="tracking circles"
+        left={"-3rem"}
+        top={"-14rem"}
+      />
       <HeaderWrapper bg={trackStats}>
         <SignInWrapper>
           <Link to={currentUser ? "/home" : "/signin"}>
@@ -72,19 +72,35 @@ const Landing = () => {
               Dividend Tracker
               <img src={investingForHeader} alt="investing" />
             </HeaderH1>
-            <h2>Record and manage your stock dividends</h2>
+            <h2>Simply and easily manage your stock dividends</h2>
           </Header>
-          <Diagram>
-            <img src={trackStats} alt="diagram" />
-          </Diagram>
+          <DiagramWrapper>
+            <Description>
+              <h4>Simple, yet robust...</h4>
+              <ul>
+                <li>Choose from 6000+ stocks and funds (updated regularly)</li>
+                <li>Get current data on stocks added to your list</li>
+                <li>Use data visualization tools to chart your journey</li>
+                <li>
+                  Add stocks not listed for lesser know stocks or proprietary
+                  funds
+                </li>
+                <li>Easy to use data entry (no more spreadsheets!)</li>
+                <li>Generate analytical reports and more!</li>
+              </ul>
+            </Description>
+            <Diagram>
+              <img src={trackStats} alt="diagram" />
+            </Diagram>
+          </DiagramWrapper>
         </Hero>
       </HeaderWrapper>
       <Section bg={spiral}>
         <RegisterDiv>
-          <H3>
+          <h3>
             Start tracking <span>your</span> dividends!
-          </H3>
-          {showRegistrationForm ? <Register /> : null}
+          </h3>
+          <Register />
         </RegisterDiv>
       </Section>
       <ListWrapper>
@@ -123,12 +139,19 @@ const Landing = () => {
         </List>
       </ListWrapper>
       <GetStarted>
-        <WhiteCircles src={whiteCircles} alt="div circle" />
+        <PurpleCircles
+          src={threePurpleCircles}
+          alt="div circle"
+          top={"-0.3rem"}
+          left={"-3rem"}
+        />
         <h3>Get Started Now.</h3>
         <Link to="/signin">
           <button>Create your account</button>
         </Link>
+        <AllTheData src={endDataIcon} alt="all the data" />
       </GetStarted>
+
       <Footer />
     </Container>
   );
@@ -138,6 +161,7 @@ export default Landing;
 
 // styles
 const Container = styled.div`
+  position: relative;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -150,10 +174,10 @@ const HeaderWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  align-self: center;
   width: 100%;
-  margin-bottom: 8rem;
-  padding-left: 1rem;
-  border: 1px solid red;
+  max-width: 1440px;
+  /* border: 1px solid green; */
 
   h3 {
     display: flex;
@@ -171,8 +195,11 @@ const HeaderWrapper = styled.div`
     /* border: 1px solid red; */
   }
 
-  @media ${device.tablet} {
-    background-position: right bottom;
+  @media ${device.mobileL} {
+    justify-content: center;
+  }
+  @media ${device.laptop} {
+    margin-bottom: 8rem;
   }
 `;
 const SignInWrapper = styled.div`
@@ -184,9 +211,6 @@ const SignInWrapper = styled.div`
   /* border: 1px solid red; */
 `;
 const SignInSpan = styled.span`
-  &:hover {
-    /* border-bottom: 2px solid #7249d1; */
-  }
   display: flex;
   align-items: center;
   color: #7249d1;
@@ -204,8 +228,12 @@ const Hero = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  margin: 4rem 0;
+  margin: 3rem 0;
   /* border: 1px solid orange; */
+
+  @media ${device.mobileL} {
+    padding: 0 0.6rem;
+  }
 `;
 const Header = styled.div`
   display: flex;
@@ -216,15 +244,29 @@ const Header = styled.div`
   /* border: 1px solid blue; */
 
   h2 {
-    font-size: 1rem;
-    margin: 1rem;
+    color: #333;
+    font-size: clamp(1rem, 3vw, 2rem);
+    margin: 1rem 0;
+  }
+
+  @media ${device.tabletS} {
+    margin-bottom: 3rem;
+  }
+  @media ${device.tablet} {
+    padding-left: 4rem;
+    margin-top: 3rem;
+  }
+  @media ${device.laptop} {
+    align-items: center;
+    margin: 8rem 0;
   }
 `;
 const HeaderH1 = styled.h1`
   position: relative;
   display: flex;
   justify-content: space-between;
-  font-size: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  font-size: clamp(2rem, 8vw, 4rem);
   color: #7249d1;
   /* border: 1px solid red; */
 
@@ -238,11 +280,59 @@ const HeaderH1 = styled.h1`
     @media ${device.mobileS} {
       display: initial;
     }
+    @media ${device.mobileL} {
+      width: 4rem;
+      left: 100%;
+    }
+    @media ${device.tabletS} {
+      width: 6.5rem;
+      margin-bottom: ;
+    }
+    @media ${device.laptop} {
+      position: relative;
+      left: 0;
+      top: 0;
+    }
+  }
+
+  @media ${device.tabletS} {
+    margin-top: 3rem;
+  }
+`;
+const DiagramWrapper = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6rem;
+
+  @media ${device.laptop} {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+`;
+const Description = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 2rem;
+  margin: 3rem 0;
+  /* border: 1px solid red; */
+
+  h4 {
+    color: #7249d1;
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin: 1.5rem 0;
+  }
+
+  li {
+    color: #333;
+    margin: 1.5rem 0;
   }
 `;
 const Diagram = styled.div`
-  margin-top: 6rem;
-  max-width: 1024px;
+  max-width: 600px;
   /* border: 1px solid red; */
 
   img {
@@ -251,7 +341,8 @@ const Diagram = styled.div`
   }
 
   @media ${device.laptop} {
-    /* margin-top: 4rem; */
+    margin-top: 0;
+    align-self: flex-end;
   }
 `;
 const Section = styled.section`
@@ -269,62 +360,49 @@ const Section = styled.section`
 `;
 const RegisterDiv = styled.div`
   position: relative;
-  width: 100%;
-  height: 600px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  width: 100%;
+  background-color: #fff;
+  padding: 3rem 0 8rem;
   /* border: 1px solid red; */
 
-  @keyframes change_flex_from_center_to_start {
-    to {
-      justify-content: flex-start;
+  h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: right;
+    padding-right: 0.6rem;
+    margin: auto 2rem 0;
+    color: #ddd;
+    width: 100%;
+    height: 6rem;
+    font-size: 1.3rem;
+    background-color: #7249d1;
+    /* border-bottom-left-radius: 100px; */
+
+    span {
+      color: #27d67b;
+      margin: 0 0.5rem;
+      /* text-decoration: underline; */
     }
   }
 
   @media ${device.tabletS} {
+    background-color: transparent;
     width: 60%;
+
+    h3 {
+      font-size: 1.6rem;
+    }
   }
   @media ${device.tablet} {
     animation: ${(props) => props.animationName} 1s 1.5s forwards;
     justify-content: center;
   }
 `;
-const H3 = styled.h3`
-  margin-top: 40%;
-  animation: ${(props) => props.animationName} 4s forwards;
-
-  span {
-    color: #7249d1;
-    color: #27d67b;
-    text-decoration: underline;
-  }
-
-  @keyframes fade_header_out {
-    0% {
-      margin-top: 0;
-      opacity: 0;
-    }
-    50% {
-      margin-top: 0;
-      opacity: 0;
-    }
-    100% {
-      margin-top: 0;
-      opacity: 1;
-    }
-  }
-
-  @media ${device.mobileL} {
-    margin-top: 20%;
-  }
-
-  @media ${device.tabletS} {
-    font-size: 1.7rem;
-  }
-`;
-
 const ListWrapper = styled.div`
   background-color: #fff;
   /* border: 1px solid red; */
@@ -393,17 +471,17 @@ const GetStarted = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 30rem;
-  padding: 2rem;
+  justify-content: flex-end;
+  padding: 8rem 0;
   overflow: hidden;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 
   h3 {
     position: relative;
     z-index: 2;
     margin: 2rem;
+    /* border: 1px solid red; */
   }
 
   button {
@@ -419,6 +497,7 @@ const GetStarted = styled.div`
   }
 
   @media ${device.tabletS} {
+    justify-content: center;
     font-size: 1.5rem;
 
     button {
@@ -428,92 +507,18 @@ const GetStarted = styled.div`
     }
   }
 `;
-const WhiteCircles = styled.img`
-  position: absolute;
-  top: 0rem;
-  left: -3rem;
-  width: 14rem;
+const AllTheData = styled.img`
+  margin: 8rem 0 4rem;
+  width: 16rem;
 `;
-const Button = styled.button`
-  &:focus {
-    outline: none;
-  }
-  /* position: absolute; */
-  top: 3rem;
-  width: 6rem;
-  height: 2.5rem;
-  border-radius: 0;
-  animation: nothing 2.5s forwards;
-  animation-name: ${(props) => props.animationName};
-  background-color: #27d67b;
-  margin-top: 1rem;
-  cursor: pointer;
-  font-family: "Exo", sans-serif;
-  border-radius: 3px;
-  border: none;
-  outline: none;
-
-  @keyframes circle_and_drop_out {
-    0% {
-      position: absolute;
-    }
-    10% {
-      position: absolute;
-      background-color: #fff;
-      color: #fff;
-      font-size: 0.6rem;
-      top: 3rem;
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-    }
-    30% {
-      position: absolute;
-      background-color: #fff;
-      background-image: url(${(props) => props.url});
-      border: none;
-    }
-    90% {
-      position: absolute;
-      background-color: #fff;
-      border: none;
-      background-image: url(${(props) => props.url});
-    }
-    100% {
-      position: absolute;
-      color: #fff;
-      font-size: 0.6rem;
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-      border: 2px solid #333;
-      top: 60%;
-      opacity: 0;
-      border: none;
-      background-image: url(${(props) => props.url});
-    }
-  }
+const PurpleCircles = styled.img`
+  display: none;
+  position: absolute;
+  top: ${(props) => props.top};
+  left: ${(props) => props.left};
+  width: 14rem;
 
   @media ${device.tabletS} {
-    width: 7rem;
-    height: 3.5rem;
-    font-size: 1rem;
-  }
-`;
-const PiggyBank = styled.img`
-  position: absolute;
-  top: 75%;
-  width: 5rem;
-  pointer-events: none;
-  opacity: 0;
-  animation: fade_in_piggy_bank 2.7s forwards;
-
-  @keyframes fade_in_piggy_bank {
-    30% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
+    display: initial;
   }
 `;
