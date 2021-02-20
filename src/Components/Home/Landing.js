@@ -8,17 +8,11 @@ import { UserContext } from "../Context/UserProvider";
 
 const Landing = () => {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
-  const [piggyBank] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608094687/Dividend%20Tracker/Icons/piggy-bank-svgrepo-com_vi5aua.svg"
-  );
-  const [coin] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608095060/Dividend%20Tracker/Icons/coin-svgrepo-com_kejmkv.svg"
-  );
   const [spiral] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609045408/Dividend%20Tracker/road-curve-svgrepo-com_njavke.svg"
   );
-  const [cash] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609172536/Dividend%20Tracker/Icons/cash-bill-svgrepo-com_dtqrjh.svg"
+  const [singlePurpleCircleFilled] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609173177/Dividend%20Tracker/Icons/atom-circular-symbol-of-circles-svgrepo-com_ccz61s.svg"
   );
   const [addStock] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609110754/Dividend%20Tracker/Icons/file-svgrepo-com_nnfjpo.svg"
@@ -31,6 +25,18 @@ const Landing = () => {
   );
   const [reports] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609111414/Dividend%20Tracker/Icons/report-svgrepo-com_ysbigv.svg"
+  );
+  const [whiteCircles] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1613756512/Dividend%20Tracker/Icons/Frame_1_l9oihd.svg"
+  );
+  const [sinlgeWhiteCircle] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609173177/Dividend%20Tracker/Icons/plate-circles-from-top-view-svgrepo-com_flb1ak.svg"
+  );
+  const [trackStats] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1613772849/Dividend%20Tracker/Icons/undraw_Browser_stats_re_j7wy_x7xweb.svg"
+  );
+  const [investingForHeader] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1613778050/Dividend%20Tracker/Icons/undraw_investing_7u74_d1vsuv.svg"
   );
   const { currentUser } = useContext(UserContext);
 
@@ -48,67 +54,36 @@ const Landing = () => {
 
   return (
     <Container>
-      <HeaderWrapper>
+      <HeaderWrapper bg={trackStats}>
         <SignInWrapper>
           <Link to={currentUser ? "/home" : "/signin"}>
             <SignInSpan>
+              <img
+                src={currentUser ? singlePurpleCircleFilled : sinlgeWhiteCircle}
+                alt="sign in"
+              />
               {currentUser ? "Go to Dashboard" : "Sign In to Dashboard"}
             </SignInSpan>
           </Link>
         </SignInWrapper>
-        <Header>
-          <h1>
-            Dividend Tracker
-            <img src={cash} alt="cash" />
-            <ImgsWrapper>
-              <Img
-                src={cash}
-                alt="cash"
-                left={"53%"}
-                rotate={"rotate(-45deg)"}
-              />
-              <Img
-                src={cash}
-                alt="cash"
-                left={"54%"}
-                rotate={"rotate(-35deg)"}
-              />
-              <Img
-                src={cash}
-                alt="cash"
-                left={"55%"}
-                rotate={"rotate(-25deg)"}
-              />
-            </ImgsWrapper>
-          </h1>
-          <section>
-            <Underline left={"10%"} color={"#7249d1"} />
-            <Underline left={"20%"} color={"#27d67b"} />
-            <Underline left={"30%"} color={"#edc639"} />
-          </section>
-        </Header>
-        <h3>Record and manage your stock dividends</h3>
+        <Hero>
+          <Header>
+            <HeaderH1>
+              Dividend Tracker
+              <img src={investingForHeader} alt="investing" />
+            </HeaderH1>
+            <h2>Record and manage your stock dividends</h2>
+          </Header>
+          <Diagram>
+            <img src={trackStats} alt="diagram" />
+          </Diagram>
+        </Hero>
       </HeaderWrapper>
       <Section bg={spiral}>
-        <RegisterDiv
-          animationName={
-            showRegistrationForm ? "change_flex_from_center_to_start" : null
-          }
-        >
-          <H3 animationName={showRegistrationForm ? "fade_header_out" : null}>
+        <RegisterDiv>
+          <H3>
             Start tracking <span>your</span> dividends!
           </H3>
-          <Button
-            id="getStarted"
-            url={coin}
-            animationName={showRegistrationForm ? "circle_and_drop_out" : null}
-            onClick={() => setShowRegistrationForm(true)}
-          >
-            Get Started
-          </Button>
-          {showRegistrationForm ? (
-            <PiggyBank src={piggyBank} alt="piggy bank" />
-          ) : null}
           {showRegistrationForm ? <Register /> : null}
         </RegisterDiv>
       </Section>
@@ -117,20 +92,28 @@ const Landing = () => {
           <h3>How it works: </h3>
           <ul>
             <li>
-              <img src={addStock} alt="add stocks" />
-              Add stocks to your list
+              <div>
+                <img src={addStock} alt="add stocks" />
+                Add stocks to your list
+              </div>
             </li>
             <li>
-              <img src={enterDivs} alt="enter dividends" />
-              Enter your dividend payouts
+              <div>
+                <img src={enterDivs} alt="enter dividends" />
+                Enter your dividend payouts
+              </div>
             </li>
             <li>
-              <img src={graph} alt="get info on stocks" />
-              Get up to date* information on your tracked stocks**
+              <div>
+                <img src={graph} alt="get info on stocks" />
+                Get up to date* information on your tracked stocks**
+              </div>
             </li>
             <li>
-              <img src={reports} alt="reports" />
-              Generate reports to track your progress
+              <div>
+                <img src={reports} alt="reports" />
+                Generate reports to track your progress
+              </div>
             </li>
           </ul>
           <Asterisk>
@@ -140,10 +123,11 @@ const Landing = () => {
         </List>
       </ListWrapper>
       <GetStarted>
+        <WhiteCircles src={whiteCircles} alt="div circle" />
         <h3>Get Started Now.</h3>
-        <button onClick={() => scrollBackToGetStarted()}>
-          Create your account
-        </button>
+        <Link to="/signin">
+          <button>Create your account</button>
+        </Link>
       </GetStarted>
       <Footer />
     </Container>
@@ -162,13 +146,14 @@ const Container = styled.div`
   /* border: 1px solid blue; */
 `;
 const HeaderWrapper = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  margin-bottom: 1rem;
-  /* border: 1px solid red; */
+  width: 100%;
+  margin-bottom: 8rem;
+  padding-left: 1rem;
+  border: 1px solid red;
 
   h3 {
     display: flex;
@@ -176,109 +161,106 @@ const HeaderWrapper = styled.div`
     align-items: center;
     text-align: right;
     padding-right: 0.6rem;
-    margin: 2rem;
-    color: #fff;
+    margin: auto 2rem 0;
+    color: #ddd;
     width: 100%;
     height: 6rem;
     font-size: 1rem;
     background-color: #7249d1;
     border-bottom-left-radius: 100px;
+    /* border: 1px solid red; */
   }
 
-  @media ${device.mobileL} {
-    h3 {
-      font-size: 1.5rem;
-    }
+  @media ${device.tablet} {
+    background-position: right bottom;
   }
 `;
 const SignInWrapper = styled.div`
-  width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
+  align-items: center;
+  width: 100%;
+  height: 4rem;
+  /* border: 1px solid red; */
 `;
 const SignInSpan = styled.span`
-  color: #7249d1;
-  border-bottom: 2px solid #7249d1;
-`;
-const Header = styled.div`
-  width: 100%;
-  margin: 3.5rem 0;
+  &:hover {
+    /* border-bottom: 2px solid #7249d1; */
+  }
   display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+  align-items: center;
+  color: #7249d1;
+  margin-right: 1rem;
   /* border: 1px solid red; */
 
-  h1 {
-    position: relative;
-    width: 100%;
-    padding-left: 0.3rem;
-    display: flex;
-    justify-content: flex-start;
+  img {
+    width: 1.4rem;
+    margin-right: 0.5rem;
     /* border: 1px solid red; */
   }
+`;
+const Hero = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  margin: 4rem 0;
+  /* border: 1px solid orange; */
+`;
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  /* border: 1px solid blue; */
+
+  h2 {
+    font-size: 1rem;
+    margin: 1rem;
+  }
+`;
+const HeaderH1 = styled.h1`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: #7249d1;
+  /* border: 1px solid red; */
 
   img {
     display: none;
-    width: 2rem;
-    margin-left: 1rem;
-    transform: rotate(-45deg);
+    position: absolute;
+    left: 105%;
+    width: 3rem;
     /* border: 1px solid red; */
-  }
 
-  section {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    /* border: 1px solid red; */
-  }
-
-  @media ${device.mobileL} {
-    h1 {
-      padding-left: 4%;
-    }
-    img {
+    @media ${device.mobileS} {
       display: initial;
     }
   }
+`;
+const Diagram = styled.div`
+  margin-top: 6rem;
+  max-width: 1024px;
+  /* border: 1px solid red; */
 
-  @media ${device.tabletS} {
-    font-size: 1.5rem;
+  img {
+    width: 100%;
+    /* border: 1px solid red; */
+  }
 
-    h1 {
-      padding-left: 20%;
-    }
+  @media ${device.laptop} {
+    /* margin-top: 4rem; */
   }
 `;
-const ImgsWrapper = styled.div`
-  display: inline;
-  display: none;
-`;
-const Img = styled.img`
-  position: absolute;
-  top: 2rem;
-  left: ${(props) => props.left};
-  margin-left: 0.3rem;
-  width: 2rem;
-  transform: ${(props) => props.rotate};
-`;
-const Underline = styled.div`
-  width: 50%;
-  height: 4px;
-  margin-left: ${(props) => props.left};
-  background-color: ${(props) => props.color};
-  margin-top: 0.6rem;
-  /* border: 1px solid red; */
-`;
 const Section = styled.section`
-  width: 100%;
-  height: 100%;
-  padding-bottom: 3rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 3rem;
   background-color: #fff;
   background-image: url(${(props) => props.bg});
   background-position: right bottom;
@@ -345,15 +327,16 @@ const H3 = styled.h3`
 
 const ListWrapper = styled.div`
   background-color: #fff;
+  /* border: 1px solid red; */
 `;
 const List = styled.div`
-  width: 100%;
-  margin-top: -4rem;
-  padding: 3rem 0.4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  margin-top: -4rem;
+  padding: 6rem 0.4rem;
   background-color: #7249d1;
   /* border: 1px solid red; */
 
@@ -366,14 +349,25 @@ const List = styled.div`
   }
   ul {
     color: #fff;
-    line-height: 3.5;
     list-style: none;
-    padding: 0.5rem;
+    padding: 2rem 0.5rem;
     /* border: 1px solid red; */
 
-    img {
-      width: 1.5rem;
-      margin-right: 1rem;
+    li {
+      font-size: 1.2rem;
+      margin: 3rem 0;
+
+      div {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        /* border: 1px solid red; */
+
+        img {
+          width: 2.2rem;
+          margin-right: 1rem;
+        }
+      }
     }
   }
 
@@ -396,15 +390,19 @@ const Asterisk = styled.div`
   font-size: 0.8rem;
 `;
 const GetStarted = styled.div`
-  height: 18rem;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 2rem;
-  /* border: 1px solid red; */
+  height: 30rem;
+  padding: 2rem;
+  overflow: hidden;
+  border: 1px solid red;
 
   h3 {
+    position: relative;
+    z-index: 2;
     margin: 2rem;
   }
 
@@ -429,6 +427,12 @@ const GetStarted = styled.div`
       font-size: 1rem;
     }
   }
+`;
+const WhiteCircles = styled.img`
+  position: absolute;
+  top: 0rem;
+  left: -3rem;
+  width: 14rem;
 `;
 const Button = styled.button`
   &:focus {

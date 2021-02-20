@@ -1,16 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
-import { auth, firestore } from "../Firebase/firebase";
-import GoogleSignInButton from "../Shared/Buttons/GoogleSignInButton";
-import Register from "./Register";
 import { UserContext } from "../Context/UserProvider";
+import { auth, firestore } from "../Firebase/firebase";
+import Register from "./Register";
+import GoogleSignInButton from "../Shared/Buttons/GoogleSignInButton";
+import ErrorComponent from "../Shared/ErrorComponent";
 
 const SignIn = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
   const { setCurrentUserAction } = useContext(UserContext);
   const [cash] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609172536/Dividend%20Tracker/Icons/cash-bill-svgrepo-com_dtqrjh.svg"
@@ -18,10 +21,8 @@ const SignIn = ({ history }) => {
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
   );
-  const [close] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616936/Dividend%20Tracker/Icons/SearchResults/close-svgrepo-com_c2ygft.svg"
-  );
 
+  useEffect(() => {}, [errorMessage]);
   const handleSubmit = async (e) => {
     // prevent refresh
     e.preventDefault();
@@ -43,7 +44,8 @@ const SignIn = ({ history }) => {
         });
     } catch (err) {
       setLoading(false);
-      alert(err.message);
+      // alert(err.message);
+      setErrorMessage(err.message);
       console.error(err);
     }
   };
@@ -76,19 +78,26 @@ const SignIn = ({ history }) => {
           opacity={showRegistrationForm ? "0.5" : null}
           events={showRegistrationForm ? "none" : null}
         >
+          {errorMessage ? <ErrorComponent message={errorMessage} /> : null}
           <label htmlFor="email">Email:</label>
           <input
             name="email"
             type="email"
             placeholder="email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setErrorMessage(null);
+              setEmail(e.target.value);
+            }}
           />
           <label htmlFor="password">Password:</label>
           <input
             name="password"
             type="password"
             placeholder="enter password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setErrorMessage(null);
+            }}
           />
 
           <Button
@@ -109,14 +118,10 @@ const SignIn = ({ history }) => {
             </NoAccount>
           )}
           {showRegistrationForm ? (
-            <div>
-              <Close
-                src={close}
-                alt="close"
-                onClick={() => setShowRegistrationForm(false)}
-              />
-              <Register />
-            </div>
+            <Register
+              setShowRegistrationForm={setShowRegistrationForm}
+              fromSignIn={true}
+            />
           ) : null}
         </RegWrapper>
 
@@ -130,9 +135,9 @@ export default withRouter(SignIn);
 
 // styles
 const Container = styled.div`
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   /* border: 1px solid red; */
 `;
 const Header = styled.div`
@@ -181,6 +186,7 @@ const Loader = styled.img`
 `;
 
 const Form = styled.form`
+  position: relative;
   width: 100%;
   max-width: 400px;
   display: flex;
@@ -245,12 +251,4 @@ const NoAccount = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-const Close = styled.img`
-  position: absolute;
-  left: calc(100% - 7rem);
-  top: 1rem;
-  width: 1.5rem;
-  cursor: pointer;
-  /* border: 1px solid blue; */
 `;

@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { auth, creatUserProfileDocument } from "../Firebase/firebase";
 import { UserContext } from "../Context/UserProvider";
+import ErrorComponent from "../Shared/ErrorComponent";
 
-const Register = () => {
+const Register = ({ setShowRegistrationForm, fromSignIn }) => {
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [password, setPassword] = useState("");
@@ -14,13 +15,20 @@ const Register = () => {
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
   );
+  const [errorMessage, setErrorMessage] = useState(null);
   const { setCurrentUserAction } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     if (password !== confirm) {
-      alert("Passwords don't match");
+      setErrorMessage("Passwords don't match");
+      setLoading(false);
+      return;
+    }
+    if (!first.length || !last.length) {
+      setErrorMessage("Please enter a first and last name");
+      setLoading(false);
       return;
     }
     try {
@@ -34,44 +42,62 @@ const Register = () => {
       setCurrentUserAction(createdUser);
     } catch (err) {
       setLoading(false);
-      alert(err);
-      console.error(err);
+      setErrorMessage(err.message);
     }
   };
 
   return (
     <Form opacity={loading ? "0.5" : null}>
+      {fromSignIn ? (
+        <Close onClick={() => setShowRegistrationForm(false)}>&#10005;</Close>
+      ) : null}
       <legend>Create your account:</legend>
       <fieldset>
+        {errorMessage ? <ErrorComponent message={errorMessage} /> : null}
         <label>First Name:</label>
         <input
           type="text"
           placeholder="first"
-          onChange={(e) => setFirst(e.target.value)}
+          onChange={(e) => {
+            setFirst(e.target.value);
+            setErrorMessage(null);
+          }}
         />
         <label>Last Name:</label>
         <input
           type="text"
           placeholder="last"
-          onChange={(e) => setLast(e.target.value)}
+          onChange={(e) => {
+            setLast(e.target.value);
+            setErrorMessage(null);
+          }}
         />
         <label>Email:</label>
         <input
           type="email"
           placeholder="email"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setErrorMessage(null);
+          }}
         />
         <label>Password:</label>
         <input
           type="password"
           placeholder="enter password"
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setErrorMessage(null);
+          }}
         />
         <label>Confirm Password:</label>
         <input
           type="password"
           placeholder="confirm password"
-          onChange={(e) => setConfirm(e.target.value)}
+          onChange={(e) => {
+            setConfirm(e.target.value);
+            setErrorMessage(null);
+          }}
         />
       </fieldset>
       <button disabled={loading} onClick={(e) => handleSubmit(e)}>
@@ -100,7 +126,7 @@ const Form = styled.form`
 
   legend {
     width: 100%;
-    text-align: left;
+    text-align: center;
     padding-left: 1rem;
     margin: 1rem 0;
   }
@@ -117,7 +143,6 @@ const Form = styled.form`
     padding: 1rem;
     background-color: #fff;
     border-radius: 3px;
-    /* animation: slide_fieldset_in_register_form 1s 1.5s backwards; */
     border: none;
 
     input {
@@ -129,12 +154,6 @@ const Form = styled.form`
     }
     input::placeholder {
       color: #ccc;
-    }
-
-    @keyframes slide_fieldset_in_register_form {
-      from {
-        left: -100%;
-      }
     }
 
     @media ${device.tabletS} {
@@ -178,4 +197,13 @@ const Form = styled.form`
       opacity: 0;
     }
   }
+`;
+const Close = styled.div`
+  display: inline;
+  width: 100%;
+  font-size: 1.5rem;
+  text-align: right;
+  padding-right: 0.5rem;
+  color: #999;
+  cursor: pointer;
 `;
