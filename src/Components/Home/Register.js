@@ -113,19 +113,24 @@ export default Register;
 // styles
 const Form = styled.form`
   position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  max-width: 600px;
+  height: 100%;
+  padding: 2rem 0;
+  overflow: hidden;
   opacity: ${(props) => props.opacity};
   animation: fade_in_registration_form 1.3s 2s backwards;
+  border-radius: 5px;
+  background-color: #fff;
   /* border: 1px solid red; */
 
   legend {
     width: 100%;
+    font-size: 1.3rem;
     text-align: center;
     padding-left: 1rem;
     margin: 1rem 0;

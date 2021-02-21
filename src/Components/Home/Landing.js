@@ -82,7 +82,7 @@ const Landing = () => {
                 <li>Get current data on stocks added to your list</li>
                 <li>Use data visualization tools to chart your journey</li>
                 <li>
-                  Add stocks not listed for lesser know stocks or proprietary
+                  Add stocks not listed for lesser known stocks or proprietary
                   funds
                 </li>
                 <li>Easy to use data entry (no more spreadsheets!)</li>
@@ -363,9 +363,10 @@ const RegisterDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  justify-content: center;
   align-items: center;
+  align-self: center;
   width: 100%;
-  background-color: #fff;
   padding: 3rem 0 8rem;
   /* border: 1px solid red; */
 
@@ -375,29 +376,24 @@ const RegisterDiv = styled.div`
     align-items: center;
     text-align: right;
     padding-right: 0.6rem;
-    margin: auto 2rem 0;
     color: #ddd;
     width: 100%;
     height: 6rem;
     font-size: 1.3rem;
     background-color: #7249d1;
     /* border-bottom-left-radius: 100px; */
+    /* border: 1px solid red; */
 
     span {
       color: #27d67b;
       margin: 0 0.5rem;
       /* text-decoration: underline; */
     }
-  }
-
-  @media ${device.tabletS} {
-    background-color: transparent;
-    width: 60%;
-
-    h3 {
-      font-size: 1.6rem;
+    @media ${device.tabletS} {
+      margin: 7rem 2rem;
     }
   }
+
   @media ${device.tablet} {
     animation: ${(props) => props.animationName} 1s 1.5s forwards;
     justify-content: center;
@@ -451,12 +447,16 @@ const List = styled.div`
 
   @media ${device.tabletS} {
     ul {
-      font-size: 1.3rem;
+      font-size: 1.5rem;
+
+      img {
+        width: 2.5rem;
+      }
     }
   }
 
   @media ${device.tablet} {
-    border-top-left-radius: 100px;
+    /* border-top-left-radius: 100px; */
   }
 `;
 const Asterisk = styled.div`
