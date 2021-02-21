@@ -2,9 +2,10 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import D3Graph from "../Shared/D3Graph";
-import HowManyStocks from "./ReportComponents/HowManyStocks";
 import { UserContext } from "../Context/UserProvider";
 import { StocksContext } from "../Context/StocksProvider";
+import HowManyStocks from "./ReportComponents/HowManyStocks";
+import MostDividends from "./ReportComponents/MostDividends";
 
 const Reports = ({ history }) => {
   const { currentUserStocks, currentUser } = useContext(UserContext);
@@ -31,12 +32,8 @@ const Reports = ({ history }) => {
       <h1>Analysis Report:</h1>
       <Wrapper>
         <ReportWrapper>
-          <HowManyStocks
-            stocks={currentUserStocks}
-            user={currentUser}
-            tickers={tickerData}
-            divs={showAllDivsAction}
-          />
+          <HowManyStocks stocks={currentUserStocks} />
+          <MostDividends stocks={currentUserStocks} />
         </ReportWrapper>
       </Wrapper>
     </Container>
@@ -85,6 +82,7 @@ const PrintButton = styled.button`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 2rem 1rem;
 `;
 const ReportWrapper = styled.div`
   display: flex;
