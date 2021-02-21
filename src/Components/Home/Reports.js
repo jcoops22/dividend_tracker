@@ -51,7 +51,9 @@ const Container = styled.div`
   min-height: 100vh;
 
   h1 {
-    margin: 1.5rem 0;
+    color: #fff;
+    padding: 1.5rem 0;
+    background-color: #333;
   }
 `;
 const Header = styled.div`
