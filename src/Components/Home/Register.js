@@ -47,7 +47,10 @@ const Register = ({ setShowRegistrationForm, fromSignIn }) => {
   };
 
   return (
-    <Form opacity={loading ? "0.5" : null}>
+    <Form
+      opacity={loading ? "0.5" : null}
+      border={fromSignIn ? "none" : "2px solid #7249d1"}
+    >
       {fromSignIn ? (
         <Close onClick={() => setShowRegistrationForm(false)}>&#10005;</Close>
       ) : null}
@@ -121,11 +124,12 @@ const Form = styled.form`
   max-width: 600px;
   height: 100%;
   padding: 2rem 0;
+  margin: 0 auto;
   overflow: hidden;
   opacity: ${(props) => props.opacity};
-  animation: fade_in_registration_form 1.3s 2s backwards;
   border-radius: 5px;
   background-color: #fff;
+  border: ${(props) => props.border};
   /* border: 1px solid red; */
 
   legend {
@@ -145,7 +149,7 @@ const Form = styled.form`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
+    padding: 3rem 0;
     background-color: #fff;
     border-radius: 3px;
     border: none;
@@ -162,7 +166,6 @@ const Form = styled.form`
     }
 
     @media ${device.tabletS} {
-      border: 2px solid #7249d1;
     }
   }
 
@@ -184,16 +187,22 @@ const Form = styled.form`
   }
 
   button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    width: 6.5rem;
-    height: 3.3rem;
-    align-self: center;
-    padding: 0.5rem;
+    width: 7.8rem;
+    height: 4.3rem;
     margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: 200;
+    color: #333;
+    font-family: "Exo", sans-serif;
     background-color: #27d67b;
     border-radius: 3px;
     border: none;
     outline: none;
+    /* border: 1px solid red; */
   }
 
   @keyframes fade_in_registration_form {
@@ -204,11 +213,14 @@ const Form = styled.form`
   }
 `;
 const Close = styled.div`
+  position: absolute;
+  top: 0;
+  left: calc(100% - 1.6rem);
   display: inline;
   width: 100%;
   font-size: 1.5rem;
-  text-align: right;
-  padding-right: 0.5rem;
   color: #999;
+  color: #7249d1;
   cursor: pointer;
+  /* border: 1px solid red; */
 `;

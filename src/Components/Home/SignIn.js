@@ -51,7 +51,6 @@ const SignIn = ({ history }) => {
   };
   // for loading the registration form
   const handleLoadRegistration = () => {
-    setLoading(true);
     let wrapper = document.querySelector("#register_wrapper");
 
     setTimeout(() => {
@@ -59,8 +58,7 @@ const SignIn = ({ history }) => {
         behavior: "smooth",
         block: "end",
       });
-      setLoading(false);
-    }, 3000);
+    }, 100);
     setShowRegistrationForm(true);
   };
   return (
@@ -109,12 +107,11 @@ const SignIn = ({ history }) => {
             Sign In
           </Button>
         </Form>
-
         <RegWrapper id="register_wrapper">
           {showRegistrationForm ? null : (
             <NoAccount>
               Don't have an account?
-              <span onClick={() => handleLoadRegistration()}> Register</span>
+              <span onClick={() => handleLoadRegistration(true)}>Register</span>
             </NoAccount>
           )}
           {showRegistrationForm ? (
@@ -213,12 +210,19 @@ const Form = styled.form`
   }
 `;
 const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  width: 5.5rem;
-  height: 2rem;
-  margin: 2rem 0;
-  border-radius: 3px;
+  width: 6.3rem;
+  height: 3.3rem;
+  margin: 3rem 0;
+  font-size: 1rem;
+  font-weight: 200;
+  color: #333;
+  font-family: "Exo", sans-serif;
   background-color: #27d67b;
+  border-radius: 3px;
   border: none;
   outline: none;
   /* border: 1px solid red; */

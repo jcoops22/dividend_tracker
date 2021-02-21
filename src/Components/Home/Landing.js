@@ -177,6 +177,7 @@ const HeaderWrapper = styled.div`
   align-self: center;
   width: 100%;
   max-width: 1440px;
+  padding: 0.7rem;
   /* border: 1px solid green; */
 
   h3 {
