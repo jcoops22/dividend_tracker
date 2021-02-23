@@ -175,9 +175,8 @@ export default StockToolbar;
 // styles
 const Container = styled.div`
   width: 100%;
-  height: 25%;
+  /* height: 25%; */
   /* user-select: none; */
-  /* background-color: #3ed; */
   /* border: 1px solid red; */
 `;
 const Wrapper = styled.div`

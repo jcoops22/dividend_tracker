@@ -104,10 +104,10 @@ const DividendsForm = ({ stock }) => {
 
   return (
     <Container>
-      <Row>
+      <AmountAndDate>
         <Amount>
           <label>Amount:</label>
-          <RowInput>
+          <div>
             <span>&#36;</span>
             <input
               id="amount_input"
@@ -119,24 +119,29 @@ const DividendsForm = ({ stock }) => {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
-          </RowInput>
+          </div>
         </Amount>
         <DateWrapper>
-          <label>Date:</label>
-          <input
-            id="payDate_input"
-            type="date"
-            value={payDate}
-            onChange={(e) => setPayDate(e.target.value)}
-          />
+          <div>
+            <label>Date:</label>
+            <input
+              id="payDate_input"
+              type="date"
+              value={payDate}
+              onChange={(e) => setPayDate(e.target.value)}
+            />
+          </div>
         </DateWrapper>
         <SubmitDividend
+          pointer={
+            loading || !(payDate && amount > 0) ? "not-allowed" : "pointer"
+          }
           onClick={() => handleSubmit()}
           disabled={loading || !(amount && payDate)}
         >
           {loading ? <img src={littleLoader} alt="loading" /> : "Add"}
         </SubmitDividend>
-      </Row>
+      </AmountAndDate>
       <History
         opacity={loading ? "0.5" : null}
         p_events={loading ? "none" : null}
@@ -144,23 +149,21 @@ const DividendsForm = ({ stock }) => {
         <HistoryHeader>
           <HistoryHeaderWrapper>
             <h6>History:</h6>
-            <>
-              <div
-                onClick={() => {
-                  showAllDivsAction({
-                    show: true,
-                    payouts: stockPayouts,
-                    stock: stock,
-                  });
-                }}
-              >
-                View All
-                {stockPayouts && stockPayouts.length > 4
-                  ? ` (${stockPayouts.length})`
-                  : null}
-                <img src={openModalIcon} alt="view all" width="18px" />
-              </div>
-            </>
+            <div
+              onClick={() => {
+                showAllDivsAction({
+                  show: true,
+                  payouts: stockPayouts,
+                  stock: stock,
+                });
+              }}
+            >
+              View All
+              {stockPayouts && stockPayouts.length > 4
+                ? ` (${stockPayouts.length})`
+                : null}
+              <img src={openModalIcon} alt="view all" width="18px" />
+            </div>
             <p>
               Total:{" "}
               {stockPayouts ? (
@@ -176,7 +179,7 @@ const DividendsForm = ({ stock }) => {
             {stockPayouts.slice(0, 4).map((pay, ind) => (
               <HistoryLine key={ind}>
                 <span>{ind + 1}</span>
-                <div>
+                <InfoWrapper>
                   <p>${parseFloat(pay.amount).toFixed(2)}</p>
                   <span>{formatDateData(pay.payDate)}</span>
                   <DeleteDividend>
@@ -186,7 +189,7 @@ const DividendsForm = ({ stock }) => {
                       onClick={() => handleDelete(pay.created)}
                     />
                   </DeleteDividend>
-                </div>
+                </InfoWrapper>
               </HistoryLine>
             ))}
           </HistoryWrapper>
@@ -209,19 +212,71 @@ const Container = styled.div`
   /* border: 1px solid red; */
 
   label {
-    font-size: 0.9rem;
-    color: #444;
+    font-size: 0.8rem;
+    color: #777;
   }
+
   input {
     width: 100%;
-    height: 2rem;
-    font-size: 1.2rem;
+    height: 1.5rem;
+    font-size: 0.9rem;
     border: none;
     outline: none;
   }
+
   input[type="number"] {
+    padding-left: 0.2rem;
     max-width: 100px;
     /* border: 1px solid orange; */
+  }
+
+  @media ${device.tabletS} {
+    input {
+      font-size: 1.2rem;
+    }
+  }
+`;
+const AmountAndDate = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8rem;
+  background-color: #fff;
+  border-bottom: 2px solid #7249d1;
+  /* border: 1px solid blue; */
+
+  @media ${device.tabletS} {
+    justify-content: flex-start;
+  }
+`;
+const Amount = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 3rem;
+  margin-right: 1rem;
+  /* border: 1px solid red; */
+
+  span {
+    font-size: 1rem;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+  }
+`;
+const DateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+  overflow: hidden;
+  /* border: 1px solid red; */
+
+  @media ${device.tabletS} {
+    margin-left: 2rem;
   }
 `;
 const SubmitDividend = styled.button`
@@ -232,16 +287,20 @@ const SubmitDividend = styled.button`
     background-color: #27d67b;
     color: #fff;
   }
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #27d67b;
-  height: 2rem;
-  width: 7rem;
-  margin-left: auto;
-  background-color: #fff;
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  margin-left: 1rem;
   cursor: ${(props) => props.pointer};
   transition-duration: 0.2s;
   pointer-events: ${(props) => props.p_events};
-  border-radius: 20px;
+  border-radius: 50%;
+  background-color: #fff;
   border: 2px solid #27d67b;
+  /* border: 2px solid red; */
 
   img {
     width: 1rem;
@@ -253,49 +312,22 @@ const SubmitDividend = styled.button`
       }
     }
   }
-`;
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  padding: 0 0.5rem;
-  background-color: #fff;
-  border-bottom: 2px solid #7249d1;
-  /* border: 1px solid blue; */
-
-  @media ${device.tablet} {
-    justify-content: space-between;
-  }
-`;
-const RowInput = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  background-color: #fff;
-  /* border: 1px solid red; */
-`;
-const DateWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
 
   @media ${device.tabletS} {
-    margin-left: 2rem;
+    min-height: 2rem;
+    width: 7rem;
+    margin-left: auto;
+    border-radius: 20px;
   }
-`;
-const Amount = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 const History = styled.div`
   position: relative;
-  width: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
   opacity: ${(props) => props.opacity};
   pointer-events: ${(props) => props.p_events};
+  /* border: 1px solid red; */
 `;
 const DivLoader = styled.img`
   position: absolute;
@@ -319,7 +351,8 @@ const HistoryHeaderWrapper = styled.div`
   font-size: 0.9rem;
   display: flex;
   justify-content: space-between;
-  padding: 0.3rem 0.7rem;
+  align-items: center;
+  padding: 0.3rem;
   color: #fff;
   background-color: #7249d1;
 
@@ -347,25 +380,25 @@ const HistoryHeaderWrapper = styled.div`
   }
 `;
 const HistoryWrapper = styled.div`
-  width: 100%;
-  height: fit-content;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin-top: 0.5rem;
-  /* border: 1px solid red; */
+  width: 100%;
+  padding: 0.2rem 0;
+  /* border: 1px solid green; */
 
   @media ${device.tabletS} {
-    padding: 0 1rem;
+    flex-direction: row;
   }
 `;
 const HistoryLine = styled.div`
   position: relative;
-  width: 48%;
-  margin: 0.1rem 0.1rem 0;
+  width: 50%;
+  width: 100%;
+  margin-top: 0.1rem;
+  padding: 0 0.2rem;
   border: 1px solid #333;
-  border-top: none;
   /* border: 1px solid red; */
 
   span:first-of-type {
@@ -375,31 +408,51 @@ const HistoryLine = styled.div`
     font-size: 0.5rem;
   }
 
-  div {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 0.8rem;
-    width: 100%;
+  @media ${device.tabletS} {
+    width: 48%;
+    padding: 0 0.5rem;
+  }
+`;
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-left: 0.5rem;
+  font-size: 0.8rem;
+  /* border: 1px solid blue; */
 
-    p {
-      font-size: 1rem;
-      color: #27d67b;
-    }
+  p {
+    color: #27d67b;
+  }
+
+  span:first-of-type {
+    font-size: 0.8rem;
+    position: static;
+    color: #999;
+    margin-left: 0.3rem;
+  }
+
+  @media ${device.tabletS} {
+    font-size: 1rem;
 
     span:first-of-type {
-      position: static;
-      font-size: 0.8rem;
-      color: #999;
-      margin-left: 0.3rem;
+      font-size: 1rem;
     }
   }
 `;
-const DeleteDividend = styled.span`
+const DeleteDividend = styled.div`
+  display: flex;
+  align-items: center;
+  /* border: 1px solid red; */
+
   img {
     width: 1.2rem;
     cursor: pointer;
+
+    @media ${device.tabletS} {
+      width: 1.5rem;
+    }
   }
 `;
-const ViewAllWrapper = styled.div``;

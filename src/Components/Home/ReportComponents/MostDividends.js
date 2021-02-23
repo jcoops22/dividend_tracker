@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const MostDividends = ({ stocks }) => {
-  const [topStocks, setTopStocks] = useState([]);
+  const [topStocks, setTopStocks] = useState(null);
 
   useEffect(() => {
-    console.log(getMostDividends(stocks));
+    if (!topStocks) {
+      getMostDividends(stocks);
+    }
     console.log(topStocks);
   }, [topStocks]);
 
@@ -37,7 +39,7 @@ const MostDividends = ({ stocks }) => {
           <p>Your top paying stocks:</p>
           <ul>
             {topStocks.slice(0, 3).map((stock) => (
-              <li>{stock.name}</li>
+              <li key={stock.ticker}>{stock.name}</li>
             ))}
           </ul>
         </div>

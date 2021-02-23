@@ -83,10 +83,12 @@ const StockLine = styled.div`
   box-shadow: 2px 3px 8px 0 #999;
   border-radius: 8px;
   border: 2px solid #7249d1;
+  /* border: 2px solid red; */
 `;
 const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
   /* border: 1px solid green; */
 
   @media ${device.tabletS} {
@@ -98,9 +100,9 @@ const Row = styled.div`
 const Col = styled.div`
   display: flex;
   flex-direction: column;
-  /* width: ${(props) => props.wid}; */
   width: 100%;
   /* border: 1px solid green; */
+
   @media ${device.tabletS} {
     width: 50%;
   }
@@ -121,20 +123,28 @@ const Ticker = styled.div`
   margin-top: 0.2rem;
 `;
 const SectionDiv = styled.div`
-  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 50%;
   padding: 0.5rem 0.3rem;
+  /* border: 1px solid red; */
 
   span {
     padding: 0 0.7rem;
   }
 `;
 const StockLabel = styled.label`
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #999;
+  /* border: 1px solid red; */
 
   span {
     color: #333;
     font-weight: bold;
+  }
+
+  @media ${device.tabletS} {
+    font-size: 1rem;
   }
 `;
