@@ -491,6 +491,12 @@ const GetStarted = styled.div`
     height: 2.5rem;
     font-size: 0.8rem;
     font-family: "Exo", sans-serif;
+    width: 7.8rem;
+    height: 4.3rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+    font-weight: 200;
+    color: #333;
     background-color: #27d67b;
     border-radius: 3px;
     border: none;

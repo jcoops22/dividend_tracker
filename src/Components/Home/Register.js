@@ -127,9 +127,7 @@ const Form = styled.form`
   margin: 0 auto;
   overflow: hidden;
   opacity: ${(props) => props.opacity};
-  border-radius: 5px;
-  background-color: #fff;
-  border: ${(props) => props.border};
+  background-color: rgba(255, 255, 255, 0);
   /* border: 1px solid red; */
 
   legend {
@@ -138,21 +136,23 @@ const Form = styled.form`
     text-align: center;
     padding-left: 1rem;
     margin: 1rem 0;
+    /* border: 1px solid red; */
   }
 
   fieldset {
-    width: 100%;
-    max-width: 600px;
     position: relative;
     left: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    max-width: 600px;
     padding: 3rem 0;
     background-color: #fff;
     border-radius: 3px;
     border: none;
+    /* border: 1px solid red; */
 
     input {
       font-family: "Exo", sans-serif;
@@ -160,12 +160,18 @@ const Form = styled.form`
       width: 80%;
       font-size: 20px;
       font-weight: bolder;
+      margin-bottom: 0.5rem;
+      /* border: 1px solid red; */
     }
+
     input::placeholder {
       color: #ccc;
+      opacity: 0.6;
     }
 
     @media ${device.tabletS} {
+      border-radius: 5px;
+      border: ${(props) => props.border};
     }
   }
 

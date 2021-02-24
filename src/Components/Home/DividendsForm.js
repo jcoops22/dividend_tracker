@@ -44,30 +44,32 @@ const DividendsForm = ({ stock }) => {
 
   // handle recording the dividend
   const handleSubmit = async () => {
-    setLoading(true);
-    // if they don't have any payout yet make an empty array
-    let payoutObj = {
-      amount: amount,
-      payDate: payDate,
-      created: new Date().getTime(),
-    };
-    // console.log(stock.payouts);
-    let success = await updateStockDividend(
-      currentUser.id,
-      stock,
-      stockPayouts.concat(payoutObj)
-    );
-    console.log("updatestockdiv--return", success);
-    if (success.message === undefined) {
-      setCurrentUserStocksAction(success);
-      setAmount(0);
-      setPayDate(makeTodaysDate());
-      setLoading(false);
-    } else {
-      console.log("There was an error.");
-      return {
-        message: success.message,
+    if (amount && payDate) {
+      setLoading(true);
+      // if they don't have any payout yet make an empty array
+      let payoutObj = {
+        amount: amount,
+        payDate: payDate,
+        created: new Date().getTime(),
       };
+      // console.log(stock.payouts);
+      let success = await updateStockDividend(
+        currentUser.id,
+        stock,
+        stockPayouts.concat(payoutObj)
+      );
+      // console.log("updatestockdiv--return", success);
+      if (success.message === undefined) {
+        setCurrentUserStocksAction(success);
+        setAmount(0);
+        setPayDate(makeTodaysDate());
+        setLoading(false);
+      } else {
+        console.log("There was an error.");
+        return {
+          message: success.message,
+        };
+      }
     }
   };
 
@@ -118,6 +120,11 @@ const DividendsForm = ({ stock }) => {
               default="0.00"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit();
+                }
+              }}
             />
           </div>
         </Amount>
@@ -133,13 +140,13 @@ const DividendsForm = ({ stock }) => {
           </div>
         </DateWrapper>
         <SubmitDividend
+          onClick={() => handleSubmit()}
           pointer={
             loading || !(payDate && amount > 0) ? "not-allowed" : "pointer"
           }
-          onClick={() => handleSubmit()}
           disabled={loading || !(amount && payDate)}
         >
-          {loading ? <img src={littleLoader} alt="loading" /> : "Add"}
+          {loading ? <img src={littleLoader} alt="loading" /> : "Enter"}
         </SubmitDividend>
       </AmountAndDate>
       <History
@@ -165,7 +172,7 @@ const DividendsForm = ({ stock }) => {
               <img src={openModalIcon} alt="view all" width="18px" />
             </div>
             <p>
-              Total:{" "}
+              <span>Total:</span>
               {stockPayouts ? (
                 <span>{stockPayouts.length ? `$${getTotal()}` : "$0"}</span>
               ) : (
@@ -267,6 +274,9 @@ const Amount = styled.div`
     display: flex;
     align-items: center;
   }
+  @media ${device.tabletS} {
+    width: 6rem;
+  }
 `;
 const DateWrapper = styled.div`
   display: flex;
@@ -351,22 +361,33 @@ const HistoryHeaderWrapper = styled.div`
   font-size: 0.9rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 0.3rem;
   color: #fff;
   background-color: #7249d1;
+  /* border: 1px solid red; */
 
   h6 {
+    display: none;
     font-size: 0.9rem;
     padding: 0.1rem 0 0 0.2rem;
+    /* border: 1px solid red; */
+
+    @media ${device.mobileM} {
+      display: initial;
+    }
   }
 
   div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
+    /* border: 1px solid red; */
 
     img {
       margin-left: 0.4rem;
@@ -374,6 +395,16 @@ const HistoryHeaderWrapper = styled.div`
   }
 
   p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid red; */
+
+    span:first-of-type {
+      color: #fff;
+      margin-right: 0.5rem;
+    }
     span {
       color: #27d67b;
     }
@@ -381,15 +412,15 @@ const HistoryHeaderWrapper = styled.div`
 `;
 const HistoryWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
-  justify-content: space-between;
   width: 100%;
-  padding: 0.2rem 0;
   /* border: 1px solid green; */
 
   @media ${device.tabletS} {
+    padding: 0.2rem 0;
     flex-direction: row;
+    justify-content: space-between;
+    height: fit-content;
   }
 `;
 const HistoryLine = styled.div`

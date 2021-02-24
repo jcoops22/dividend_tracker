@@ -65,15 +65,15 @@ const ViewAll = () => {
             {stock ? (
               <h5>
                 <span>
-                  <span style={{ fontSize: "1.1rem" }}>
-                    (<span style={{ color: "#ccc" }}> {payouts.length} </span>)
-                  </span>{" "}
-                  {payouts.length === 1 ? "Payout" : "Payouts"}:
-                </span>
-                <span>
                   {stock.name.split(" ").slice(0, 2).join(" ")}
                   {`(${stock.ticker})`}
                 </span>
+                <p>
+                  <span>
+                    (<span> {payouts.length} </span>)
+                  </span>{" "}
+                  {payouts.length === 1 ? "Payout" : "Payouts"}:
+                </p>
               </h5>
             ) : null}
             {payouts.map((payout, ind) => (
@@ -134,11 +134,28 @@ const DividendsWrapper = styled.div`
 
   h5 {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     color: #fff;
     font-size: 1.4rem;
     background-color: #7249d1;
     padding: 0.3rem 2rem;
+    /* border: 1px solid red; */
+
+    span {
+      font-size: 1.3rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      padding: 0.3rem 0;
+      span {
+        font-size: 1rem;
+        span {
+          color: #ccc;
+        }
+      }
+    }
   }
 `;
 const Wrapper = styled.div`
