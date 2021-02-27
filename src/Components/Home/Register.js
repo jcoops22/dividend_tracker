@@ -135,7 +135,11 @@ const Form = styled.form`
     font-size: 1.3rem;
     text-align: center;
     padding-left: 1rem;
-    margin: 1rem 0;
+    margin: 1rem 0 0;
+    padding: 1rem 0;
+    background-color: #fff;
+    border: ${(props) => props.border};
+    border-bottom: none;
     /* border: 1px solid red; */
   }
 
@@ -150,7 +154,7 @@ const Form = styled.form`
     max-width: 600px;
     padding: 3rem 0;
     background-color: #fff;
-    border-radius: 3px;
+    /* border-radius: 3px; */
     border: none;
     /* border: 1px solid red; */
 
@@ -170,7 +174,7 @@ const Form = styled.form`
     }
 
     @media ${device.tabletS} {
-      border-radius: 5px;
+      /* border-radius: 5px; */
       border: ${(props) => props.border};
     }
   }
