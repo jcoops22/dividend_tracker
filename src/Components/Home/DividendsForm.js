@@ -30,6 +30,7 @@ const DividendsForm = ({ stock }) => {
   const [openModalIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609038418/Dividend%20Tracker/Icons/Stock%20Toolbar/share-arrows-svgrepo-com_npdvvm.svg"
   );
+
   useEffect(() => {
     // set the stockPayouts variable
     setStockPayouts(
@@ -93,6 +94,11 @@ const DividendsForm = ({ stock }) => {
       };
     }
   };
+  // convert to comma notation
+  const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   // generate total for history header
   const getTotal = () => {
     let acc = 0;
@@ -100,7 +106,7 @@ const DividendsForm = ({ stock }) => {
       stockPayouts.map((val) => {
         return (acc += parseFloat(val.amount));
       });
-      return acc.toFixed(2);
+      return numberWithCommas(acc.toFixed(2));
     }
   };
 
@@ -187,7 +193,7 @@ const DividendsForm = ({ stock }) => {
               <HistoryLine key={ind}>
                 <span>{ind + 1}</span>
                 <InfoWrapper>
-                  <p>${parseFloat(pay.amount).toFixed(2)}</p>
+                  <p>${numberWithCommas(parseFloat(pay.amount).toFixed(2))}</p>
                   <span>{formatDateData(pay.payDate)}</span>
                   <DeleteDividend>
                     <img

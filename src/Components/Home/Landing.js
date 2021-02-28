@@ -97,9 +97,11 @@ const Landing = () => {
       </HeaderWrapper>
       <Section bg={spiral}>
         <RegisterDiv>
-          <h3>
-            Start tracking <span>your</span> dividends!
-          </h3>
+          <h1>
+            <p>
+              Start tracking <span>your</span> dividends!
+            </p>
+          </h1>
           <Register />
         </RegisterDiv>
       </Section>
@@ -371,11 +373,11 @@ const RegisterDiv = styled.div`
   padding: 3rem 0 8rem;
   /* border: 1px solid red; */
 
-  h3 {
+  h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: right;
+    text-align: center;
     padding-right: 0.6rem;
     color: #ddd;
     width: 100%;
