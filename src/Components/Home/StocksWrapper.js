@@ -7,6 +7,11 @@ import { formatDateData } from "../../resources/stockUtilities";
 const StocksWrapper = ({ stocks }) => {
   useEffect(() => {}, [stocks]);
 
+  // convert to comma notation
+  const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <Container>
       {stocks.map((stock) => (
@@ -27,7 +32,10 @@ const StocksWrapper = ({ stocks }) => {
                   {stock.payouts ? (
                     <span>
                       {stock.payouts.length
-                        ? "$" + parseFloat(stock.payouts[0].amount).toFixed(2)
+                        ? "$" +
+                          numberWithCommas(
+                            parseFloat(stock.payouts[0].amount).toFixed(2)
+                          )
                         : "No payments"}
                     </span>
                   ) : (
