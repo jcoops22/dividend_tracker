@@ -153,7 +153,6 @@ const Landing = () => {
         </Link>
         <AllTheData src={endDataIcon} alt="all the data" />
       </GetStarted>
-
       <Footer />
     </Container>
   );
@@ -383,13 +382,7 @@ const RegisterDiv = styled.div`
     width: 100%;
     height: 6rem;
     font-size: 1.3rem;
-    /* background-color: #7249d1; */
-    background: rgb(255, 255, 255);
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(114, 73, 209, 1) 53%
-    );
+    background-color: #7249d1;
     /* border-bottom-left-radius: 100px; */
     /* border: 1px solid red; */
 
@@ -400,6 +393,12 @@ const RegisterDiv = styled.div`
     }
     @media ${device.tabletS} {
       margin: 7rem 2rem;
+      background: rgb(255, 255, 255);
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(114, 73, 209, 1) 53%
+      );
     }
   }
 

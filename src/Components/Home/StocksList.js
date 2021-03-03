@@ -6,6 +6,7 @@ import LoadingIcon from "../Shared/LoadingIcon";
 import StocksWrapper from "./StocksWrapper";
 import { formatDateData } from "../../resources/stockUtilities";
 import { UserContext } from "../Context/UserProvider";
+import UtilitiesRow from "./UtilitiesRow";
 
 const StocksList = () => {
   const {
@@ -233,6 +234,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-top: 8rem;
   /* background-color: blue; */
 
   h1 {
@@ -252,16 +254,6 @@ const StockContainer = styled.div`
   padding: 0 0.3rem;
   /* border: 1px solid red; */
 `;
-const UtilitiesRow = styled.div`
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-between;
-  align-items: center;
-
-  @media ${device.tabletS} {
-    flex-direction: row;
-  }
-`;
 const SearchBar = styled.div`
   position: relative;
   display: flex;
@@ -271,6 +263,7 @@ const SearchBar = styled.div`
   padding: 0 0.3rem;
   margin: 0.5rem 0;
   border-radius: 3px;
+  background-color: #fff;
   border: 2px solid #7249d1;
 
   img {
@@ -301,6 +294,7 @@ const SortWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  background-color: #fff;
   /* border: 1px solid red; */
 
   p {

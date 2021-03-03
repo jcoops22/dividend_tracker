@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
+import { device } from "../../resources/mediaquery";
 import { withRouter, Link } from "react-router-dom";
 import { UserContext } from "../Context/UserProvider";
 import { auth, firestore } from "../Firebase/firebase";
@@ -15,8 +16,8 @@ const SignIn = ({ history }) => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const { setCurrentUserAction } = useContext(UserContext);
-  const [cash] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1609172536/Dividend%20Tracker/Icons/cash-bill-svgrepo-com_dtqrjh.svg"
+  const [investingForHeader] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1613778050/Dividend%20Tracker/Icons/undraw_investing_7u74_d1vsuv.svg"
   );
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
@@ -66,7 +67,7 @@ const SignIn = ({ history }) => {
       <Header>
         <Link to="/">
           <h1>
-            Dividend Tracker <img src={cash} alt="cash" />
+            Dividend Tracker <img src={investingForHeader} alt="cash" />
           </h1>
         </Link>
       </Header>
@@ -138,24 +139,33 @@ const Container = styled.div`
   /* border: 1px solid red; */
 `;
 const Header = styled.div`
+  position: relative;
+  top: 0;
+  z-index: 1;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
   height: 3rem;
-  background-color: #333;
+  background-color: #fff;
 
   h1 {
+    display: flex;
+    align-items: center;
     margin-left: 2rem;
     font-size: 1.5rem;
-    color: #fff;
+    color: #7249d1;
     /* border: 1px solid red; */
   }
 
   img {
     width: 2rem;
-    transform: rotate(-45deg);
     margin-left: 1rem;
+    /* border: 1px solid red; */
+  }
+
+  @media ${device.tabletS} {
+    position: sticky;
   }
 `;
 const Wrapper = styled.div`

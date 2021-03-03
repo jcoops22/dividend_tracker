@@ -54,8 +54,8 @@ const Register = ({ setShowRegistrationForm, fromSignIn }) => {
       {fromSignIn ? (
         <Close onClick={() => setShowRegistrationForm(false)}>&#10005;</Close>
       ) : null}
-      <legend>Create your account:</legend>
       <fieldset>
+        <legend>Create your account:</legend>
         {errorMessage ? <ErrorComponent message={errorMessage} /> : null}
         <label>First Name:</label>
         <input
@@ -128,18 +128,16 @@ const Form = styled.form`
   overflow: hidden;
   opacity: ${(props) => props.opacity};
   background-color: rgba(255, 255, 255, 0);
+  /* border: ${(props) => props.border}; */
   /* border: 1px solid red; */
 
   legend {
     width: 100%;
     font-size: 1.3rem;
     text-align: center;
-    padding-left: 1rem;
-    margin: 1rem 0 0;
-    padding: 1rem 0;
+    padding-top: 1rem;
     background-color: #fff;
-    border: ${(props) => props.border};
-    border-bottom: none;
+    border-radius: 5px;
     /* border: 1px solid red; */
   }
 
@@ -154,7 +152,7 @@ const Form = styled.form`
     max-width: 600px;
     padding: 3rem 0;
     background-color: #fff;
-    /* border-radius: 3px; */
+    border-radius: 5px;
     border: none;
     /* border: 1px solid red; */
 
@@ -175,7 +173,6 @@ const Form = styled.form`
 
     @media ${device.tabletS} {
       /* border-radius: 5px; */
-      border: ${(props) => props.border};
     }
   }
 

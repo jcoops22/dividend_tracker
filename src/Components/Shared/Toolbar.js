@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import AddForm from "../Home/AddForm";
 import ViewAll from "../Home/ViewAll";
 import { StocksContext } from "../Context/StocksProvider";
 
-const Toolbar = () => {
+const Toolbar = ({ history }) => {
   const { showAllDivs } = useContext(StocksContext);
   const [add] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608615849/Dividend%20Tracker/Icons/Stock%20Toolbar/plus-svgrepo-com_mtsovt.svg"
+  );
+  const [reportIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1614794559/Dividend%20Tracker/Icons/analytics-report-svgrepo-com_lucomp.svg"
   );
   const [showAddForm, setShowAddForm] = useState(false);
   const [showViewAllForm, setShowViewAllForm] = useState(
@@ -25,24 +28,25 @@ const Toolbar = () => {
         return showAddForm ? setShowAddForm(false) : null;
       }}
     >
-      <ReportButton>
-        <Link to="/reports">
-          <button>Reports</button>
-        </Link>
-      </ReportButton>
-      <AddTickerWrapper>
+      <ButtonWrapper>
+        <ReportButton onClick={() => history.push("/reports")}>
+          Reports
+          <img src={reportIcon} alt="reports" />
+        </ReportButton>
+      </ButtonWrapper>
+      <ButtonWrapper>
         <AddTicker onClick={() => setShowAddForm(true)}>
           <span>Add stock</span>
           <img src={add} alt="add" />
         </AddTicker>
-      </AddTickerWrapper>
+      </ButtonWrapper>
       {showAddForm ? <AddForm /> : null}
       {showViewAllForm ? <ViewAll payouts={showAllDivs.payouts} /> : null}
     </Container>
   );
 };
 
-export default Toolbar;
+export default withRouter(Toolbar);
 
 // styles
 const Container = styled.div`
@@ -61,6 +65,7 @@ const Container = styled.div`
   opacity: 0;
   animation: drop_toolbar_down 0.5s 1s forwards;
   border-bottom: 2px solid #999;
+  /* border: 1px solid red; */
 
   @keyframes drop_toolbar_down {
     to {
@@ -70,27 +75,28 @@ const Container = styled.div`
     }
   }
 `;
-const ReportButton = styled.div`
-  width: 100%;
+const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
-  /* border: 2px solid #edc639; */
-  /* border: 1px solid red; */
-
-  button {
-    width: 6rem;
-    height: 3rem;
-    cursor: pointer;
-    border-radius: 3px;
-  }
-`;
-const AddTickerWrapper = styled.div`
-  width: 100%;
+  align-items: center;
   height: 3rem;
+  /* border: 1px solid red; */
+`;
+const ReportButton = styled.div`
+  height: 100%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  /* border: 1px solid red; */
+  padding: 0 1rem;
+  box-shadow: 2px 2px 8px 0 #999;
+  background-color: #fff;
+  cursor: pointer;
+  /* border: 1px solid orange; */
+
+  img {
+    margin-left: 1rem;
+    width: 2rem;
+  }
 `;
 const AddTicker = styled.div`
   height: 100%;

@@ -5,6 +5,7 @@ import { UserContext } from "../Context/UserProvider";
 
 const Header = ({ text, user, auth, history }) => {
   const { setCurrentUserAction } = useContext(UserContext);
+
   return (
     <Container>
       <H1 onClick={() => history.push("/")}>{text}</H1>
@@ -27,13 +28,13 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 4rem;
+  height: 3.3rem;
   padding: 0.3rem 0;
   background-color: #333;
   color: #fff;
   /* border: 1px solid red; */
+
   @media ${device.tabletS} {
-    height: 3.3rem;
     padding: 0.3rem 1rem;
   }
 `;
