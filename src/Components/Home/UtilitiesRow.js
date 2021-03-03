@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
+import { StocksContext } from "../Context/StocksProvider";
 
 const UtilitiesRow = ({ children }) => {
+  const { showAddForm, showAllDivs } = useContext(StocksContext);
   const navbar = useRef();
   // scroll pos for showHideNavbar func
   var prevScrollpos = window.pageYOffset;
@@ -26,23 +28,42 @@ const UtilitiesRow = ({ children }) => {
     prevScrollpos = currentScrollPos;
   };
 
-  return <Container ref={navbar}>{children}</Container>;
+  return (
+    <Container
+      ref={navbar}
+      vis={showAddForm || showAllDivs.show ? "hidden" : "visible"}
+      events={showAddForm || showAllDivs.show ? "none" : "auto"}
+      opacity={showAddForm || showAllDivs.show ? "0" : "1"}
+    >
+      {children}
+    </Container>
+  );
 };
 
 export default UtilitiesRow;
 
 // styles
 const Container = styled.div`
-  position: sticky;
+  position: static;
   top: 0;
-  z-index: 2;
   display: flex;
   flex-direction: column-reverse;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  height: 4.25rem;
+  padding: 0 0.3rem;
   transition-duration: 0.5s;
+  transition-property: top;
+  /* border: 1px solid red; */
 
   @media ${device.tabletS} {
     flex-direction: row;
+  }
+  @media ${device.tablet} {
+    position: sticky;
+    z-index: 1;
+    visibility: ${(props) => props.vis};
+    /* pointer-events: ${(props) => props.events};
+    opacity: ${(props) => props.opacity}; */
   }
 `;

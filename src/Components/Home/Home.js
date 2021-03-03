@@ -66,7 +66,6 @@ const Container = styled.div`
   /* border: 1px solid red; */
 `;
 const Sticky = styled.div`
-  /* position: sticky; */
   position: fixed;
   top: 0;
   z-index: 1;

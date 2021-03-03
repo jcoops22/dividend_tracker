@@ -7,6 +7,7 @@ export const StocksContext = createContext({
   getStocks: () => {},
   loading: false,
   tickerData: null,
+  showAddForm: false,
   showAllDivs: { show: false, payouts: [], stock: {} },
   showAllDivsAction: () => {},
   setTickerDataAction: () => {},
@@ -15,6 +16,7 @@ export const StocksContext = createContext({
 // PROVIDER
 const StocksProvider = ({ children }) => {
   const [stocks, setStocks] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
   const [showAllDivs, setShowAllDivs] = useState({
     show: false,
     payouts: [],
@@ -66,6 +68,8 @@ const StocksProvider = ({ children }) => {
         tickerData,
         showAllDivsAction,
         setTickerDataAction,
+        showAddForm,
+        setShowAddForm,
       }}
     >
       {children}

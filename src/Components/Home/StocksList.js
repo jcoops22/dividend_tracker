@@ -183,7 +183,7 @@ const StocksList = () => {
               ) : null}
             </SearchBar>
             <SortWrapper>
-              <p>Sort by:</p>
+              <p>Sort:</p>
               <SortBy
                 onChange={(e) => {
                   setSortType(e.target.value);
@@ -259,7 +259,7 @@ const SearchBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 3rem;
+  height: 2.5rem;
   padding: 0 0.3rem;
   margin: 0.5rem 0;
   border-radius: 3px;
@@ -267,16 +267,22 @@ const SearchBar = styled.div`
   border: 2px solid #7249d1;
 
   img {
-    width: 1.8rem;
+    width: 1.4rem;
     margin-right: 1rem;
   }
   input {
     width: 200px;
     height: 100%;
     font-size: 18px;
+    font-weight: 700;
+    font-family: "Exo", sans-serif;
     border: none;
     outline: none;
     /* border: 2px solid red; */
+
+    ::placeholder {
+      font-weight: 300;
+    }
   }
 
   span {
@@ -298,14 +304,15 @@ const SortWrapper = styled.div`
   /* border: 1px solid red; */
 
   p {
-    margin-left: 1rem;
+    font-weight: 700;
+    margin-left: 0.5rem;
   }
 `;
 const SortBy = styled.select`
   position: relative;
   width: 8rem;
   height: 2rem;
-  margin-left: 1rem;
+  margin-left: 0.7rem;
 `;
 const ScrollUp = styled.div`
   width: 100%;

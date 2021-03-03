@@ -48,7 +48,11 @@ const ViewAll = () => {
       };
     }
   };
-
+  // convert to comma notation
+  const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+  // generate total
   const getTotal = (arr) => {
     let total = 0;
     arr.forEach((pay) => {
@@ -79,7 +83,7 @@ const ViewAll = () => {
             {payouts.map((payout, ind) => (
               <Row key={ind}>
                 <span>{ind + 1}</span>
-                <p>${parseFloat(payout.amount).toFixed(2)}</p>
+                <p>${numberWithCommas(parseFloat(payout.amount).toFixed(2))}</p>
                 <p>{formatDateData(payout.payDate)}</p>
                 <img
                   src={deleteIcon}
@@ -89,7 +93,8 @@ const ViewAll = () => {
               </Row>
             ))}
             <Total>
-              Total: <span>${getTotal(payouts).toFixed(2)}</span>
+              <p>Total:</p>
+              <span>${numberWithCommas(getTotal(payouts).toFixed(2))}</span>
             </Total>
           </Wrapper>
         ) : null}
@@ -161,18 +166,30 @@ const DividendsWrapper = styled.div`
 const Wrapper = styled.div`
   opacity: ${(props) => props.opacity};
 `;
-const Total = styled.p`
-  margin: 1rem 0;
+const Total = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 0;
+  /* border: 2px solid red; */
+
+  p {
+    color: #333;
+    margin: 0 1rem;
+  }
+
   span {
     color: #27d67b;
-    color: #333;
+    font-size: 1.2rem;
     font-weight: 700;
+    font-family: "Arimo", sans-serif;
   }
 `;
 const Row = styled.div`
   position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  justify-content: flex-start;
   height: 2rem;
   margin-bottom: 1px;
   padding: 0.4rem 2rem;
@@ -186,9 +203,17 @@ const Row = styled.div`
     color: #000;
   }
 
+  p {
+    margin-right: auto;
+  }
+
   img {
+    position: absolute;
+    top: 0.2rem;
+    left: calc(100% - 2rem);
     width: 1.5rem;
     cursor: pointer;
+    /* border: 1px solid red; */
   }
 `;
 const ViewAllLoader = styled.img`

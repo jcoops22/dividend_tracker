@@ -24,15 +24,15 @@ const Container = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  opacity: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  height: 100vh;
-  width: 100vw;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  animation: fade_AddForm_in 0.5s forwards;
+  opacity: 0;
+  height: 100vh;
+  width: 100vw;
   font-family: "Exo", sans-serif;
+  animation: fade_AddForm_in 0.5s forwards;
+  background-color: rgba(0, 0, 0, 0.7);
   /* border: 2px solid purple; */
 
   @keyframes fade_AddForm_in {

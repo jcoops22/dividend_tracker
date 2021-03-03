@@ -6,14 +6,16 @@ import ViewAll from "../Home/ViewAll";
 import { StocksContext } from "../Context/StocksProvider";
 
 const Toolbar = ({ history }) => {
-  const { showAllDivs } = useContext(StocksContext);
+  const { showAllDivs, showAddForm, setShowAddForm } = useContext(
+    StocksContext
+  );
   const [add] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608615849/Dividend%20Tracker/Icons/Stock%20Toolbar/plus-svgrepo-com_mtsovt.svg"
   );
   const [reportIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1614794559/Dividend%20Tracker/Icons/analytics-report-svgrepo-com_lucomp.svg"
   );
-  const [showAddForm, setShowAddForm] = useState(false);
+  // const [showAddForm, setShowAddForm] = useState(false);
   const [showViewAllForm, setShowViewAllForm] = useState(
     showAllDivs.show || false
   );
@@ -50,20 +52,18 @@ export default withRouter(Toolbar);
 
 // styles
 const Container = styled.div`
-  width: 100%;
-  height: 0;
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
-  background-color: #7249d1;
-  background-color: #edc639;
-  background-color: #fff;
+  width: 100%;
+  height: 0;
   margin-bottom: 3rem;
-  padding: 0;
   overflow: hidden;
   opacity: 0;
   animation: drop_toolbar_down 0.5s 1s forwards;
+  background-color: #fff;
   border-bottom: 2px solid #999;
   /* border: 1px solid red; */
 
@@ -80,6 +80,7 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 3rem;
+  background-color: #fff;
   /* border: 1px solid red; */
 `;
 const ReportButton = styled.div`
