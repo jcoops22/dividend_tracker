@@ -78,6 +78,13 @@ const ViewAll = () => {
                   </span>{" "}
                   {payouts.length === 1 ? "Payout" : "Payouts"}:
                 </p>
+                <Close
+                  onClick={() =>
+                    showAllDivsAction({ show: false, payouts: [] })
+                  }
+                >
+                  &#10005;
+                </Close>
               </h5>
             ) : null}
             {payouts.map((payout, ind) => (
@@ -129,13 +136,24 @@ const Container = styled.div`
 `;
 const DividendsWrapper = styled.div`
   position: absolute;
+  top: 15vh;
   min-height: 300px;
   max-height: 500px;
   width: 100%;
   max-width: 600px;
   background-color: #fff;
+  opacity: 1;
   overflow-y: scroll;
+  animation: jumpDividendPayoutsUp 0.5s ease-in-out forwards;
   border: 1px solid #333;
+  /* border: 1px solid red; */
+
+  @keyframes jumpDividendPayoutsUp {
+    from {
+      top: 30vh;
+      opacity: 0;
+    }
+  }
 
   h5 {
     display: flex;
@@ -163,8 +181,22 @@ const DividendsWrapper = styled.div`
     }
   }
 `;
+const Close = styled.div`
+  position: absolute;
+  top: 0;
+  left: calc(100% - 1.6rem);
+  display: inline;
+  width: 100%;
+  font-size: 1.5rem;
+  color: #999;
+  color: #7249d1;
+  color: #fff;
+  cursor: pointer;
+  /* border: 1px solid red; */
+`;
 const Wrapper = styled.div`
   opacity: ${(props) => props.opacity};
+  /* border: 1px solid red; */
 `;
 const Total = styled.div`
   display: flex;

@@ -26,7 +26,7 @@ const Landing = () => {
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609111414/Dividend%20Tracker/Icons/report-svgrepo-com_ysbigv.svg"
   );
   const [threePurpleCircles] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1613756512/Dividend%20Tracker/Icons/Frame_1_l9oihd.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1614812809/Dividend%20Tracker/Icons/Frame_1_yntnfj.svg"
   );
   const [sinlgeWhiteCircle] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1609173177/Dividend%20Tracker/Icons/plate-circles-from-top-view-svgrepo-com_flb1ak.svg"
@@ -79,14 +79,16 @@ const Landing = () => {
               <h4>Simple, yet robust...</h4>
               <ul>
                 <li>Choose from 6000+ stocks and funds (updated regularly)</li>
-                <li>Get current data on stocks added to your list</li>
+                <li>
+                  Get current data on the stocks you've added to your list
+                </li>
                 <li>Use data visualization tools to chart your journey</li>
                 <li>
                   Add stocks not listed for lesser known stocks or proprietary
                   funds
                 </li>
-                <li>Easy to use data entry (no more spreadsheets!)</li>
-                <li>Generate analytical reports and more!</li>
+                <li>Easy to use data entry</li>
+                <li>Generate analytical reports for your portfolio!</li>
               </ul>
             </Description>
             <Diagram>
@@ -381,9 +383,8 @@ const RegisterDiv = styled.div`
     color: #ddd;
     width: 100%;
     height: 6rem;
-    font-size: 1.3rem;
+    font-size: 1.8rem;
     background-color: #7249d1;
-    /* border-bottom-left-radius: 100px; */
     /* border: 1px solid red; */
 
     span {
@@ -391,6 +392,7 @@ const RegisterDiv = styled.div`
       margin: 0 0.5rem;
       /* text-decoration: underline; */
     }
+
     @media ${device.tabletS} {
       margin: 7rem 2rem;
       background: rgb(255, 255, 255);
