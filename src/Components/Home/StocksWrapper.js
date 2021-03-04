@@ -81,6 +81,11 @@ const Container = styled.div`
   }
 `;
 const StockLine = styled.div`
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 2px 3px 8px 0 #999;
+    /* box-shadow: 2px 3px 8px 0 #7249d1; */
+  }
   width: 100%;
   font-size: 1.2rem;
   display: flex;
@@ -88,9 +93,9 @@ const StockLine = styled.div`
   padding: 0.5rem 0;
   margin: 0.3rem 0;
   background-color: ${(props) => props.background};
-  box-shadow: 2px 3px 8px 0 #999;
   border-radius: 8px;
-  border: 2px solid #7249d1;
+  transition-duration: 0.3s;
+  /* border: 2px solid #7249d1; */
   /* border: 2px solid red; */
 `;
 const Row = styled.div`

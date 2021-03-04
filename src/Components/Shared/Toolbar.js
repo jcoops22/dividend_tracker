@@ -77,7 +77,7 @@ const Container = styled.div`
   }
 
   @media ${device.tabletS} {
-    background-color: #7249d1;
+    /* background-color: #7249d1; */
   }
 `;
 const ButtonWrapper = styled.div`
