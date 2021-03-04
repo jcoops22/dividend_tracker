@@ -78,7 +78,7 @@ const Landing = () => {
             <Description>
               <h4>Simple, yet robust...</h4>
               <ul>
-                <li>Choose from 6000+ stocks and funds (updated regularly)</li>
+                <li>Choose from 6000+ stocks and funds</li>
                 <li>
                   Get current data on the stocks you've added to your list
                 </li>
@@ -328,11 +328,20 @@ const Description = styled.div`
     font-weight: 700;
     font-size: 1.6rem;
     margin: 1.5rem 0;
+
+    @media ${device.tabletS} {
+      font-size: 2rem;
+      /* border: 1px solid red; */
+    }
   }
 
   li {
     color: #333;
     margin: 1.5rem 0;
+
+    @media ${device.tabletS} {
+      font-size: 1.3rem;
+    }
   }
 `;
 const Diagram = styled.div`
@@ -399,7 +408,7 @@ const RegisterDiv = styled.div`
       background: linear-gradient(
         90deg,
         rgba(255, 255, 255, 1) 0%,
-        rgba(114, 73, 209, 1) 53%
+        rgba(114, 73, 209, 1) 36%
       );
     }
   }

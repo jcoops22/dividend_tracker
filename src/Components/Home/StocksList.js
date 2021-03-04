@@ -159,12 +159,12 @@ const StocksList = () => {
 
   return (
     <Container>
-      <h1>
-        Your Stocks:{" "}
+      <HeaderWrapper>
+        <h1>Your Stocks:</h1>
         <span>
           ({query ? filteredStocks.length : currentUserStocks.length})
         </span>
-      </h1>
+      </HeaderWrapper>
       {loading ? (
         <LoadingIcon big={true} height={"6rem"} />
       ) : (
@@ -235,14 +235,24 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding-top: 8rem;
-  /* background-color: blue; */
+`;
+const HeaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 3rem 0;
+  width: 100%;
+  /* border: 1px solid blue; */
 
   h1 {
-    margin-bottom: 0.8rem;
+    font-size: 1.7rem;
+    width: fit-content;
+    /* border: 1px solid blue; */
+  }
 
-    span {
-      font-size: 1.3rem;
-    }
+  span {
+    font-size: 1.3rem;
+    margin-left: 1rem;
   }
 `;
 const StockContainer = styled.div`
@@ -300,7 +310,7 @@ const SortWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
+  /* background-color: #fff; */
   /* border: 1px solid red; */
 
   p {

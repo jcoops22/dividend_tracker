@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
+import { device } from "../../resources/mediaquery";
 import { withRouter } from "react-router-dom";
 import AddForm from "../Home/AddForm";
 import ViewAll from "../Home/ViewAll";
@@ -73,6 +74,10 @@ const Container = styled.div`
       padding: 0.5rem;
       height: 4.25rem;
     }
+  }
+
+  @media ${device.tabletS} {
+    background-color: #7249d1;
   }
 `;
 const ButtonWrapper = styled.div`
