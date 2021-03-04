@@ -160,7 +160,7 @@ const StocksList = () => {
   return (
     <Container>
       <HeaderWrapper>
-        <h1>Your Stocks:</h1>
+        <h1>Your Holdings:</h1>
         <span>
           ({query ? filteredStocks.length : currentUserStocks.length})
         </span>
@@ -234,19 +234,23 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 8rem;
+
+  @media ${device.tabletS} {
+    padding-top: 8rem;
+  }
 `;
 const HeaderWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 3rem 0;
+  margin: 2rem 0;
   width: 100%;
   /* border: 1px solid blue; */
 
   h1 {
-    font-size: 1.7rem;
+    font-size: 2rem;
     width: fit-content;
+    color: #7249d1;
     /* border: 1px solid blue; */
   }
 

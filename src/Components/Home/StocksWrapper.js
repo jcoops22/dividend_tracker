@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import StockToolbar from "./StockToolbar";
@@ -74,6 +74,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 0 4rem;
+  user-select: none;
   /* border: 3px solid green; */
 
   @media ${device.mobileL} {
@@ -81,22 +82,24 @@ const Container = styled.div`
   }
 `;
 const StockLine = styled.div`
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: 2px 3px 8px 0 #999;
-    /* box-shadow: 2px 3px 8px 0 #7249d1; */
-  }
-  width: 100%;
-  font-size: 1.2rem;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  font-size: 1.2rem;
   padding: 0.5rem 0;
   margin: 0.3rem 0;
   background-color: ${(props) => props.background};
   border-radius: 8px;
   transition-duration: 0.3s;
-  /* border: 2px solid #7249d1; */
   /* border: 2px solid red; */
+
+  @media ${device.tabletS} {
+    &:hover {
+      transform: scale(1.02);
+      box-shadow: 2px 3px 8px 0 #999;
+      /* box-shadow: 2px 3px 8px 0 #7249d1; */
+    }
+  }
 `;
 const Row = styled.div`
   display: flex;

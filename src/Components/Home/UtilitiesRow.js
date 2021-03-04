@@ -52,7 +52,7 @@ const Container = styled.div`
   align-items: center;
   height: 4.25rem;
   padding: 0 0.3rem;
-  margin-bottom: 3rem;
+  margin-bottom: 6rem;
   transition-duration: 0.5s;
   transition-property: top;
   /* border: 1px solid red; */

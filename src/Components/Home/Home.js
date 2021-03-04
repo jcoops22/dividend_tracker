@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useRef } from "react";
 import styled from "styled-components";
+import { device } from "../../resources/mediaquery.js";
 import { auth } from "../Firebase/firebase";
 import Header from "../Shared/Header";
 import Toolbar from "../Shared/Toolbar";
@@ -66,9 +67,13 @@ const Container = styled.div`
   /* border: 1px solid red; */
 `;
 const Sticky = styled.div`
-  position: fixed;
+  position: static;
   top: 0;
   z-index: 1;
   width: 100%;
   transition-duration: 0.5s;
+
+  @media ${device.tabletS} {
+    position: fixed;
+  }
 `;

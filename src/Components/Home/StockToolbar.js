@@ -85,7 +85,7 @@ const StockToolbar = ({ stock }) => {
   };
 
   return (
-    <Container>
+    <Container onDoubleClick={() => handleShowDividend()}>
       <Wrapper>
         <IconWrapper>
           <img

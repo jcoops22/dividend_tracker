@@ -60,7 +60,6 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   height: 0;
-  margin-bottom: 3rem;
   overflow: hidden;
   opacity: 0;
   animation: drop_toolbar_down 0.5s 1s forwards;
@@ -77,7 +76,8 @@ const Container = styled.div`
   }
 
   @media ${device.tabletS} {
-    /* background-color: #7249d1; */
+    margin-bottom: 3rem;
+    background-color: #7249d1;
   }
 `;
 const ButtonWrapper = styled.div`
