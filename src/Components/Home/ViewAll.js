@@ -136,7 +136,7 @@ const Container = styled.div`
 `;
 const DividendsWrapper = styled.div`
   position: absolute;
-  top: 15vh;
+  top: 25vh;
   min-height: 300px;
   max-height: 500px;
   width: 100%;
@@ -150,7 +150,7 @@ const DividendsWrapper = styled.div`
 
   @keyframes jumpDividendPayoutsUp {
     from {
-      top: 30vh;
+      top: 40vh;
       opacity: 0;
     }
   }

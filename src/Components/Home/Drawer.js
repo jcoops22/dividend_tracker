@@ -129,23 +129,26 @@ const Container = styled.div`
   }
 `;
 const HrWrapper = styled.div`
-  display: flex;
+  display: none;
   justify-content: flex-start;
   align-items: center;
 
   div {
-    /* opacity: 0.5; */
     height: 10px;
     width: 10px;
     border-radius: 50%;
     background-color: #7249d1;
   }
+
+  @media ${device.tabletS} {
+    display: flex;
+  }
 `;
 const Hr = styled.hr`
   width: ${(props) => props.wid};
   border-color: #7249d1;
-  /* opacity: 0.5; */
   animation: extend_hr_in_drawer 0.3s forwards;
+  /* border: 1px solid red; */
 
   @keyframes extend_hr_in_drawer {
     from {

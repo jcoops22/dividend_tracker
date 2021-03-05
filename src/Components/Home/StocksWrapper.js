@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import StockToolbar from "./StockToolbar";
 import { formatDateData } from "../../resources/stockUtilities";
+import TickerIcon from "./TickerIcon";
 
 const StocksWrapper = ({ stocks }) => {
   useEffect(() => {}, [stocks]);
@@ -20,6 +21,7 @@ const StocksWrapper = ({ stocks }) => {
             <Col>
               <Name>
                 <span>{stock.name.split(" ").slice(0, 2).join(" ")}</span>
+                <TickerIcon symbol={stock.ticker} />
               </Name>
               <Ticker>
                 <span>{stock.ticker}</span>
@@ -74,7 +76,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 0 4rem;
-  user-select: none;
   /* border: 3px solid green; */
 
   @media ${device.mobileL} {
@@ -91,6 +92,7 @@ const StockLine = styled.div`
   background-color: ${(props) => props.background};
   border-radius: 8px;
   transition-duration: 0.3s;
+  box-shadow: 2px 3px 8px 0 #999;
   /* border: 2px solid red; */
 
   @media ${device.tabletS} {
@@ -99,6 +101,7 @@ const StockLine = styled.div`
       box-shadow: 2px 3px 8px 0 #999;
       /* box-shadow: 2px 3px 8px 0 #7249d1; */
     }
+    box-shadow: none;
   }
 `;
 const Row = styled.div`
@@ -124,9 +127,11 @@ const Col = styled.div`
   }
 `;
 const Name = styled.div`
+  position: relative;
   font-size: 1.3rem;
   color: #000;
   padding-left: 0.3rem;
+  /* border: 1px solid red; */
 
   span {
     font-weight: bolder;
@@ -137,6 +142,7 @@ const Ticker = styled.div`
   color: #555;
   padding-left: 0.3rem;
   margin-top: 0.2rem;
+  /* border: 1px solid red; */
 `;
 const SectionDiv = styled.div`
   display: flex;

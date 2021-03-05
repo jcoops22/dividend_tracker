@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
+import { device } from "../../resources/mediaquery";
 import { deleteStock, getTickerInfo } from "../../resources/stockUtilities";
 import TransformIcon from "../Shared/TransformIcon";
 import Drawer from "./Drawer";
@@ -87,41 +88,44 @@ const StockToolbar = ({ stock }) => {
   return (
     <Container onDoubleClick={() => handleShowDividend()}>
       <Wrapper>
-        <IconWrapper>
-          <img
-            src={deleteIcon}
-            alt="delete stock entry"
+        <p>double click for dividends</p>
+        <IconSection>
+          <IconWrapper>
+            <img
+              src={deleteIcon}
+              alt="delete stock entry"
+              onClick={() => {
+                setShowModal(true);
+              }}
+            />
+          </IconWrapper>
+          <IconWrapper
             onClick={() => {
-              setShowModal(true);
+              handleShowInfo();
             }}
-          />
-        </IconWrapper>
-        <IconWrapper
-          onClick={() => {
-            handleShowInfo();
-          }}
-        >
-          <TransformIcon
-            first={infoIcon}
-            second={closeInfoIcon}
-            w1={"1.5rem"}
-            w2={"1.5rem"}
-            transform={showInfo}
-          />
-        </IconWrapper>
-        <IconWrapper
-          onClick={() => {
-            handleShowDividend();
-          }}
-        >
-          <TransformIcon
-            first={openIcon}
-            second={closeIcon}
-            w1={"1.5rem"}
-            w2={"1.2rem"}
-            transform={showDividend}
-          />
-        </IconWrapper>
+          >
+            <TransformIcon
+              first={infoIcon}
+              second={closeInfoIcon}
+              w1={"1.5rem"}
+              w2={"1.5rem"}
+              transform={showInfo}
+            />
+          </IconWrapper>
+          <IconWrapper
+            onClick={() => {
+              handleShowDividend();
+            }}
+          >
+            <TransformIcon
+              first={openIcon}
+              second={closeIcon}
+              w1={"1.5rem"}
+              w2={"1.2rem"}
+              transform={showDividend}
+            />
+          </IconWrapper>
+        </IconSection>
       </Wrapper>
       {showModal ? (
         <Modal
@@ -175,17 +179,42 @@ export default StockToolbar;
 // styles
 const Container = styled.div`
   width: 100%;
-  /* height: 25%; */
-  /* user-select: none; */
+  user-select: none;
   /* border: 1px solid red; */
 `;
 const Wrapper = styled.div`
+  &:hover {
+    background-color: #eee;
+  }
   width: 100%;
   padding: 0.3rem;
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
+  transition-duration: 0.3s;
   /* border: 1px solid red; */
+
+  p {
+    display: none;
+    padding-left: 2rem;
+    font-size: 0.7rem;
+
+    @media ${device.tabletS} {
+      display: initial;
+    }
+  }
+`;
+const IconSection = styled.section`
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row-reverse;
+  width: 100%;
+  /* border: 1px solid red; */
+
+  @media ${device.tabletS} {
+    width: fit-content;
+    justify-content: center;
+  }
 `;
 const IconWrapper = styled.div`
   display: flex;

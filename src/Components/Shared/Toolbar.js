@@ -74,11 +74,6 @@ const Container = styled.div`
       height: 4.25rem;
     }
   }
-
-  @media ${device.tabletS} {
-    margin-bottom: 3rem;
-    background-color: #7249d1;
-  }
 `;
 const ButtonWrapper = styled.div`
   display: flex;
