@@ -84,8 +84,6 @@ const D3Graph = ({ arr, stock }) => {
     const dbase = average(baseLine);
     const high = getHigh(baseLine);
     const low = getLow(baseLine) - getLow(baseLine) * 0.5;
-    setHighestVal(getHigh(baseLine));
-    setLowestVal(getLow(baseLine));
     // make the svg element
     const svg = d3
       .select(`#${stock.ticker}`)
@@ -134,16 +132,16 @@ const D3Graph = ({ arr, stock }) => {
         };
 
         // console.log("val", d, "comparing:", parseInt(prevNum), parseInt(d));
-        if (parseInt(prevNum) === parseInt(d)) {
-          console.log("Equals:", parseInt(cents) * 0.3);
-          return parseInt(cents) * 0.333;
-        } else if (parseInt(prevNum) >= parseInt(d)) {
-          console.log("Greater:", parseInt(cents) * 0.5);
-          return parseInt(cents) * 0.6;
-        } else if (parseInt(prevNum) <= parseInt(d)) {
-          console.log("Less:", parseInt("1" + cents));
-          return parseInt("1" + cents) * 0.7;
-        }
+        // if (parseInt(prevNum) === parseInt(d)) {
+        //   console.log("Equals:", parseInt(cents) * 0.3);
+        //   return parseInt(cents) * 0.333;
+        // } else if (parseInt(prevNum) >= parseInt(d)) {
+        //   console.log("Greater:", parseInt(cents) * 0.5);
+        //   return parseInt(cents) * 0.6;
+        // } else if (parseInt(prevNum) <= parseInt(d)) {
+        //   console.log("Less:", parseInt("1" + cents));
+        //   return parseInt("1" + cents) * 0.7;
+        // }
 
         // console.log(
         //   "val:",
@@ -156,7 +154,7 @@ const D3Graph = ({ arr, stock }) => {
         //   parseInt((pennies / highPennies) * 100)
         // );
         // console.log(parseInt((pennies / highPennies) * 100));
-        // return parseInt((pennies / highPennies) * 100);
+        return parseInt((pennies / highPennies) * 100);
       })
       .style("stroke", "#7249d1")
       .style("stroke-width", "1px")
