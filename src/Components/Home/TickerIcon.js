@@ -13,7 +13,6 @@ const TickerIcon = ({ symbol }) => {
   useEffect(() => {
     // check if the url is valid
     imageExists(tickerUrl, async function (exists) {
-      console.log(exists);
       if (exists) {
         setUrlToUse(tickerUrl);
       } else {

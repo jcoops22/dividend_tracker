@@ -191,6 +191,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   transition-duration: 0.3s;
   /* border: 1px solid red; */
 

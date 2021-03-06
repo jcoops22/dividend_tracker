@@ -97,9 +97,7 @@ const StockLine = styled.div`
 
   @media ${device.tabletS} {
     &:hover {
-      transform: scale(1.02);
       box-shadow: 2px 3px 8px 0 #999;
-      /* box-shadow: 2px 3px 8px 0 #7249d1; */
     }
     box-shadow: none;
   }
