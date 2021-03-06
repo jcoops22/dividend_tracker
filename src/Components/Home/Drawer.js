@@ -16,6 +16,8 @@ const Drawer = ({ info, open, loading, data, dividends, stock }) => {
   );
 
   useEffect(() => {
+    setShowGraph(false);
+    console.log(showGraph && info);
     if (info) {
       setPoint("calc(100% - 4.9rem)");
     } else if (dividends) {
