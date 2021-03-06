@@ -88,7 +88,7 @@ const StockToolbar = ({ stock }) => {
   return (
     <Container onDoubleClick={() => handleShowDividend()}>
       <Wrapper>
-        <p>double click for dividends</p>
+        <WrapperParagraph>double click for dividends form</WrapperParagraph>
         <IconSection>
           <IconWrapper>
             <img
@@ -182,9 +182,24 @@ const Container = styled.div`
   user-select: none;
   /* border: 1px solid red; */
 `;
+const WrapperParagraph = styled.p`
+  display: none;
+  padding-left: 0.1rem;
+  font-size: 0.7rem;
+  transition-delay: 0.1s;
+  transition-duration: 0.3s;
+
+  @media ${device.tabletS} {
+    display: initial;
+    opacity: 0;
+  }
+`;
 const Wrapper = styled.div`
   &:hover {
     background-color: #eee;
+  }
+  &:hover ${WrapperParagraph} {
+    opacity: 0.8;
   }
   width: 100%;
   padding: 0.3rem;
@@ -194,16 +209,6 @@ const Wrapper = styled.div`
   align-items: center;
   transition-duration: 0.3s;
   /* border: 1px solid red; */
-
-  p {
-    display: none;
-    padding-left: 2rem;
-    font-size: 0.7rem;
-
-    @media ${device.tabletS} {
-      display: initial;
-    }
-  }
 `;
 const IconSection = styled.section`
   display: flex;
