@@ -87,6 +87,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
           divPerShare: "No data",
           exDivDate: "No data",
           payDivDate: "No data",
+          updated: 0,
         };
       } else {
         // console.log("All data", data);
@@ -103,6 +104,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
           divPerShare: DividendPerShare,
           exDivDate: ExDividendDate,
           payDivDate: DividendDate,
+          updated: new Date().getTime(),
         };
       }
     })
@@ -121,7 +123,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
     .then((data) => {
       console.log(data);
       if (data.data.Note) {
-        console.log("Timeout occurred");
+        console.log("Timeout occurred, please try again in 3-5 minutes");
         return {
           yield: "No data",
           divPerShare: "No data",

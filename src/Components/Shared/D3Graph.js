@@ -182,7 +182,6 @@ const D3Graph = ({ arr, stock }) => {
         </Legend>
         <LeftInfoBar>
           {valueArr ? <span>0</span> : null}
-          {valueArr ? <span>${average(valueArr).toFixed(2)}</span> : null}
           {valueArr ? <span>${getHigh(valueArr).toFixed(2)}</span> : null}
         </LeftInfoBar>
         {infoValues ? (
@@ -259,7 +258,7 @@ const LeftInfoBar = styled.div`
     }
   }
 
-  span:nth-child(3) {
+  span:nth-child(2) {
     visibility: visible;
   }
 

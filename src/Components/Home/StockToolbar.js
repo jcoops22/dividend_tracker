@@ -29,6 +29,9 @@ const StockToolbar = ({ stock }) => {
   const [showInfo, setShowInfo] = useState(false);
   const [showDividend, setShowDividend] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
+  const [localStorageUser] = useState(
+    JSON.parse(window.localStorage.getItem("currentUser"))
+  );
   const { setTickerDataAction } = useContext(StocksContext);
   const {
     setCurrentUserStocksAction,
@@ -36,15 +39,77 @@ const StockToolbar = ({ stock }) => {
     currentUser,
   } = useContext(UserContext);
 
+  // update the local storage with updated stock item
+  const updateLocalStorageStocks = (updatedStock) => {
+    console.log(updatedStock);
+    let selectedIndex = localStorageUser.stocks.findIndex(
+      (e) => e.ticker === updatedStock.ticker
+    );
+
+    console.log(selectedIndex);
+    localStorageUser.stocks.splice(selectedIndex, 1, {
+      ...localStorageUser.stocks[selectedIndex],
+      updated: updatedStock.updated,
+      info: updatedStock,
+    });
+
+    let newCU = { ...localStorageUser, stocks: localStorageUser.stocks };
+    // set it in local storage
+    window.localStorage.setItem("currentUser", JSON.stringify(newCU));
+    console.log("FROM FUNC", newCU);
+  };
+
+  // retrieve the symbol data
   const assignTickerData = async () => {
     setLoading(true);
+    console.log(localStorageUser.stocks);
+    // if its already open return and do the close handled in handleShowInfo
     if (showDrawer && showInfo) {
       return;
     }
-    let data = await getTickerInfo(stock.ticker, 60);
-    setTickerDataAction(data);
-    setTickerInfo(data);
-    setLoading(!!!data);
+
+    // // Check if its updated in local storage first
+    if (localStorageUser.stocks) {
+      // get the stock we're working with
+      let selectedStock = localStorageUser.stocks.filter(
+        (s) => s.ticker === stock.ticker
+      );
+      // check if stock has the "info" property
+      if (selectedStock[0].info) {
+        // var to track 24 time period in milliseconds
+        let daymillies = 86400000;
+        // see if its been more than 24hours since updated
+        if (selectedStock[0].info.updated < new Date().getTime() + daymillies) {
+          // use the existing data from localStorage
+          console.log("we pulled from existing");
+          setTickerDataAction(selectedStock[0].info);
+          setTickerInfo(selectedStock[0].info);
+          setLoading(false);
+        } else if (
+          // is it more than 24 hours old ?
+          selectedStock[0].info.updated >=
+          new Date().getTime() + daymillies
+        ) {
+          console.log("we checked but it was outdated, had to call");
+          // run the getTickerInfo function from stockUtilities
+          let data = await getTickerInfo(stock.ticker, 60);
+          setTickerDataAction(data);
+          setTickerInfo(data);
+          updateLocalStorageStocks(data);
+          setLoading(!!!data);
+        }
+      } else {
+        // do a fresh check
+        console.log("nothing in local storage");
+        // run the getTickerInfo function from stockUtilities
+        let data = await getTickerInfo(stock.ticker, 60);
+        console.log("DATA:", data);
+        setTickerDataAction(data);
+        setTickerInfo(data);
+        updateLocalStorageStocks(data);
+        setLoading(!!!data);
+      }
+    }
   };
   // BUTTONS Functions
   // update the stocks list after delete
