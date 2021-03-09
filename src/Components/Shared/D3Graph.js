@@ -3,21 +3,54 @@ import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import * as d3 from "d3";
 
-const D3Graph = ({ arr, stock }) => {
+const D3Graph = ({ arr, stock, startTimer, setStartTimer }) => {
   const [valueArr, setValueArr] = useState(null);
   const [infoValues, setInfoValues] = useState(null);
   const [hoveredValue, setHoveredValue] = useState(null);
+  const [useTimeoutView, setUseTimeoutView] = useState(false);
+  const [running, setRunning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
 
   useEffect(() => {
-    // console.log(arr);
+    console.log("STRT TIMER?:", startTimer, "RUNNING:", running);
+
+    // counter function
+    let counter;
+    let countdown = () => {
+      if (startTimer) {
+        console.log("we starrted");
+        counter = setInterval(() => {
+          console.log("TIMER:", startTimer, "COUNTDOWN:", timeLeft);
+          setTimeLeft(timeLeft - 1);
+
+          if (timeLeft <= 0) {
+            setRunning(false);
+            clearInterval(counter);
+            console.log("count has been clearred");
+          }
+        }, 1000);
+      } else {
+        setStartTimer(false);
+        setRunning(false);
+        return;
+      }
+    };
+
+    if (!running) {
+      countdown();
+      setRunning(true);
+    }
+
     if (!valueArr && !infoValues) {
       makeValuesArray(arr);
       makeInfoValues(arr);
-    } else {
+      setUseTimeoutView(true);
+    } else if (arr[0] !== undefined) {
       // create the graph chart
+      setUseTimeoutView(false);
       drawChart("100%", "90%");
     }
-  }, [valueArr, infoValues]);
+  }, [valueArr, infoValues, useTimeoutView, startTimer]);
 
   // make a values array from the time series data
   const makeValuesArray = (obj) => {
@@ -32,17 +65,15 @@ const D3Graph = ({ arr, stock }) => {
   };
   // get first middle and last values for the infobar
   const makeInfoValues = (obj) => {
-    let arr = Object.entries(obj).reverse();
-    // console.log(arr);
-    // console.log(arr.reverse());
-    if (arr[0][1] === "Data Not Available") {
-      return;
-    } else {
+    let arrObj = Object.entries(obj).reverse();
+    if (arr[0] !== undefined) {
       setInfoValues([
-        formatInfo(arr[1][1].lastUpdated),
-        formatInfo(arr[50][1].lastUpdated),
-        formatInfo(arr[100][1].lastUpdated),
+        formatInfo(arrObj[2][1].lastUpdated),
+        formatInfo(arrObj[50][1].lastUpdated),
+        formatInfo(arrObj[99][1].lastUpdated),
       ]);
+    } else {
+      return;
     }
   };
 
@@ -166,32 +197,38 @@ const D3Graph = ({ arr, stock }) => {
 
   return (
     <Container>
-      <Graph id={`${stock.ticker}`}>
-        <Legend>
-          {!hoveredValue ? (
-            <p>
-              Market Value <span>(last 7 trading days)</span>
-            </p>
-          ) : (
-            <HoverValParagraph
-              color={hoveredValue >= average(valueArr) ? "#27d67b" : "#FF3501"}
-            >
-              Value: <span>${hoveredValue.toFixed(2)}</span>
-            </HoverValParagraph>
-          )}
-        </Legend>
-        <LeftInfoBar>
-          {valueArr ? <span>0</span> : null}
-          {valueArr ? <span>${getHigh(valueArr).toFixed(2)}</span> : null}
-        </LeftInfoBar>
-        {infoValues ? (
-          <BottomInfoBar>
-            {infoValues.map((i, ind) => (
-              <span key={ind}>{i}</span>
-            ))}
-          </BottomInfoBar>
-        ) : null}
-      </Graph>
+      {useTimeoutView ? (
+        <div>TIMEOUT</div>
+      ) : (
+        <Graph id={`${stock.ticker}`}>
+          <Legend>
+            {!hoveredValue ? (
+              <p>
+                Market Value <span>(last 7 trading days)</span>
+              </p>
+            ) : (
+              <HoverValParagraph
+                color={
+                  hoveredValue >= average(valueArr) ? "#27d67b" : "#FF3501"
+                }
+              >
+                Value: <span>${hoveredValue.toFixed(2)}</span>
+              </HoverValParagraph>
+            )}
+          </Legend>
+          <LeftInfoBar>
+            {valueArr ? <span>0</span> : null}
+            {valueArr ? <span>${getHigh(valueArr).toFixed(2)}</span> : null}
+          </LeftInfoBar>
+          {infoValues ? (
+            <BottomInfoBar>
+              {infoValues.map((i, ind) => (
+                <span key={ind}>{i}</span>
+              ))}
+            </BottomInfoBar>
+          ) : null}
+        </Graph>
+      )}
     </Container>
   );
 };

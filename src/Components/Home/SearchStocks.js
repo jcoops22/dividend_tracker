@@ -58,10 +58,18 @@ const SearchStocks = () => {
   // adding stock function
   const handleAddStock = async (user, stock) => {
     setLoading(true);
-    let timeStampeStock = { ...stock, added: new Date().getTime() };
-    let success = await addStock(user, timeStampeStock);
+    let timeStampedStock = { ...stock, added: new Date().getTime() };
+    let success = await addStock(user, timeStampedStock);
     if (success.message === undefined) {
-      setCurrentUserStocksAction(currentUserStocks.concat(stock));
+      console.log(success);
+      setCurrentUserStocksAction(currentUserStocks.concat(timeStampedStock));
+      window.localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          ...currentUser,
+          stocks: currentUserStocks.concat(timeStampedStock),
+        })
+      );
       setAlreadyAdded(!alreadyAdded);
       let arr = tickersArr;
       arr.push(query.toUpperCase());

@@ -18,18 +18,28 @@ const AddMissing = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [ticker, setTicker] = useState(null);
   const [name, setName] = useState(null);
-  const { currentUserStocks, setCurrentUserStocksAction } = useContext(
-    UserContext
-  );
+  const {
+    currentUserStocks,
+    setCurrentUserStocksAction,
+    currentUser,
+  } = useContext(UserContext);
 
   // adding stock function
   const handleAddStock = async (user, stock) => {
     setLoading(true);
     let timeStampedStock = { ...stock, added: new Date().getTime() };
     let success = await addStock(user, timeStampedStock);
-    console.log(success);
     if (success.message === undefined) {
+      console.log(success);
       setCurrentUserStocksAction(currentUserStocks.concat(timeStampedStock));
+      // add to local storage as well
+      window.localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          ...currentUser,
+          stocks: currentUserStocks.concat(timeStampedStock),
+        })
+      );
       setAlreadyAdded(!alreadyAdded);
       setLoading(false);
     } else {

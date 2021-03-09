@@ -6,7 +6,16 @@ import LoadingIcon from "../Shared/LoadingIcon";
 import DividendsForm from "../Home/DividendsForm";
 import D3Graph from "../Shared/D3Graph";
 
-const Drawer = ({ info, open, loading, data, dividends, stock }) => {
+const Drawer = ({
+  info,
+  open,
+  loading,
+  data,
+  dividends,
+  stock,
+  startTimer,
+  setStartTimer,
+}) => {
   const [point, setPoint] = useState(
     info ? "calc(100% - 4.8rem)" : "calc(100% - 7.8rem)"
   );
@@ -22,12 +31,13 @@ const Drawer = ({ info, open, loading, data, dividends, stock }) => {
     } else if (dividends) {
       setPoint("calc(100% - 7.8rem)");
     }
+    // hide the graph if needed on resize
     window.addEventListener("resize", checkShowGraph);
-
+    // clean up
     return () => {
       window.removeEventListener("resize", checkShowGraph);
     };
-  }, [loading, info, dividends, point]);
+  }, [loading, info, dividends, point, data]);
 
   const checkShowGraph = () => {
     return window.innerWidth > 768 ? setShowGraph(false) : null;
@@ -62,7 +72,12 @@ const Drawer = ({ info, open, loading, data, dividends, stock }) => {
                 <GraphMobileWrapper>
                   <D3Div>
                     {data.timeDate.yield === "No data" ? null : (
-                      <D3Graph arr={data.timeDate} stock={stock} />
+                      <D3Graph
+                        arr={data.timeDate}
+                        stock={stock}
+                        startTimer={startTimer}
+                        setStartTimer={setStartTimer}
+                      />
                     )}
                   </D3Div>
                 </GraphMobileWrapper>
@@ -106,9 +121,12 @@ const Drawer = ({ info, open, loading, data, dividends, stock }) => {
             </ColForInfo>
             <D3Wrapper padding="0 0 0 0.5rem">
               <D3Div>
-                {data.timeDate.yield === "No data" ? null : (
-                  <D3Graph arr={data.timeDate} stock={stock} />
-                )}
+                <D3Graph
+                  arr={data.timeDate}
+                  stock={stock}
+                  startTimer={startTimer}
+                  setStartTimer={setStartTimer}
+                />
               </D3Div>
             </D3Wrapper>
           </RowForInfo>

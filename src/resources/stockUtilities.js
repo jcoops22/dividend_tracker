@@ -82,12 +82,12 @@ export const getTickerInfo = async (ticker, timeInterval) => {
     .get(overview)
     .then((data) => {
       if (data.data.Note) {
+        console.log(data.data.Note);
         return {
           yield: "No data",
           divPerShare: "No data",
           exDivDate: "No data",
           payDivDate: "No data",
-          updated: 0,
         };
       } else {
         // console.log("All data", data);
@@ -104,7 +104,6 @@ export const getTickerInfo = async (ticker, timeInterval) => {
           divPerShare: DividendPerShare,
           exDivDate: ExDividendDate,
           payDivDate: DividendDate,
-          updated: new Date().getTime(),
         };
       }
     })
@@ -121,7 +120,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
   let seriesData = await axios
     .get(currentInfo)
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       if (data.data.Note) {
         console.log("Timeout occurred, please try again in 3-5 minutes");
         return {
@@ -144,23 +143,24 @@ export const getTickerInfo = async (ticker, timeInterval) => {
       return {
         ...obj,
         value: obj[0].value,
+        updated: new Date().getTime(),
       };
     })
     .catch((err) => {
-      console.log(
-        "There was a problem getting the interval data,",
-        err.message
-      );
+      // console.log(
+      //   "There was a problem getting the interval data,",
+      //   err.message
+      // );
       return {
         lastUpdated: "No Data",
         value: "Data Not Available",
       };
     });
-  console.log({
-    ...overviewData,
-    timeDate: seriesData,
-    value: seriesData.value,
-  });
+  // console.log({
+  //   ...overviewData,
+  //   timeDate: seriesData,
+  //   value: seriesData.value,
+  // });
   return {
     ...overviewData,
     timeDate: seriesData,
