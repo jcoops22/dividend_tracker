@@ -3,44 +3,45 @@ import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import * as d3 from "d3";
 
-const D3Graph = ({ arr, stock, startTimer, setStartTimer }) => {
+const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
   const [valueArr, setValueArr] = useState(null);
   const [infoValues, setInfoValues] = useState(null);
   const [hoveredValue, setHoveredValue] = useState(null);
-  const [useTimeoutView, setUseTimeoutView] = useState(false);
-  const [running, setRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [useTimeoutView, setUseTimeoutView] = useState(true);
+  const [showRefresh, setShowRefresh] = useState(false);
+  const [refreshMessage, setRefreshMessage] = useState(false);
+  const [refreshIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1615498605/Dividend%20Tracker/Icons/refresh-svgrepo-com_rpdems.svg"
+  );
 
   useEffect(() => {
-    console.log("STRT TIMER?:", startTimer, "RUNNING:", running);
+    window.addEventListener("resize", handleDuplicateGraph);
+    // console.log("STRT TIMER?:", startTimer, "RUNNING:", running);
 
     // counter function
-    let counter;
-    let countdown = () => {
-      if (startTimer) {
-        console.log("we starrted");
-        counter = setInterval(() => {
-          console.log("TIMER:", startTimer, "COUNTDOWN:", timeLeft);
-          setTimeLeft(timeLeft - 1);
+    // let counter;
+    // let countdown = () => {
+    //   if (startTimer) {
+    //     console.log("we starrted");
+    //     counter = setInterval(() => {
+    //       console.log("TIMER:", startTimer, "COUNTDOWN:", timeLeft);
+    //       setTimeLeft(timeLeft - 1);
 
-          if (timeLeft <= 0) {
-            setRunning(false);
-            clearInterval(counter);
-            console.log("count has been clearred");
-          }
-        }, 1000);
-      } else {
-        setStartTimer(false);
-        setRunning(false);
-        return;
-      }
-    };
+    //       if (timeLeft <= 0) {
+    //         setRunning(false);
+    //         clearInterval(counter);
+    //         console.log("count has been clearred");
+    //       }
+    //     }, 1000);
+    //   } else {
+    //     setStartTimer(false);
+    //     setRunning(false);
+    //     return;
+    //   }
+    // };
 
-    if (!running) {
-      countdown();
-      setRunning(true);
-    }
-
+    // check for data the build the chart
     if (!valueArr && !infoValues) {
       makeValuesArray(arr);
       makeInfoValues(arr);
@@ -50,7 +51,18 @@ const D3Graph = ({ arr, stock, startTimer, setStartTimer }) => {
       setUseTimeoutView(false);
       drawChart("100%", "90%");
     }
-  }, [valueArr, infoValues, useTimeoutView, startTimer]);
+
+    return () => {
+      window.removeEventListener("resize", handleDuplicateGraph);
+    };
+  }, [
+    valueArr,
+    infoValues,
+    useTimeoutView,
+    startTimer,
+    showRefresh,
+    useTimeoutView,
+  ]);
 
   // make a values array from the time series data
   const makeValuesArray = (obj) => {
@@ -63,6 +75,7 @@ const D3Graph = ({ arr, stock, startTimer, setStartTimer }) => {
       });
     setValueArr(values.reverse());
   };
+
   // get first middle and last values for the infobar
   const makeInfoValues = (obj) => {
     let arrObj = Object.entries(obj).reverse();
@@ -108,8 +121,30 @@ const D3Graph = ({ arr, stock, startTimer, setStartTimer }) => {
       return "00";
     }
   };
+
+  const handleDuplicateGraph = () => {
+    let svgs = d3.selectAll(`#${stock.ticker} svg rect`);
+    console.log("before the if", useTimeoutView, "REF:", showRefresh);
+    if (svgs._groups[0].length >= 100 && window.innerWidth > 768) {
+      console.log("in handle dup graph");
+      setShowRefresh(true);
+    }
+  };
+  // handle reloading the graph
+  const handleRefresh = () => {
+    drawChart("100%", "90%");
+    setShowRefresh(false);
+  };
+
   // D3 FUNC
   const drawChart = (w, h) => {
+    let svgs = d3.selectAll(`#${stock.ticker} svg rect`);
+
+    if (svgs._groups[0].length >= 100) {
+      console.log("svgs._groups[0].length");
+      handleDuplicateGraph();
+      // return;
+    }
     const data = valueArr;
     const baseLine = data ? data : [100];
     const dbase = average(baseLine);
@@ -121,7 +156,7 @@ const D3Graph = ({ arr, stock, startTimer, setStartTimer }) => {
       .append("svg")
       .attr("width", w)
       .attr("height", h);
-    // select all rect elements pass the data
+    // select all rect elements and pass the data
     svg
       .selectAll("rect")
       .data(data)
@@ -148,7 +183,7 @@ const D3Graph = ({ arr, stock, startTimer, setStartTimer }) => {
       .duration(800)
       .attr("x", (d, i) => `${i}%`)
       .attr("y", (d, i) => 0)
-      .attr("width", "5px")
+      .attr("width", "1%")
       .attr("height", (d, i) => {
         let cents = getCents(d);
         let pennies = d * 100;
@@ -197,8 +232,27 @@ const D3Graph = ({ arr, stock, startTimer, setStartTimer }) => {
 
   return (
     <Container>
-      {useTimeoutView ? (
-        <div>TIMEOUT</div>
+      <RefreshButton
+        onClick={() => {
+          forceInfoUpdate();
+          setShowRefresh(false);
+        }}
+        onMouseOver={() => setRefreshMessage(true)}
+        onMouseOut={() => setRefreshMessage(false)}
+      >
+        <img src={refreshIcon} alt="refresh graph" />
+      </RefreshButton>
+      {refreshMessage ? <RefreshMessage>Refresh Graph</RefreshMessage> : null}
+      {useTimeoutView || showRefresh ? (
+        <RefreshTimeoutWrapper>
+          {showRefresh ? (
+            <Refresh onClick={() => handleRefresh()}>Show Graph</Refresh>
+          ) : (
+            <TimeoutParagraph>
+              Timeout: <span>{timeLeft}</span>
+            </TimeoutParagraph>
+          )}
+        </RefreshTimeoutWrapper>
       ) : (
         <Graph id={`${stock.ticker}`}>
           <Legend>
@@ -246,16 +300,100 @@ const Container = styled.div`
   margin: 0 0.2rem;
   /* border: 3px solid red; */
 `;
+const RefreshButton = styled.div`
+  &:hover {
+    img {
+      transform: rotate(270deg);
+    }
+  }
+  position: absolute;
+  top: 0;
+  left: calc(100% - 1.5rem);
+  z-index: 2;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  /* border: 1px solid orange; */
+
+  img {
+    width: 100%;
+    transition-duration: 0.6s;
+  }
+
+  @media ${device.tablet} {
+    display: flex;
+  }
+`;
+const RefreshTimeoutWrapper = styled.div`
+  height: 8rem;
+  display: flex;
+  align-items: center;
+  /* border: 1px solid orange; */
+`;
+const RefreshMessage = styled.p`
+  position: absolute;
+  top: 0;
+  left: calc(100% - 6.5rem);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  width: 6.5rem;
+  height: 1.5rem;
+  font-size: 0.6rem;
+  background-color: #fff;
+  padding: 0 0.5rem;
+  animation: slideRefreshMessageIn 0.4s ease-out forwards;
+  /* border: 1px solid red; */
+
+  @keyframes slideRefreshMessageIn {
+    to {
+      opacity: 1;
+    }
+  }
+`;
 const Graph = styled.div`
   position: relative;
   width: 100%;
   max-width: 500px;
   height: 8rem;
+  opacity: 0;
   transform: scale(-1, -1);
+  animation: fadeD3GraphIn 0.8s ease-out forwards;
   background-color: #fff;
   border-top: 2px solid #7249d1;
   border-right: 2px solid #7249d1;
   /* border: 1px solid greenyellow; */
+
+  @keyframes fadeD3GraphIn {
+    to {
+      opacity: 1;
+    }
+  }
+`;
+const Refresh = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 8rem;
+  height: 4rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid #333;
+`;
+const TimeoutParagraph = styled.p`
+  font-size: 2.5rem;
+  color: red;
+
+  span {
+    color: blue;
+  }
 `;
 const Legend = styled.div`
   position: absolute;

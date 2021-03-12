@@ -15,6 +15,7 @@ const Drawer = ({
   stock,
   startTimer,
   setStartTimer,
+  forceInfoUpdate,
 }) => {
   const [point, setPoint] = useState(
     info ? "calc(100% - 4.8rem)" : "calc(100% - 7.8rem)"
@@ -40,7 +41,8 @@ const Drawer = ({
   }, [loading, info, dividends, point, data]);
 
   const checkShowGraph = () => {
-    return window.innerWidth > 768 ? setShowGraph(false) : null;
+    // hide the graph on resize
+    setShowGraph(false);
   };
 
   return (
@@ -70,7 +72,7 @@ const Drawer = ({
             <ColForInfo>
               {showGraph ? (
                 <GraphMobileWrapper>
-                  <D3Div>
+                  <D3Div id="d3Div">
                     {data.timeDate.yield === "No data" ? null : (
                       <D3Graph
                         arr={data.timeDate}
@@ -119,13 +121,14 @@ const Drawer = ({
                 </ColForInfoWrapper>
               )}
             </ColForInfo>
-            <D3Wrapper padding="0 0 0 0.5rem">
+            <D3Wrapper>
               <D3Div>
                 <D3Graph
                   arr={data.timeDate}
                   stock={stock}
                   startTimer={startTimer}
                   setStartTimer={setStartTimer}
+                  forceInfoUpdate={forceInfoUpdate}
                 />
               </D3Div>
             </D3Wrapper>
@@ -207,7 +210,6 @@ const Hr = styled.hr`
     }
   }
 `;
-
 const InfoWrapper = styled.div`
   position: relative;
   display: flex;
@@ -323,7 +325,9 @@ const GraphMobileWrapper = styled.div`
     display: none;
   }
 `;
+
 const D3Wrapper = styled.div`
+  position: relative;
   display: none;
   flex-direction: column;
   justify-content: center;

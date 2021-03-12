@@ -29,7 +29,7 @@ const StockToolbar = ({ stock }) => {
   const [showInfo, setShowInfo] = useState(false);
   const [showDividend, setShowDividend] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
-  const [startTimer, setStartTimer] = useState(false);
+  const [startTimer, setStartTimer] = useState(null);
   const [localStorageUser] = useState(
     JSON.parse(window.localStorage.getItem("currentUser"))
   );
@@ -41,6 +41,17 @@ const StockToolbar = ({ stock }) => {
     currentUser,
   } = useContext(UserContext);
 
+  const timer = () => {
+    let seconds = 60;
+    let interval = setInterval(() => {
+      console.log(seconds--);
+
+      if (seconds === 0) {
+        clearInterval(interval);
+        console.log("interval was cleared");
+      }
+    }, 1000);
+  };
   // update the local storage with updated stock item
   const updateLocalStorageStocks = (updatedStock) => {
     // console.log(updatedStock);
@@ -76,7 +87,14 @@ const StockToolbar = ({ stock }) => {
       let selectedStock = localStorageUser.stocks.filter((s) =>
         s.ticker === stock.ticker ? s : null
       );
-      console.log(selectedStock);
+      let dt = new Date().getTime() + daymillies;
+      let now = new Date().getTime();
+      console.log(
+        "Stock OUtaded?:",
+        new Date(now).toDateString(),
+        "Date:",
+        new Date(dt).toDateString()
+      );
 
       // check if stock has the "info" property
       if (selectedStock[0] && selectedStock[0].hasOwnProperty("info")) {
@@ -103,6 +121,7 @@ const StockToolbar = ({ stock }) => {
           updateLocalStorageStocks(data);
           setLoading(!!!data);
           setStartTimer(true);
+          timer();
         } else {
           // do a fresh check
           console.log("nothing in local storage from the first IF");
@@ -116,6 +135,7 @@ const StockToolbar = ({ stock }) => {
           setLoading(!!!data);
           // timer for potential api call timeout
           setStartTimer(true);
+          timer();
         }
       } else {
         // do a fresh check
@@ -130,9 +150,27 @@ const StockToolbar = ({ stock }) => {
         setLoading(!!!data);
         // timer for potential api call timeout
         setStartTimer(true);
+        timer();
       }
     }
   };
+  // force refresh
+  const forceInfoUpdate = async () => {
+    // do a fresh check
+    console.log("nothing in local storage");
+
+    // run the getTickerInfo function from stockUtilities
+    let data = await getTickerInfo(stock.ticker, 60);
+    console.log("DATA:", data);
+    setTickerDataAction(data);
+    setTickerInfo(data);
+    updateLocalStorageStocks(data);
+    setLoading(!!!data);
+    // timer for potential api call timeout
+    setStartTimer(true);
+    timer();
+  };
+
   // BUTTONS Functions
   // update the stocks list after delete
   const updateAfterDelete = async (user, stock) => {
@@ -249,6 +287,7 @@ const StockToolbar = ({ stock }) => {
         </Modal>
       ) : null}
       <Drawer
+        forceInfoUpdate={forceInfoUpdate}
         startTimer={startTimer}
         setStartTimer={setStartTimer}
         key={stock.ticker}
