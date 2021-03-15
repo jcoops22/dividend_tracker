@@ -3,11 +3,17 @@ import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import * as d3 from "d3";
 
-const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
+const D3Graph = ({
+  arr,
+  stock,
+  startTimer,
+  setStartTimer,
+  forceInfoUpdate,
+  loading,
+}) => {
   const [valueArr, setValueArr] = useState(null);
   const [infoValues, setInfoValues] = useState(null);
   const [hoveredValue, setHoveredValue] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(60);
   const [useTimeoutView, setUseTimeoutView] = useState(true);
   const [showRefresh, setShowRefresh] = useState(false);
   const [refreshMessage, setRefreshMessage] = useState(false);
@@ -17,29 +23,6 @@ const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
 
   useEffect(() => {
     window.addEventListener("resize", handleDuplicateGraph);
-    // console.log("STRT TIMER?:", startTimer, "RUNNING:", running);
-
-    // counter function
-    // let counter;
-    // let countdown = () => {
-    //   if (startTimer) {
-    //     console.log("we starrted");
-    //     counter = setInterval(() => {
-    //       console.log("TIMER:", startTimer, "COUNTDOWN:", timeLeft);
-    //       setTimeLeft(timeLeft - 1);
-
-    //       if (timeLeft <= 0) {
-    //         setRunning(false);
-    //         clearInterval(counter);
-    //         console.log("count has been clearred");
-    //       }
-    //     }, 1000);
-    //   } else {
-    //     setStartTimer(false);
-    //     setRunning(false);
-    //     return;
-    //   }
-    // };
 
     // check for data the build the chart
     if (!valueArr && !infoValues) {
@@ -59,9 +42,9 @@ const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
     valueArr,
     infoValues,
     useTimeoutView,
-    startTimer,
     showRefresh,
     useTimeoutView,
+    loading,
   ]);
 
   // make a values array from the time series data
@@ -75,7 +58,6 @@ const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
       });
     setValueArr(values.reverse());
   };
-
   // get first middle and last values for the infobar
   const makeInfoValues = (obj) => {
     let arrObj = Object.entries(obj).reverse();
@@ -89,7 +71,6 @@ const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
       return;
     }
   };
-
   // format the info data
   const formatInfo = (info) => {
     let date = (info) => {
@@ -101,7 +82,6 @@ const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
         return rawTime > 12 ? rawTime - 12 + "pm" : parseInt(rawTime) + "am";
       }
     };
-
     return date(info) + " " + time(info);
   };
   // average for baseline value
@@ -110,7 +90,6 @@ const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
   const getHigh = (array) => array.reduce((a, b) => (a > b ? a : b));
   // get the lowest value
   const getLow = (array) => array.reduce((a, b) => (a < b ? a : b));
-
   // get correct cents
   const getCents = (num) => {
     if (num && num.toString().includes(".")) {
@@ -121,20 +100,20 @@ const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
       return "00";
     }
   };
-
+  // hide duplicate svgs on resize from mobile to fullscreen
   const handleDuplicateGraph = () => {
     let svgs = d3.selectAll(`#${stock.ticker} svg rect`);
-    console.log("before the if", useTimeoutView, "REF:", showRefresh);
+
     if (svgs._groups[0].length >= 100 && window.innerWidth > 768) {
-      console.log("in handle dup graph");
       setShowRefresh(true);
     }
   };
-  // handle reloading the graph
+  // handle reloading the graph after hiding on resize
   const handleRefresh = () => {
     drawChart("100%", "90%");
     setShowRefresh(false);
   };
+  // set timer if the API is on timeout
 
   // D3 FUNC
   const drawChart = (w, h) => {
@@ -232,56 +211,62 @@ const D3Graph = ({ arr, stock, startTimer, forceInfoUpdate }) => {
 
   return (
     <Container>
-      <RefreshButton
-        onClick={() => {
-          forceInfoUpdate();
-          setShowRefresh(false);
-        }}
-        onMouseOver={() => setRefreshMessage(true)}
-        onMouseOut={() => setRefreshMessage(false)}
-      >
-        <img src={refreshIcon} alt="refresh graph" />
-      </RefreshButton>
-      {refreshMessage ? <RefreshMessage>Refresh Graph</RefreshMessage> : null}
-      {useTimeoutView || showRefresh ? (
-        <RefreshTimeoutWrapper>
-          {showRefresh ? (
-            <Refresh onClick={() => handleRefresh()}>Show Graph</Refresh>
-          ) : (
-            <TimeoutParagraph>
-              Timeout: <span>{timeLeft}</span>
-            </TimeoutParagraph>
-          )}
-        </RefreshTimeoutWrapper>
+      {loading ? (
+        <p>Loading</p>
       ) : (
-        <Graph id={`${stock.ticker}`}>
-          <Legend>
-            {!hoveredValue ? (
-              <p>
-                Market Value <span>(last 7 trading days)</span>
-              </p>
-            ) : (
-              <HoverValParagraph
-                color={
-                  hoveredValue >= average(valueArr) ? "#27d67b" : "#FF3501"
-                }
-              >
-                Value: <span>${hoveredValue.toFixed(2)}</span>
-              </HoverValParagraph>
-            )}
-          </Legend>
-          <LeftInfoBar>
-            {valueArr ? <span>0</span> : null}
-            {valueArr ? <span>${getHigh(valueArr).toFixed(2)}</span> : null}
-          </LeftInfoBar>
-          {infoValues ? (
-            <BottomInfoBar>
-              {infoValues.map((i, ind) => (
-                <span key={ind}>{i}</span>
-              ))}
-            </BottomInfoBar>
+        <Wrapper>
+          <RefreshButton
+            onClick={() => {
+              forceInfoUpdate();
+              setShowRefresh(false);
+            }}
+            onMouseOver={() => setRefreshMessage(true)}
+            onMouseOut={() => setRefreshMessage(false)}
+          >
+            <img src={refreshIcon} alt="refresh graph" />
+          </RefreshButton>
+          {refreshMessage ? (
+            <RefreshMessage>Refresh Graph</RefreshMessage>
           ) : null}
-        </Graph>
+          {useTimeoutView || showRefresh ? (
+            <RefreshTimeoutWrapper>
+              {showRefresh ? (
+                <Refresh onClick={() => handleRefresh()}>Show Graph</Refresh>
+              ) : (
+                <TimeoutParagraph>API Timeout</TimeoutParagraph>
+              )}
+            </RefreshTimeoutWrapper>
+          ) : (
+            <Graph id={`${stock.ticker}`}>
+              <Legend>
+                {!hoveredValue ? (
+                  <p>
+                    Market Value <span>(last 7 trading days)</span>
+                  </p>
+                ) : (
+                  <HoverValParagraph
+                    color={
+                      hoveredValue >= average(valueArr) ? "#27d67b" : "#FF3501"
+                    }
+                  >
+                    Value: <span>${hoveredValue.toFixed(2)}</span>
+                  </HoverValParagraph>
+                )}
+              </Legend>
+              <LeftInfoBar>
+                {valueArr ? <span>0</span> : null}
+                {valueArr ? <span>${getHigh(valueArr).toFixed(2)}</span> : null}
+              </LeftInfoBar>
+              {infoValues ? (
+                <BottomInfoBar>
+                  {infoValues.map((i, ind) => (
+                    <span key={ind}>{i}</span>
+                  ))}
+                </BottomInfoBar>
+              ) : null}
+            </Graph>
+          )}
+        </Wrapper>
       )}
     </Container>
   );
@@ -299,6 +284,11 @@ const Container = styled.div`
   padding-bottom: 1rem;
   margin: 0 0.2rem;
   /* border: 3px solid red; */
+`;
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `;
 const RefreshButton = styled.div`
   &:hover {

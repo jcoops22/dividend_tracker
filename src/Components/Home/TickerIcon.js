@@ -9,16 +9,22 @@ const TickerIcon = ({ symbol }) => {
     `https://eodhistoricaldata.com/img/logos/US/${symbol}.png`
   );
   const [urlToUse, setUrlToUse] = useState(tickerUrl);
+  const [subscribed, setSubscribed] = useState(true);
 
   useEffect(() => {
     // check if the url is valid
     imageExists(tickerUrl, async function (exists) {
-      if (exists) {
+      if (exists && subscribed) {
         setUrlToUse(tickerUrl);
       } else {
         setUrlToUse(placeholder);
+        return;
       }
     });
+
+    return () => {
+      setSubscribed(false);
+    };
   }, [symbol, urlToUse]);
 
   const imageExists = (url, callback) => {

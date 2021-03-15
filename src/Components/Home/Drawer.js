@@ -14,7 +14,6 @@ const Drawer = ({
   dividends,
   stock,
   startTimer,
-  setStartTimer,
   forceInfoUpdate,
 }) => {
   const [point, setPoint] = useState(
@@ -74,12 +73,7 @@ const Drawer = ({
                 <GraphMobileWrapper>
                   <D3Div id="d3Div">
                     {data.timeDate.yield === "No data" ? null : (
-                      <D3Graph
-                        arr={data.timeDate}
-                        stock={stock}
-                        startTimer={startTimer}
-                        setStartTimer={setStartTimer}
-                      />
+                      <D3Graph arr={data.timeDate} stock={stock} />
                     )}
                   </D3Div>
                 </GraphMobileWrapper>
@@ -124,10 +118,10 @@ const Drawer = ({
             <D3Wrapper>
               <D3Div>
                 <D3Graph
+                  loading={loading}
                   arr={data.timeDate}
                   stock={stock}
                   startTimer={startTimer}
-                  setStartTimer={setStartTimer}
                   forceInfoUpdate={forceInfoUpdate}
                 />
               </D3Div>

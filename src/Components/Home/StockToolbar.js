@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import { deleteStock, getTickerInfo } from "../../resources/stockUtilities";
@@ -29,7 +29,6 @@ const StockToolbar = ({ stock }) => {
   const [showInfo, setShowInfo] = useState(false);
   const [showDividend, setShowDividend] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
-  const [startTimer, setStartTimer] = useState(null);
   const [localStorageUser] = useState(
     JSON.parse(window.localStorage.getItem("currentUser"))
   );
@@ -41,17 +40,6 @@ const StockToolbar = ({ stock }) => {
     currentUser,
   } = useContext(UserContext);
 
-  const timer = () => {
-    let seconds = 60;
-    let interval = setInterval(() => {
-      console.log(seconds--);
-
-      if (seconds === 0) {
-        clearInterval(interval);
-        console.log("interval was cleared");
-      }
-    }, 1000);
-  };
   // update the local storage with updated stock item
   const updateLocalStorageStocks = (updatedStock) => {
     // console.log(updatedStock);
@@ -72,7 +60,6 @@ const StockToolbar = ({ stock }) => {
       // console.log("FROM FUNC", newCU);
     }
   };
-
   // retrieve the symbol data
   const assignTickerData = async () => {
     setLoading(true);
@@ -80,22 +67,12 @@ const StockToolbar = ({ stock }) => {
     if (showDrawer && showInfo) {
       return;
     }
-
     // // Check if its updated in local storage first
     if (localStorageUser.stocks) {
       // get the stock we're working with
       let selectedStock = localStorageUser.stocks.filter((s) =>
         s.ticker === stock.ticker ? s : null
       );
-      let dt = new Date().getTime() + daymillies;
-      let now = new Date().getTime();
-      console.log(
-        "Stock OUtaded?:",
-        new Date(now).toDateString(),
-        "Date:",
-        new Date(dt).toDateString()
-      );
-
       // check if stock has the "info" property
       if (selectedStock[0] && selectedStock[0].hasOwnProperty("info")) {
         // see if its been more than 24hours since updated
@@ -104,7 +81,7 @@ const StockToolbar = ({ stock }) => {
           new Date().getTime() + daymillies
         ) {
           // use the existing data from localStorage
-          console.log("we pulled from existing");
+          // console.log("we pulled from existing");
           setTickerDataAction(selectedStock[0].info);
           setTickerInfo(selectedStock[0].info);
           setLoading(false);
@@ -113,19 +90,16 @@ const StockToolbar = ({ stock }) => {
           selectedStock[0].info.timeDate.updated >=
           new Date().getTime() + daymillies
         ) {
-          console.log("we checked but it was outdated, had to call");
+          // console.log("we checked but it was outdated, had to call");
           // run the getTickerInfo function from stockUtilities
           let data = await getTickerInfo(stock.ticker, 60);
           setTickerDataAction(data);
           setTickerInfo(data);
           updateLocalStorageStocks(data);
           setLoading(!!!data);
-          setStartTimer(true);
-          timer();
         } else {
           // do a fresh check
-          console.log("nothing in local storage from the first IF");
-
+          // console.log("nothing in local storage from the first IF");
           // run the getTickerInfo function from stockUtilities
           let data = await getTickerInfo(stock.ticker, 60);
           console.log("DATA:", data);
@@ -133,32 +107,23 @@ const StockToolbar = ({ stock }) => {
           setTickerInfo(data);
           updateLocalStorageStocks(data);
           setLoading(!!!data);
-          // timer for potential api call timeout
-          setStartTimer(true);
-          timer();
         }
       } else {
         // do a fresh check
-        console.log("nothing in local storage");
-
+        // console.log("nothing in local storage");
         // run the getTickerInfo function from stockUtilities
         let data = await getTickerInfo(stock.ticker, 60);
-        console.log("DATA:", data);
+        // console.log("DATA:", data);
         setTickerDataAction(data);
         setTickerInfo(data);
         updateLocalStorageStocks(data);
         setLoading(!!!data);
-        // timer for potential api call timeout
-        setStartTimer(true);
-        timer();
       }
     }
   };
   // force refresh
   const forceInfoUpdate = async () => {
     // do a fresh check
-    console.log("nothing in local storage");
-
     // run the getTickerInfo function from stockUtilities
     let data = await getTickerInfo(stock.ticker, 60);
     console.log("DATA:", data);
@@ -166,9 +131,7 @@ const StockToolbar = ({ stock }) => {
     setTickerInfo(data);
     updateLocalStorageStocks(data);
     setLoading(!!!data);
-    // timer for potential api call timeout
-    setStartTimer(true);
-    timer();
+    return data;
   };
 
   // BUTTONS Functions
@@ -288,8 +251,6 @@ const StockToolbar = ({ stock }) => {
       ) : null}
       <Drawer
         forceInfoUpdate={forceInfoUpdate}
-        startTimer={startTimer}
-        setStartTimer={setStartTimer}
         key={stock.ticker}
         info={showInfo}
         dividends={showDividend}

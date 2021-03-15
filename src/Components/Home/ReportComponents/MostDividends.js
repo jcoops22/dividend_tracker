@@ -8,7 +8,6 @@ const MostDividends = ({ stocks }) => {
     if (!topStocks) {
       getMostDividends(stocks);
     }
-    console.log(topStocks);
   }, [topStocks]);
 
   const getMostDividends = (arr) => {
