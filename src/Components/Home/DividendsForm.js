@@ -120,7 +120,7 @@ const DividendsForm = ({ stock }) => {
             <input
               id="amount_input"
               autoFocus={window.innerWidth > 580 ? true : null}
-              type="number"
+              type="tel"
               min="0"
               step="0.01"
               default="0.00"
