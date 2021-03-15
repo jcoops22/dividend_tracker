@@ -124,6 +124,7 @@ const DividendsForm = ({ stock }) => {
               pattern="[0-9]+([\.,][0-9]+)?"
               inputMode="numeric"
               min="0"
+              formnovalidate
               step="0.01"
               default="0.00"
               value={amount}
