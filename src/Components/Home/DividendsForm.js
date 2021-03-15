@@ -121,7 +121,7 @@ const DividendsForm = ({ stock }) => {
               id="amount_input"
               autoFocus={window.innerWidth > 580 ? true : null}
               type="number"
-              pattern="[0-9 .\+]* "
+              pattern="[0-9]+([\.,][0-9]+)?"
               inputMode="numeric"
               min="0"
               step="0.01"
