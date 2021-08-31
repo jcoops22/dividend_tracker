@@ -295,6 +295,7 @@ const DateWrapper = styled.div`
 
   @media ${device.tabletS} {
     margin-left: 2rem;
+    width: 12rem;
   }
 `;
 const SubmitDividend = styled.button`
