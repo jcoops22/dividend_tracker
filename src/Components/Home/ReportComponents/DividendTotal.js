@@ -33,7 +33,7 @@ const DividendTotal = ({ stocks, user, tickers, divs }) => {
     <Container>
       <P>
         Total dividends earned to date:{" "}
-        <strong>${totalDividends(stocks).toFixed(2)}</strong>
+        <span>${totalDividends(stocks).toFixed(2)}</span>
       </P>
     </Container>
   );
