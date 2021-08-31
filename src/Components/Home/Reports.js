@@ -6,6 +6,7 @@ import { UserContext } from "../Context/UserProvider";
 import { StocksContext } from "../Context/StocksProvider";
 import HowManyStocks from "./ReportComponents/HowManyStocks";
 import MostDividends from "./ReportComponents/MostDividends";
+import DividendTotal from "./ReportComponents/DividendTotal";
 
 const Reports = ({ history }) => {
   const { currentUserStocks, currentUser } = useContext(UserContext);
@@ -35,6 +36,9 @@ const Reports = ({ history }) => {
           <HowManyStocks stocks={currentUserStocks} />
           <MostDividends stocks={currentUserStocks} />
         </ReportWrapper>
+        <DividendTotalWrapper>
+          <DividendTotal stocks={currentUserStocks} />
+        </DividendTotalWrapper>
       </Wrapper>
     </Container>
   );
@@ -87,4 +91,7 @@ const Wrapper = styled.div`
 const ReportWrapper = styled.div`
   display: flex;
   flex-direction: column;
+`;
+const DividendTotalWrapper = styled.div`
+  display: flex;
 `;
