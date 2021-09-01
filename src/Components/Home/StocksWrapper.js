@@ -16,7 +16,7 @@ const StocksWrapper = ({ stocks }) => {
   return (
     <Container>
       {stocks.map((stock) => (
-        <StockLine key={stock.ticker}>
+        <StockLine key={stock.ticker} id={"line" + stock.ticker}>
           <Row>
             <Col>
               <Name>
@@ -83,6 +83,10 @@ const Container = styled.div`
   }
 `;
 const StockLine = styled.div`
+  &:focus,
+  &:hover {
+    background-color: #eee;
+  }
   display: flex;
   flex-direction: column;
   width: 100%;

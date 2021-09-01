@@ -36,3 +36,6 @@ body {
   font-family: "Exo", sans-serif;
   background-color: #fff;
 }
+.highlight {
+  border: 2px solid #ccc;
+}

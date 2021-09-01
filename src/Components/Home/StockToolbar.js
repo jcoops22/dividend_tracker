@@ -23,11 +23,18 @@ const StockToolbar = ({ stock }) => {
   const [closeIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616032/Dividend%20Tracker/Icons/Stock%20Toolbar/close-svgrepo-com_nohmjc.svg"
   );
+  const [soldIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1630473930/Dividend%20Tracker/Icons/Stock%20Toolbar/transfer-svgrepo-com_ktmyen.svg"
+  );
+  const [archivedIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1630473930/Dividend%20Tracker/Icons/Stock%20Toolbar/archive-svgrepo-com_qwlusk.svg"
+  );
   const [showModal, setShowModal] = useState(false);
   const [tickerInfo, setTickerInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showDividend, setShowDividend] = useState(false);
+  const [sold, setSold] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [localStorageUser] = useState(
     JSON.parse(window.localStorage.getItem("currentUser"))
@@ -147,16 +154,26 @@ const StockToolbar = ({ stock }) => {
       console.log(success.message);
     }
   };
+  //hightlight row when drawer is opened
+  const highlight = () => {
+    let row = document.getElementById(`line${stock.ticker}`);
+    // add styling when drawer is opened
+    showDrawer
+      ? row.classList.remove("highlight")
+      : row.classList.add("highlight");
+  };
   // tasks when DIVIDEND drawer is opened
   const handleShowDividend = () => {
     if (showDividend) {
       setShowDrawer(false);
       setShowDividend(false);
+      highlight();
     } else {
       setLoading(false);
       setShowDrawer(true);
       setShowDividend(true);
       setShowInfo(false);
+      highlight();
     }
   };
   // tasks when INFO drawer is opened
@@ -165,12 +182,18 @@ const StockToolbar = ({ stock }) => {
       setShowDrawer(false);
       setShowInfo(false);
       assignTickerData();
+      highlight();
     } else {
       assignTickerData();
       setShowDrawer(true);
       setShowInfo(true);
       setShowDividend(false);
+      highlight();
     }
+  };
+  //handle marking stock as sold
+  const markAsSold = () => {
+    sold ? setSold(false) : setSold(true);
   };
 
   return (
@@ -185,6 +208,19 @@ const StockToolbar = ({ stock }) => {
               onClick={() => {
                 setShowModal(true);
               }}
+            />
+          </IconWrapper>
+          <IconWrapper
+            onClick={() => {
+              markAsSold();
+            }}
+          >
+            <TransformIcon
+              first={soldIcon}
+              second={archivedIcon}
+              w1={"1.5rem"}
+              w2={"1.5rem"}
+              transform={sold}
             />
           </IconWrapper>
           <IconWrapper
