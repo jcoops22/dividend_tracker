@@ -233,6 +233,43 @@ export const deleteStock = async (userID, stock) => {
   return updatedStocksArray;
 };
 
+//Archive/Mark stock as sold to retain history but not show as an active dividend paying stock
+export const markStockAsSold = async (userID, stock) => {
+  let ref = firestore.doc(`users/${userID}`); //reference the users data
+  let currentUserObj = await ref.get().then((data) => data.data());
+  let updatedStockArr = await ref //get their stocks array
+    .get()
+    .then((data) => {
+      return data.data().stocks.map((s) => {
+        return s.ticker === stock.ticker
+          ? {
+              ...s,
+              isSold: stock.isSold, //update the isSold value from stock object passed in
+            }
+          : s;
+      });
+    })
+    .then((data) => {
+      let updatedObj = { ...currentUserObj, stocks: data }; //prepare object to save
+      ref.set({
+        ...updatedObj, //update the existing object
+      });
+      return data;
+    })
+    .catch((err) => {
+      return {
+        message: err.message,
+      };
+    });
+  //filter out the stock we just updated to return to client
+  let updatedStock = updatedStockArr.filter((s) => {
+    return stock.ticker === s.ticker;
+  });
+
+  // console.log(updatedStock);
+  return updatedStock; //return stock to be used to notify client of the update
+};
+
 export const updateStockDividend = async (userID, stock, payout) => {
   let ref = firestore.doc(`users/${userID}`);
   let currentUserObj = await ref.get().then((data) => data.data());

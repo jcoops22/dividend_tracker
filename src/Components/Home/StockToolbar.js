@@ -1,7 +1,11 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
-import { deleteStock, getTickerInfo } from "../../resources/stockUtilities";
+import {
+  deleteStock,
+  getTickerInfo,
+  markStockAsSold,
+} from "../../resources/stockUtilities";
 import TransformIcon from "../Shared/TransformIcon";
 import Drawer from "./Drawer";
 import { StocksContext } from "../Context/StocksProvider";
@@ -23,18 +27,21 @@ const StockToolbar = ({ stock }) => {
   const [closeIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608616032/Dividend%20Tracker/Icons/Stock%20Toolbar/close-svgrepo-com_nohmjc.svg"
   );
-  const [soldIcon] = useState(
+  const [markAsSoldIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1630473930/Dividend%20Tracker/Icons/Stock%20Toolbar/transfer-svgrepo-com_ktmyen.svg"
   );
   const [archivedIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1630473930/Dividend%20Tracker/Icons/Stock%20Toolbar/archive-svgrepo-com_qwlusk.svg"
   );
   const [showModal, setShowModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [tickerInfo, setTickerInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showDividend, setShowDividend] = useState(false);
-  const [sold, setSold] = useState(false);
+  const [sold, setSold] = useState(
+    stock.isSold === undefined ? false : stock.isSold
+  );
   const [showDrawer, setShowDrawer] = useState(false);
   const [localStorageUser] = useState(
     JSON.parse(window.localStorage.getItem("currentUser"))
@@ -192,8 +199,11 @@ const StockToolbar = ({ stock }) => {
     }
   };
   //handle marking stock as sold
-  const markAsSold = () => {
-    sold ? setSold(false) : setSold(true);
+  const markAsSold = async (stock) => {
+    setSold(!sold); //toggle the sold value
+    let updatedStock = { ...stock, isSold: !sold }; //add/update the isSold property
+    let result = await markStockAsSold(currentUser.id, updatedStock); //update on backend
+    console.log(result);
   };
 
   return (
@@ -206,21 +216,21 @@ const StockToolbar = ({ stock }) => {
               src={deleteIcon}
               alt="delete stock entry"
               onClick={() => {
+                setDeleting(true);
                 setShowModal(true);
               }}
             />
           </IconWrapper>
           <IconWrapper
             onClick={() => {
-              markAsSold();
+              setDeleting(false);
+              setShowModal(true);
             }}
           >
-            <TransformIcon
-              first={soldIcon}
-              second={archivedIcon}
-              w1={"1.5rem"}
-              w2={"1.5rem"}
-              transform={sold}
+            <img
+              width="1.5rem"
+              src={!sold ? markAsSoldIcon : archivedIcon}
+              alt="archive"
             />
           </IconWrapper>
           <IconWrapper
@@ -258,31 +268,84 @@ const StockToolbar = ({ stock }) => {
           }
           onClick={() => setShowModal(false)}
         >
-          <ConfirmDelete>
-            <ConfirmDeleteWrapper style={{ background: "#fff" }}>
-              <p>
-                <u>DELETE</u>: {stock.name}({stock.ticker})
-              </p>
-              <ButtonsWrapper>
-                <input
-                  type="button"
-                  value="Delete"
-                  onClick={() => {
-                    setShowDrawer(false);
-                    setShowInfo(false);
-                    setShowDividend(false);
-                    updateAfterDelete(currentUser.id, stock);
-                  }}
-                />
-                <input
-                  bg={"#7249d1"}
-                  type="button"
-                  value="Cancel"
-                  onClick={() => setShowModal(false)}
-                />
-              </ButtonsWrapper>
-            </ConfirmDeleteWrapper>
-          </ConfirmDelete>
+          {deleting ? (
+            <ConfirmDelete>
+              <ConfirmDeleteWrapper style={{ background: "#fff" }}>
+                <p>
+                  <u>DELETE</u>: {stock.name}({stock.ticker})
+                </p>
+                <ButtonsWrapper>
+                  <input
+                    type="button"
+                    value="Delete"
+                    onClick={() => {
+                      setShowDrawer(false);
+                      setShowInfo(false);
+                      setShowDividend(false);
+                      updateAfterDelete(currentUser.id, stock);
+                    }}
+                  />
+                  <input
+                    bg={"#7249d1"}
+                    type="button"
+                    value="Cancel"
+                    onClick={() => setShowModal(false)}
+                  />
+                </ButtonsWrapper>
+              </ConfirmDeleteWrapper>
+            </ConfirmDelete>
+          ) : (
+            <ConfirmDelete>
+              <ConfirmDeleteWrapper style={{ background: "#fff" }}>
+                {stock.isSold ? (
+                  <p>
+                    Unarchive{" "}
+                    <u>
+                      {stock.name}({stock.ticker})
+                    </u>
+                    ?
+                  </p>
+                ) : (
+                  <div>
+                    <p>
+                      Archive{" "}
+                      <u>
+                        {stock.name}({stock.ticker})
+                      </u>
+                      ?
+                    </p>
+                    <Note>
+                      *Marking this stock as "sold" will retain all historical
+                      data. If you do not want to keep this data then{" "}
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleting(true);
+                        }}
+                      >
+                        delete
+                      </span>{" "}
+                      the stock instead.
+                    </Note>
+                  </div>
+                )}
+                <ButtonsWrapper>
+                  <input
+                    type="button"
+                    value="Yes"
+                    onClick={() => {
+                      markAsSold(stock);
+                    }}
+                  />
+                  <input
+                    type="button"
+                    value="No"
+                    onClick={() => setShowModal(false)}
+                  />
+                </ButtonsWrapper>
+              </ConfirmDeleteWrapper>
+            </ConfirmDelete>
+          )}
         </Modal>
       ) : null}
       <Drawer
@@ -427,6 +490,18 @@ const ConfirmDeleteWrapper = styled.div`
   padding: 1rem;
   border-radius: 3px;
 `;
+const Note = styled.span`
+  font-size: 0.8rem;
+
+  span {
+    &:hover {
+      font-weight: bolder;
+    }
+    transition-duration: 0.2s;
+    color: #ff3501;
+    cursor: pointer;
+  }
+`;
 const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -451,7 +526,8 @@ const ButtonsWrapper = styled.div`
     border: 2px solid #7249d1;
   }
 
-  input[value="Cancel"] {
+  input[value="Delete"],
+  input[value="Yes"] {
     &:hover {
       color: #000;
       background-color: #27d67b;
