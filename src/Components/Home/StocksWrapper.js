@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import StockToolbar from "./StockToolbar";
@@ -6,6 +6,9 @@ import { formatDateData } from "../../resources/stockUtilities";
 import TickerIcon from "./TickerIcon";
 
 const StocksWrapper = ({ stocks }) => {
+  const [soldImg] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/e_grayscale,o_7/v1630717251/Dividend%20Tracker/png-clipart-sold-logo-sold-sign-miscellaneous-for-rent-sale-signs-thumbnail_iq8cbk.png"
+  );
   useEffect(() => {}, [stocks]);
 
   // convert to comma notation
@@ -16,7 +19,11 @@ const StocksWrapper = ({ stocks }) => {
   return (
     <Container>
       {stocks.map((stock) => (
-        <StockLine key={stock.ticker} id={"line" + stock.ticker}>
+        <StockLine
+          key={stock.ticker}
+          id={"line" + stock.ticker}
+          url={stock.isSold ? soldImg : null}
+        >
           <Row>
             <Col>
               <Name>
@@ -94,6 +101,9 @@ const StockLine = styled.div`
   padding: 0.5rem 0;
   margin: 0.3rem 0;
   background-color: ${(props) => props.background};
+  background: url(${(props) => props.url});
+  background-position: center;
+  background-repeat: none;
   border-radius: 8px;
   transition-duration: 0.3s;
   box-shadow: 2px 3px 8px 0 #999;

@@ -7,6 +7,7 @@ import StocksWrapper from "./StocksWrapper";
 import { formatDateData } from "../../resources/stockUtilities";
 import { UserContext } from "../Context/UserProvider";
 import UtilitiesRow from "./UtilitiesRow";
+import IncludeArchived from "../Home/IncludeArchived";
 
 const StocksList = () => {
   const {
@@ -17,6 +18,7 @@ const StocksList = () => {
   const [loading, setLoading] = useState(true);
   const [filteredStocks, setFilteredStocks] = useState(currentUserStocks);
   const [query, setQuery] = useState(null);
+  const [showArchived, setShowArchived] = useState(false);
   const [sortType, setSortType] = useState("Newest Payouts");
   const [scrollUpIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608673604/Dividend%20Tracker/Icons/Stocklist/up-arrow-svgrepo-com_ghr6pj.svg"
@@ -45,7 +47,13 @@ const StocksList = () => {
     setLoading(false);
   };
   // sort the filteredStocks array
-  const handleSort = (arr, sort) => {
+  const handleSort = (arr, sort, archived) => {
+    //handle the archived toggle
+    if (!archived) {
+      arr = arr.filter((s) => {
+        return s.isSold ? null : s;
+      });
+    }
     // NEWEST
     if (sort === "Newest") {
       return arr.sort((a, b) => (a.added < b.added ? 1 : -1));
@@ -170,41 +178,50 @@ const StocksList = () => {
       ) : (
         <StockContainer>
           <UtilitiesRow>
-            <SearchBar>
-              <img src={searchIcon} alt="search" />
-              <input
-                autoFocus
-                type="text"
-                placeholder="search your stocks"
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              {query ? (
-                <span onClick={() => setQuery(null)}> &#10005; </span>
-              ) : null}
-            </SearchBar>
+            <SearchBarWrapper>
+              <p>Search:</p>
+              <SearchBar>
+                <img src={searchIcon} alt="search" />
+                <input
+                  autoFocus
+                  type="text"
+                  placeholder="search your stocks"
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                {query ? (
+                  <span onClick={() => setQuery(null)}> &#10005; </span>
+                ) : null}
+              </SearchBar>
+            </SearchBarWrapper>
             <SortWrapper>
-              <p>Sort:</p>
-              <SortBy
-                onChange={(e) => {
-                  setSortType(e.target.value);
-                }}
-              >
-                <option value={"Newest Payouts"}>Newest Payouts</option>
-                <option value={"Oldest Payouts"}>Oldest Payouts</option>
-                <option value={"Most Dividends"}>Most Dividends</option>
-                <option value={"Least Dividends"}>Least Dividends</option>
-                <option value={"Most Payouts"}>Most Payouts</option>
-                <option value={"Newest"}>Newest</option>
-                <option value={"Oldest"}>Oldest</option>
-              </SortBy>
+              <SubWrapper>
+                <p>Sort by:</p>
+                <SortBy
+                  onChange={(e) => {
+                    setSortType(e.target.value);
+                  }}
+                >
+                  <option value={"Newest Payouts"}>Newest Payouts</option>
+                  <option value={"Oldest Payouts"}>Oldest Payouts</option>
+                  <option value={"Most Dividends"}>Most Dividends</option>
+                  <option value={"Least Dividends"}>Least Dividends</option>
+                  <option value={"Most Payouts"}>Most Payouts</option>
+                  <option value={"Newest"}>Newest</option>
+                  <option value={"Oldest"}>Oldest</option>
+                </SortBy>
+              </SubWrapper>
+              <IncludeArchived
+                showArchived={showArchived}
+                setShowArchived={setShowArchived}
+              />
             </SortWrapper>
           </UtilitiesRow>
           {currentUserStocks.length ? (
             <StocksWrapper
               stocks={
                 query
-                  ? handleSort(filteredStocks, sortType)
-                  : handleSort(currentUserStocks, sortType)
+                  ? handleSort(filteredStocks, sortType, showArchived)
+                  : handleSort(currentUserStocks, sortType, showArchived)
               }
             />
           ) : (
@@ -268,14 +285,31 @@ const StockContainer = styled.div`
   padding: 0 0.3rem;
   /* border: 1px solid red; */
 `;
+const SearchBarWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1rem;
+  /* border: 1px solid red; */
+
+  @media ${device.tabletS} {
+    margin-top: 0;
+    width: 50%;
+    align-items: center;
+  }
+
+  p {
+    font-weight: 700;
+  }
+`;
 const SearchBar = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 2.5rem;
-  padding: 0 0.3rem;
-  margin: 0.5rem 0;
+  height: 2.4rem;
+  max-width: 250px;
+  padding: 0.3rem;
   border-radius: 3px;
   background-color: #fff;
   border: 2px solid #7249d1;
@@ -285,7 +319,7 @@ const SearchBar = styled.div`
     margin-right: 1rem;
   }
   input {
-    width: 200px;
+    width: 160px;
     height: 100%;
     font-size: 18px;
     font-weight: 700;
@@ -310,23 +344,34 @@ const SearchBar = styled.div`
   }
 `;
 const SortWrapper = styled.div`
+  width: 100%;
+  min-width: 250px;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  /* background-color: #fff; */
   /* border: 1px solid red; */
 
   p {
     font-weight: 700;
-    margin-left: 0.5rem;
+  }
+
+  @media ${device.mobileL} {
+    justify-content: space-around;
+  }
+
+  @media ${device.tabletS} {
+    width: 50%;
   }
 `;
+const SubWrapper = styled.div``;
 const SortBy = styled.select`
   position: relative;
   width: 8rem;
-  height: 2rem;
-  margin-left: 0.7rem;
+  height: 2.2rem;
+  border-radius: 8px;
+  padding: 0.2rem;
+  /* border: 1px solid red; */
 `;
 const ScrollUp = styled.div`
   width: 100%;

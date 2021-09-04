@@ -261,13 +261,8 @@ export const markStockAsSold = async (userID, stock) => {
         message: err.message,
       };
     });
-  //filter out the stock we just updated to return to client
-  let updatedStock = updatedStockArr.filter((s) => {
-    return stock.ticker === s.ticker;
-  });
 
-  // console.log(updatedStock);
-  return updatedStock; //return stock to be used to notify client of the update
+  return { stocks: updatedStockArr, success: true };
 };
 
 export const updateStockDividend = async (userID, stock, payout) => {

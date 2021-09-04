@@ -30,8 +30,8 @@ const UtilitiesRow = ({ children }) => {
 
   return (
     <Container
+      disp={showAddForm || showAllDivs.show ? "none" : "flex"}
       ref={navbar}
-      vis={showAddForm || showAllDivs.show ? "hidden" : "visible"}
       events={showAddForm || showAllDivs.show ? "none" : "auto"}
       opacity={showAddForm || showAllDivs.show ? "0" : "1"}
     >
@@ -50,7 +50,8 @@ const Container = styled.div`
   flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
-  height: 4.25rem;
+  width: 100%fit-content;
+  max-width: 700px;
   padding: 0 0.3rem;
   margin-bottom: 6rem;
   transition-duration: 0.5s;
@@ -63,8 +64,10 @@ const Container = styled.div`
   @media ${device.tablet} {
     position: sticky;
     z-index: 1;
-    visibility: ${(props) => props.vis};
-    /* pointer-events: ${(props) => props.events};
-    opacity: ${(props) => props.opacity}; */
+    display: ${(props) => props.disp};
+    /* visibility: ${(props) => props.vis}; */
+  }
+  @media ${device.laptop} {
+    width: 100%;
   }
 `;

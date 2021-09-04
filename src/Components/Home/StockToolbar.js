@@ -203,12 +203,17 @@ const StockToolbar = ({ stock }) => {
     setSold(!sold); //toggle the sold value
     let updatedStock = { ...stock, isSold: !sold }; //add/update the isSold property
     let result = await markStockAsSold(currentUser.id, updatedStock); //update on backend
-    console.log(result);
+    //handle response
+    if (result.success) {
+      setCurrentUserStocksAction(result.stocks); //need to update the setCurrentUserStocksAction to refresh the data
+    } else {
+      console.log("There was an error archiving this stock.");
+    }
   };
 
   return (
     <Container onDoubleClick={() => handleShowDividend()}>
-      <Wrapper>
+      <Wrapper color={stock.isSold ? "transparent" : "#eee"}>
         <WrapperParagraph>double click for dividends form</WrapperParagraph>
         <IconSection>
           <IconWrapper>
@@ -269,7 +274,7 @@ const StockToolbar = ({ stock }) => {
           onClick={() => setShowModal(false)}
         >
           {deleting ? (
-            <ConfirmDelete>
+            <ConfirmDelete onClick={(e) => e.stopPropagation()}>
               <ConfirmDeleteWrapper style={{ background: "#fff" }}>
                 <p>
                   <u>DELETE</u>: {stock.name}({stock.ticker})
@@ -280,6 +285,7 @@ const StockToolbar = ({ stock }) => {
                     value="Delete"
                     onClick={() => {
                       setShowDrawer(false);
+                      setShowModal(false);
                       setShowInfo(false);
                       setShowDividend(false);
                       updateAfterDelete(currentUser.id, stock);
@@ -295,7 +301,7 @@ const StockToolbar = ({ stock }) => {
               </ConfirmDeleteWrapper>
             </ConfirmDelete>
           ) : (
-            <ConfirmDelete>
+            <ConfirmDelete onClick={(e) => e.stopPropagation()}>
               <ConfirmDeleteWrapper style={{ background: "#fff" }}>
                 {stock.isSold ? (
                   <p>
@@ -334,6 +340,7 @@ const StockToolbar = ({ stock }) => {
                     type="button"
                     value="Yes"
                     onClick={() => {
+                      setShowModal(false);
                       markAsSold(stock);
                     }}
                   />
@@ -384,7 +391,7 @@ const WrapperParagraph = styled.p`
 `;
 const Wrapper = styled.div`
   &:hover {
-    background-color: #eee;
+    background-color: ${(props) => props.color};
   }
   &:hover ${WrapperParagraph} {
     opacity: 0.8;
