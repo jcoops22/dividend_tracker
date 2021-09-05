@@ -27,9 +27,9 @@ const Drawer = ({
   useEffect(() => {
     setShowGraph(false);
     if (info) {
-      setPoint("calc(100% - 4.9rem)");
+      setPoint("calc(100% - 7.9rem)");
     } else if (dividends) {
-      setPoint("calc(100% - 7.8rem)");
+      setPoint("calc(100% - 10.65rem)");
     }
     // hide the graph if needed on resize
     window.addEventListener("resize", checkShowGraph);

@@ -39,11 +39,11 @@ const addZero = (i) => {
   }
   return i;
 };
-export const makeTodaysDate = () => {
-  const now = new Date();
+export const makeTodaysDate = (date) => {
+  const now = date ? date : new Date();
   let year = now.getFullYear();
   let month = addZero(now.getMonth() + 1);
-  let day = now.getDate();
+  let day = addZero(now.getDate());
   return `${year}-${month}-${day}`;
 };
 // format data to month * day * year
@@ -345,5 +345,33 @@ export const deleteDividend = async (userID, stock, id) => {
       };
     });
   console.log("From utilities-- deleted stocks new array", updatedStockArr);
+  return updatedStockArr;
+};
+
+export const updateStockInfo = async (userID, stock) => {
+  console.log("THE OBJ: ", stock);
+  let ref = firestore.doc(`users/${userID}`);
+  let currentUserObj = await ref.get().then((data) => data.data());
+  let updatedStockArr = await ref
+    .get()
+    .then((data) => {
+      return data.data().stocks.map((s) => {
+        return s.ticker === stock.ticker ? stock : s;
+      });
+    })
+    .then((data) => {
+      console.log("THE DATE RET: ", data);
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return { message: err.message };
+    });
+
+  let updatedObj = { ...currentUserObj, stocks: updatedStockArr }; //prepare object to save
+
+  ref.set({
+    ...updatedObj,
+  });
   return updatedStockArr;
 };

@@ -240,9 +240,7 @@ const D3Graph = ({
             <Graph id={`${stock.ticker}`}>
               <Legend>
                 {!hoveredValue ? (
-                  <p>
-                    Market Value <span>(last 7 trading days)</span>
-                  </p>
+                  <p>Market Value</p>
                 ) : (
                   <HoverValParagraph
                     color={

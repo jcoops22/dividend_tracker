@@ -4,12 +4,12 @@ import { device } from "../../resources/mediaquery";
 import StockToolbar from "./StockToolbar";
 import { formatDateData } from "../../resources/stockUtilities";
 import TickerIcon from "./TickerIcon";
+import EditStock from "./EditStock";
 
 const StocksWrapper = ({ stocks }) => {
   const [soldImg] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/e_grayscale,o_7/v1630717251/Dividend%20Tracker/png-clipart-sold-logo-sold-sign-miscellaneous-for-rent-sale-signs-thumbnail_iq8cbk.png"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/e_grayscale,o_10/v1630717251/Dividend%20Tracker/png-clipart-sold-logo-sold-sign-miscellaneous-for-rent-sale-signs-thumbnail_iq8cbk.png"
   );
-  useEffect(() => {}, [stocks]);
 
   // convert to comma notation
   const numberWithCommas = (x) => {
@@ -31,7 +31,7 @@ const StocksWrapper = ({ stocks }) => {
                 <TickerIcon symbol={stock.ticker} />
               </Name>
               <Ticker>
-                <span>{stock.ticker}</span>
+                <span>{stock.ticker}</span> <EditStock stock={stock} />
               </Ticker>
             </Col>
             <Row>
@@ -150,10 +150,12 @@ const Name = styled.div`
   }
 `;
 const Ticker = styled.div`
+  display: flex;
+  align-items: center;
   font-size: 1rem;
   color: #555;
   padding-left: 0.3rem;
-  margin-top: 0.2rem;
+  margin-top: 0.5rem;
   /* border: 1px solid red; */
 `;
 const SectionDiv = styled.div`

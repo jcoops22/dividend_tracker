@@ -170,7 +170,11 @@ const StocksList = () => {
       <HeaderWrapper>
         <h1>Your Holdings:</h1>
         <span>
-          ({query ? filteredStocks.length : currentUserStocks.length})
+          (
+          {query
+            ? handleSort(filteredStocks, sortType, showArchived).length
+            : handleSort(currentUserStocks, sortType, showArchived).length}
+          )
         </span>
       </HeaderWrapper>
       {loading ? (
@@ -371,7 +375,7 @@ const SortBy = styled.select`
   height: 2.2rem;
   border-radius: 8px;
   padding: 0.2rem;
-  /* border: 1px solid red; */
+  border: 2px solid #7249d1;
 `;
 const ScrollUp = styled.div`
   width: 100%;
