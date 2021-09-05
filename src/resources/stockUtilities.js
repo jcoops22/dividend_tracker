@@ -349,7 +349,6 @@ export const deleteDividend = async (userID, stock, id) => {
 };
 
 export const updateStockInfo = async (userID, stock) => {
-  console.log("THE OBJ: ", stock);
   let ref = firestore.doc(`users/${userID}`);
   let currentUserObj = await ref.get().then((data) => data.data());
   let updatedStockArr = await ref
@@ -360,7 +359,6 @@ export const updateStockInfo = async (userID, stock) => {
       });
     })
     .then((data) => {
-      console.log("THE DATE RET: ", data);
       return data;
     })
     .catch((err) => {

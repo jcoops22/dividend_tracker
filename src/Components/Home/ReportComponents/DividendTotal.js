@@ -2,18 +2,16 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const DividendTotal = ({ stocks, user, tickers, divs }) => {
-  useEffect(() => {
-    console.log();
-    // totalDividends(stocks);
-  }, []);
-
   //  get total of payouts for each stock as an array
   const getPayoutsArray = (arr) => {
     let allpayouts = [];
+
     arr.map((stock) => {
-      return stock.payouts.forEach((payout) => {
-        allpayouts.push(parseFloat(payout.amount).toFixed(2));
-      });
+      return stock.payouts
+        ? stock.payouts.forEach((payout) => {
+            allpayouts.push(parseFloat(payout.amount).toFixed(2));
+          })
+        : null;
     });
     return allpayouts;
   };
