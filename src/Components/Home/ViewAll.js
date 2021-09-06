@@ -144,6 +144,7 @@ const DividendsWrapper = styled.div`
   background-color: #fff;
   opacity: 1;
   overflow-y: scroll;
+  overflow-x: hidden;
   animation: jumpDividendPayoutsUp 0.5s ease-in-out forwards;
   border: 1px solid #333;
   /* border: 1px solid red; */

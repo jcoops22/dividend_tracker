@@ -52,7 +52,7 @@ export default TickerIcon;
 const Container = styled.div`
   position: absolute;
   top: 0;
-  left: calc(100% - 2rem);
+  left: calc(100% - 2.5rem);
   margin-left: auto;
   /* border: 1px solid red; */
 

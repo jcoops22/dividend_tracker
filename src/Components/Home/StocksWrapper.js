@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { device } from "../../resources/mediaquery";
 import StockToolbar from "./StockToolbar";
 import { formatDateData } from "../../resources/stockUtilities";
 import TickerIcon from "./TickerIcon";
 import EditStock from "./EditStock";
+import ToolTip from "../Shared/ToolTip";
 
 const StocksWrapper = ({ stocks }) => {
   const [soldImg] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/e_grayscale,o_10/v1630717251/Dividend%20Tracker/png-clipart-sold-logo-sold-sign-miscellaneous-for-rent-sale-signs-thumbnail_iq8cbk.png"
   );
-
+  const [monthlyIcon] = useState(
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1630888843/Dividend%20Tracker/Icons/day-month-svgrepo-com_luysrh.svg"
+  );
   // convert to comma notation
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -31,7 +34,19 @@ const StocksWrapper = ({ stocks }) => {
                 <TickerIcon symbol={stock.ticker} />
               </Name>
               <Ticker>
-                <span>{stock.ticker}</span> <EditStock stock={stock} />
+                <span>{stock.ticker}</span>
+                <TickerWrapper>
+                  <EditStock stock={stock} />
+                  {stock.monthly ? (
+                    <ToolTip
+                      tip={"Pays Monthly"}
+                      width={"5rem"}
+                      pos={"-1.9rem"}
+                    >
+                      <MonthIcon src={monthlyIcon} alt="monthly" />
+                    </ToolTip>
+                  ) : null}
+                </TickerWrapper>
               </Ticker>
             </Col>
             <Row>
@@ -147,6 +162,7 @@ const Name = styled.div`
 
   span {
     font-weight: bolder;
+    /* border: 1px solid red; */
   }
 `;
 const Ticker = styled.div`
@@ -158,6 +174,21 @@ const Ticker = styled.div`
   margin-top: 0.5rem;
   /* border: 1px solid red; */
 `;
+const TickerWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  /* border: 1px solid red; */
+`;
+const MonthIcon = styled.img`
+  width: 1.2rem;
+  margin-right: 1rem;
+
+  @media ${device.tabletS} {
+    margin-right: 0;
+  }
+`;
 const SectionDiv = styled.div`
   display: flex;
   justify-content: center;
@@ -168,6 +199,7 @@ const SectionDiv = styled.div`
 
   span {
     padding: 0 0.7rem;
+    /* border: 1px solid red; */
   }
 `;
 const StockLabel = styled.label`

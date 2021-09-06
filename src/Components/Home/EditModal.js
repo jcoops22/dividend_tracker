@@ -12,6 +12,7 @@ import {
 const EditModal = ({ stock, editing, setEditing }) => {
   const { currentUser, setCurrentUserStocksAction } = useContext(UserContext);
   const [stockName, setStockName] = useState(stock.name);
+  const [monthly, setMonthly] = useState(stock.monthly || false);
   const [dateAdded, setDateAdded] = useState(
     makeTodaysDate(new Date(stock.added))
   );
@@ -22,14 +23,16 @@ const EditModal = ({ stock, editing, setEditing }) => {
   );
 
   useEffect(() => {
+    console.log(stock);
     //set the updated object
     setStockObj({
       ...stock,
       name: stockName,
       added: getMillisecondsFromDate(dateAdded),
       note: note,
+      monthly: monthly,
     });
-  }, [stock, stockName, dateAdded, note]);
+  }, [stock, stockName, dateAdded, note, monthly]);
 
   const calcHowManyDays = (millis) => {
     let today = Date.now(); //get todays milliseconds
@@ -86,6 +89,13 @@ const EditModal = ({ stock, editing, setEditing }) => {
             value={note}
             setter={setNote}
           />
+          <EditFormEntry
+            fieldName={"Pays Monthly"}
+            type="checkbox"
+            value={monthly}
+            setter={setMonthly}
+            checked={monthly}
+          />
         </FormInputWrapper>
         <ButtonRow>
           <Save
@@ -116,6 +126,14 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeInEditModal 0.4s ease-in-out forwards;
+  /* border: 1px solid red; */
+
+  @keyframes fadeInEditModal {
+    from {
+      opacity: 0;
+    }
+  }
 `;
 const Form = styled.div`
   max-width: 700px;

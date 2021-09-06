@@ -507,6 +507,7 @@ const Note = styled.span`
     transition-duration: 0.2s;
     color: #ff3501;
     cursor: pointer;
+    /* border: 1px solid red; */
   }
 `;
 const ButtonsWrapper = styled.div`
