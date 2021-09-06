@@ -7,7 +7,7 @@ import ToolTip from "../Shared/ToolTip";
 const EditStock = ({ stock }) => {
   const [editing, setEditing] = useState(false);
   const [editIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1630890389/Dividend%20Tracker/Icons/edit-svgrepo-com_4_iqeije.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1630904132/Dividend%20Tracker/Icons/edit-list-svgrepo-com_p0qjtu.svg"
   );
 
   return (
