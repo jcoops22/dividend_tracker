@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { device } from "../../resources/mediaquery";
 
 const TickerIcon = ({ symbol }) => {
   const [placeholder] = useState(
@@ -58,5 +59,8 @@ const Container = styled.div`
 
   img {
     width: 2rem;
+  }
+  @media ${device.tabletS} {
+    left: calc(100% - 1.8rem);
   }
 `;
