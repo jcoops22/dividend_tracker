@@ -30,7 +30,9 @@ const StocksWrapper = ({ stocks }) => {
           <Row>
             <Col>
               <Name>
-                <span>{stock.name.split(" ").slice(0, 2).join(" ")}</span>
+                <span>
+                  {stock.name.split(" ").slice(0, 2).join(" ").replace(",", "")}
+                </span>
                 <TickerIcon symbol={stock.ticker} />
               </Name>
               <Ticker>

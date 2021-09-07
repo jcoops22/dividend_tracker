@@ -69,7 +69,7 @@ const ViewAll = () => {
             {stock ? (
               <h5>
                 <span>
-                  {stock.name.split(" ").slice(0, 2).join(" ")}
+                  {stock.name.split(" ").slice(0, 2).join(" ").replace(",", "")}{" "}
                   {`(${stock.ticker})`}
                 </span>
                 <p>
@@ -157,6 +157,9 @@ const DividendsWrapper = styled.div`
   }
 
   h5 {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
