@@ -23,10 +23,11 @@ const EditModal = ({ stock, editing, setEditing }) => {
   );
 
   useEffect(() => {
-    console.log(stock);
+    // console.log(stock);
     //set the updated object
     setStockObj({
       ...stock,
+      //each of these need to be added to the update list array below
       name: stockName,
       added: getMillisecondsFromDate(dateAdded),
       note: note,
