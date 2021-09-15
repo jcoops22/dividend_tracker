@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { addStock, deleteStock } from "../../resources/stockUtilities";
+import {
+  addStock,
+  deleteStock,
+  getTickerImg,
+} from "../../resources/stockUtilities";
 import TransformIcon from "../Shared/TransformIcon";
 import AddMissing from "./AddMissing";
 import { UserContext } from "../Context/UserProvider";
@@ -58,7 +62,11 @@ const SearchStocks = () => {
   // adding stock function
   const handleAddStock = async (user, stock) => {
     setLoading(true);
-    let timeStampedStock = { ...stock, added: new Date().getTime() };
+    let timeStampedStock = {
+      ...stock,
+      added: new Date().getTime(),
+      imgUrl: await getTickerImg(stock.ticker),
+    };
     let success = await addStock(user, timeStampedStock);
     if (success.message === undefined) {
       console.log(success);

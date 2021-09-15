@@ -5,6 +5,8 @@ import {
   deleteStock,
   getTickerInfo,
   markStockAsSold,
+  updateStockInfo,
+  getSeekingAlphaAPIData,
 } from "../../resources/stockUtilities";
 import TransformIcon from "../Shared/TransformIcon";
 import Drawer from "./Drawer";
@@ -13,7 +15,7 @@ import { UserContext } from "../Context/UserProvider";
 
 const StockToolbar = ({ stock }) => {
   const [deleteIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1631341728/Dividend%20Tracker/Icons/Stock%20Toolbar/trash-svgrepo-com_k6m8ts.svg"
   );
   const [infoIcon] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614713/Dividend%20Tracker/Icons/Stock%20Toolbar/info-svgrepo-com_quyddh.svg"
@@ -65,6 +67,7 @@ const StockToolbar = ({ stock }) => {
     localStorageUser.stocks.splice(selectedIndex, 1, {
       ...localStorageUser.stocks[selectedIndex],
       info: updatedStock,
+      dps: updatedStock.divPerShare,
     });
 
     if (selectedIndex > -1) {
@@ -81,6 +84,7 @@ const StockToolbar = ({ stock }) => {
     if (showDrawer && showInfo) {
       return;
     }
+
     // // Check if its updated in local storage first
     if (localStorageUser.stocks) {
       // get the stock we're working with
@@ -132,6 +136,13 @@ const StockToolbar = ({ stock }) => {
         setTickerInfo(data);
         updateLocalStorageStocks(data);
         setLoading(!!!data);
+
+        let theStock = currentUserStocks.filter((s) => {
+          return s.ticker === data.ticker;
+        });
+        let withDPS = { ...theStock[0], dps: data.divPerShare };
+        let newArr = await updateStockInfo(currentUser.id, withDPS);
+        setCurrentUserStocksAction(newArr);
       }
     }
   };
@@ -191,6 +202,7 @@ const StockToolbar = ({ stock }) => {
       assignTickerData();
       highlight();
     } else {
+      // getSeekingAlphaAPIData(stock.ticker, "chart");
       assignTickerData();
       setShowDrawer(true);
       setShowInfo(true);
@@ -200,6 +212,8 @@ const StockToolbar = ({ stock }) => {
   };
   //handle marking stock as sold
   const markAsSold = async (stock) => {
+    getSeekingAlphaAPIData(stock.ticker, "info");
+    // getSeekingAlphaAPIData(stock.ticker, "chart");
     setSold(!sold); //toggle the sold value
     let updatedStock = { ...stock, isSold: !sold }; //add/update the isSold property
     let result = await markStockAsSold(currentUser.id, updatedStock); //update on backend

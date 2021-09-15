@@ -7,15 +7,17 @@ import {
   makeTodaysDate,
   formatDateData,
   updateStockInfo,
+  getTickerImg,
 } from "../../resources/stockUtilities";
 
-const EditModal = ({ stock, editing, setEditing }) => {
+const EditModal = ({ stock, setEditing }) => {
   const { currentUser, setCurrentUserStocksAction } = useContext(UserContext);
   const [stockName, setStockName] = useState(stock.name);
   const [monthly, setMonthly] = useState(stock.monthly || false);
   const [dateAdded, setDateAdded] = useState(
     makeTodaysDate(new Date(stock.added))
   );
+  const [url, setUrl] = useState(stock.imgUrl);
   const [note, setNote] = useState(stock.note || "");
   const [stockObj, setStockObj] = useState({});
   const [close] = useState(
@@ -24,6 +26,7 @@ const EditModal = ({ stock, editing, setEditing }) => {
 
   useEffect(() => {
     // console.log(stock);
+    getEstimatedShares(0);
     //set the updated object
     setStockObj({
       ...stock,
@@ -32,8 +35,9 @@ const EditModal = ({ stock, editing, setEditing }) => {
       added: getMillisecondsFromDate(dateAdded),
       note: note,
       monthly: monthly,
+      imgUrl: url,
     });
-  }, [stock, stockName, dateAdded, note, monthly]);
+  }, [stock, stockName, dateAdded, note, monthly, url]);
 
   const calcHowManyDays = (millis) => {
     let today = Date.now(); //get todays milliseconds
@@ -50,6 +54,16 @@ const EditModal = ({ stock, editing, setEditing }) => {
   const handleSave = async () => {
     let stocks = await updateStockInfo(currentUser.id, stockObj);
     setCurrentUserStocksAction(stocks);
+  };
+
+  const getEstimatedShares = (dps) => {
+    let quarterDps = stock.monthly ? dps / 12 : dps / 4;
+    if (stock.payouts.length >= 1 && dps) {
+      let lastDividend = stock.payouts[0].amount;
+      return parseFloat(lastDividend / quarterDps).toFixed(2);
+    } else {
+      return 0;
+    }
   };
 
   return (
@@ -97,6 +111,20 @@ const EditModal = ({ stock, editing, setEditing }) => {
             setter={setMonthly}
             checked={monthly}
           />
+          {stock.dps ? (
+            <EditFormEntry
+              fieldName={"Estimated Shares Owned"}
+              type="number"
+              value={getEstimatedShares(stock.dps)}
+              disabled={true}
+            />
+          ) : null}
+          {!stock.imgUrl ? (
+            <AddImgUrlDiv>
+              <label>Add Image:</label>
+              <input type="text" placeholder="Image url" />
+            </AddImgUrlDiv>
+          ) : null}
         </FormInputWrapper>
         <ButtonRow>
           <Save
@@ -155,6 +183,21 @@ const FormInputWrapper = styled.div`
   flex-wrap: wrap;
   /* justify-content: space-around; */
   justify-content: flex-start;
+`;
+const AddImgUrlDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid red; */
+
+  input {
+    height: 1.5rem;
+    min-width: 250px;
+    margin-left: 1rem;
+    padding-left: 0.5rem;
+    outline: none;
+  }
 `;
 const ButtonRow = styled.div`
   display: flex;

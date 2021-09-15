@@ -7,6 +7,7 @@ import {
 } from "../../resources/stockUtilities";
 import { StocksContext } from "../Context/StocksProvider";
 import { UserContext } from "../Context/UserProvider";
+import { makeTodaysDate } from "../../resources/stockUtilities";
 
 const ViewAll = () => {
   const { currentUser, setCurrentUserStocksAction } = useContext(UserContext);
@@ -15,7 +16,7 @@ const ViewAll = () => {
   const [payouts, setPayouts] = useState(showAllDivs.payouts);
   const [loading, setLoading] = useState(false);
   const [deleteIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1631341728/Dividend%20Tracker/Icons/Stock%20Toolbar/trash-svgrepo-com_k6m8ts.svg"
   );
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
@@ -247,7 +248,7 @@ const Row = styled.div`
     position: absolute;
     top: 0.2rem;
     left: calc(100% - 2rem);
-    width: 1.5rem;
+    width: 1.3rem;
     cursor: pointer;
     /* border: 1px solid red; */
   }

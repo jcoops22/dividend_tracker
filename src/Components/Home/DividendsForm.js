@@ -22,7 +22,7 @@ const DividendsForm = ({ stock }) => {
   const [stockPayouts, setStockPayouts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [deleteIcon] = useState(
-    "https://res.cloudinary.com/drucvvo7f/image/upload/v1608651426/Dividend%20Tracker/Icons/Stock%20Toolbar/delete-folder-hand-drawn-outline-svgrepo-com_rjmcgy.svg"
+    "https://res.cloudinary.com/drucvvo7f/image/upload/v1631341728/Dividend%20Tracker/Icons/Stock%20Toolbar/trash-svgrepo-com_k6m8ts.svg"
   );
   const [littleLoader] = useState(
     "https://res.cloudinary.com/drucvvo7f/image/upload/v1608614181/Dividend%20Tracker/Icons/SearchResults/loading-loader-svgrepo-com_urrwap.svg"
@@ -488,11 +488,13 @@ const DeleteDividend = styled.div`
   /* border: 1px solid red; */
 
   img {
-    width: 1.2rem;
+    width: 1rem;
     cursor: pointer;
+    padding: 0.1rem 0;
 
     @media ${device.tabletS} {
-      width: 1.5rem;
+      width: 1.2rem;
+      padding: 0.16rem 0;
     }
   }
 `;

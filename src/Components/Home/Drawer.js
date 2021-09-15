@@ -96,7 +96,9 @@ const Drawer = ({
 
                   <span>
                     <span> Dividend per share: </span>$
-                    {isNaN(data.divPerShare) ? 0 : data.divPerShare}
+                    {isNaN(data.divPerShare)
+                      ? 0
+                      : parseFloat(data.divPerShare).toFixed(2)}
                   </span>
 
                   <span>

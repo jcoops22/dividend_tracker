@@ -2,6 +2,74 @@ import { firestore } from "../Components/Firebase/firebase";
 import axios from "axios";
 import { nas } from "../resources/nyseOBJ";
 
+export const getSeekingAlphaAPIData = async (ticker, type) => {
+  // docs@ https://rapidapi.com/apidojo/api/seeking-alpha/
+  let url = null;
+
+  if (type === "info") {
+    url = "https://seeking-alpha.p.rapidapi.com/symbols/get-key-data";
+    //company | divRate (div per share) | divYield | lastDivDate (ex-dividend date) | name |
+  } else if (type === "chart") {
+    url = "https://seeking-alpha.p.rapidapi.com/symbols/get-chart";
+  }
+
+  let options = {
+    method: "GET",
+    url: "https://seeking-alpha.p.rapidapi.com/symbols/get-chart",
+    params: { symbol: ticker },
+    headers: {
+      "x-rapidapi-host": "seeking-alpha.p.rapidapi.com",
+      "x-rapidapi-key": "3e9f7cf06fmshe234b944d63680fp16c2e6jsn44590aa01ea5",
+    },
+  };
+  if (type === "info") {
+    let data = await axios
+      .request(options)
+      .then((data) => {
+        // return data.data.data[0].attributes;
+        return data;
+      })
+      // .then(async (data) => {
+      //   return {
+      //     name: data.company,
+      //     divPerShare: data.divRate,
+      //     yield: data.divYield,
+      //     exDivDate: data.lastDivDate,
+      //     ticker: data.name,
+      //     //need the monthly quarterly designation...
+      //   };
+      // })
+      .catch((err) => {
+        console.error("THer was an error! ", err);
+        return err.message;
+      });
+    // console.log("NEw API: ", data);
+  }
+};
+
+export const getTickerImg = async (ticker) => {
+  //Seeking Alpha API config
+  let options = {
+    method: "GET",
+    url: "https://seeking-alpha.p.rapidapi.com/symbols/get-meta-data",
+    params: { symbol: ticker },
+    headers: {
+      "x-rapidapi-host": "seeking-alpha.p.rapidapi.com",
+      "x-rapidapi-key": "3e9f7cf06fmshe234b944d63680fp16c2e6jsn44590aa01ea5",
+    },
+  };
+  //axios call for the image url
+  let url = await axios
+    .request(options)
+    .then((info) => {
+      return info.data.meta.companyLogoUrl;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return url;
+};
+// FUNCTION TO UPDATE ALL STOCKS LIST ON FIREBASE
 export const updateStocks = () => {
   // let ref = firestore.collection("symbols");
   // ref
@@ -39,12 +107,22 @@ const addZero = (i) => {
   }
   return i;
 };
-export const makeTodaysDate = (date) => {
+export const makeTodaysDate = (date, time) => {
   const now = date ? date : new Date();
   let year = now.getFullYear();
   let month = addZero(now.getMonth() + 1);
   let day = addZero(now.getDate());
-  return `${year}-${month}-${day}`;
+  let hour = now.getHours() >= 13 ? now.getHours() - 2 : now.getHours();
+  let min = now.getMinutes();
+  let sec = now.getSeconds();
+
+  if (time) {
+    return `${month}/${day}/${year} (${
+      now.getHours() === "0" ? "12" : now.getHours()
+    }:${min}:${sec}) ${now.getHours() >= 13 ? "pm" : "am"}`;
+  } else {
+    return `${year}-${month}-${day}`;
+  }
 };
 // format data to month * day * year
 export const formatDateData = (data) => {
@@ -82,6 +160,7 @@ export const getTickerInfo = async (ticker, timeInterval) => {
     .get(overview)
     .then((data) => {
       if (data.data.Note) {
+        //if the API call failed fro too many requests
         console.log(data.data.Note);
         return {
           yield: "No data",
@@ -245,6 +324,7 @@ export const markStockAsSold = async (userID, stock) => {
           ? {
               ...s,
               isSold: stock.isSold, //update the isSold value from stock object passed in
+              sellDate: makeTodaysDate(null, true),
             }
           : s;
       });
